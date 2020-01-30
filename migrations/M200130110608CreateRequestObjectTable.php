@@ -35,11 +35,11 @@ class M200130110608CreateRequestObjectTable extends Migration
             'user_id' => 'INT NOT NULL', //fk users
             'num_of_people' => 'INT NOT NULL',
             'family' => 'BOOLEAN NOT NULL',
-            'type' => 'INT NOT NULL', //fk request_type
+            'pets' => 'BOOLEAN NOT NULL',
+            'request_type_id' => 'INT NOT NULL', //fk request_type
             'square_from' => 'INT NOT NULL',
             'square_to' => 'INT NOT NULL',
             'city_id' => 'INT NOT NULL', //fk  city
-            'address_ids' => 'VARCHAR(256) NOT NULL',
             'price_from' => 'INT NOT NULL',
             'price_to' => 'INT NOT NULL',
             'description' => 'TEXT NOT NULL',

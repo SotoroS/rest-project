@@ -38,7 +38,7 @@ class M200130005604CreateAddressTable extends Migration
             'city_id' => 'INT NOT NULL',
             'street_id' => 'INT NOT NULL',
             'region_id' => 'INT',
-            'city_are_id' => 'INT'
+            'city_area_id' => 'INT'
         ]);
     }
 
