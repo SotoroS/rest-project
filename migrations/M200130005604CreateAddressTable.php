@@ -35,10 +35,10 @@ class M200130005604CreateAddressTable extends Migration
             'id' => $this->primaryKey(),
             'lt' => 'DECIMAL NOT NULL',
             'lg' => 'DECIMAL NOT NULL',
-            'city_id' => 'INTEGER NOT NULL',
-            'street_id' => 'INTEGER NOT NULL',
-            'region_id' => 'INTEGER',
-            'city_are_id' => 'INTEGER'
+            'city_id' => 'INT NOT NULL',
+            'street_id' => 'INT NOT NULL',
+            'region_id' => 'INT',
+            'city_are_id' => 'INT'
         ]);
     }
 
