@@ -13,6 +13,7 @@ use Yii;
  * @property string $email
  * @property int $age
  * @property int|null $verified
+ * @property string|null $signup_token
  */
 class User extends \yii\db\ActiveRecord
 {
@@ -35,6 +36,7 @@ class User extends \yii\db\ActiveRecord
             [['gender'], 'string', 'max' => 1],
             [['phone'], 'string', 'max' => 30],
             [['email'], 'string', 'max' => 256],
+            [['signup_token'], 'string', 'max' => 13],
         ];
     }
 
@@ -50,6 +52,7 @@ class User extends \yii\db\ActiveRecord
             'email' => 'Email',
             'age' => 'Age',
             'verified' => 'Verified',
+            'signup_token' => 'Signup Token',
         ];
     }
 }
