@@ -29,7 +29,7 @@ return [
 			'class' => 'yii\db\Connection',
 			'dsn' => 'mysql:host=localhost;dbname=mailer',
 			'username' => 'root',
-			'password' => 'password',
+			'password' => '',
 			
 		],
 		'request' => [

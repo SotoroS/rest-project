@@ -22,7 +22,6 @@ return [
 			'class' => 'yii\console\controllers\MigrateController',
 			'migrationPath' => null,
 			'migrationNamespaces' => [
-				'yii\queue\db\migrations',
 				'micro\migrations'
 			],
 		],
@@ -32,7 +31,7 @@ return [
 			'class' => 'yii\db\Connection',
 			'dsn' => 'mysql:host=localhost;dbname=mailer',
 			'username' => 'root',
-			'password' => 'password',
+			'password' => '',
 		],
 		'queue' => [
 			'class' => \yii\queue\db\Queue::class,
