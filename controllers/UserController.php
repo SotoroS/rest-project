@@ -178,6 +178,8 @@ class UserController extends Controller
     public function actionCallBackGoogle()
     {
         $g_client = new Google_Client();
+        $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
+        $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
         //Step 3 : Get the authorization  code
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
 
