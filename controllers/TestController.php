@@ -7,6 +7,7 @@ use micro\models\User;
 use Yii;
 use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
+use Facebook;
 
 
 
@@ -79,4 +80,54 @@ class TestController extends Controller
         }
 
     }
+
+    public function actionFbToken() {
+
+		$fb = new Facebook( [
+			'app_id'                => 559755891418423,
+			'app_secret'            => f5a86f378bca716435d1db271695dedd,
+			'default_graph_version' => 'v2.4',
+		]);;
+
+		$helper = $fb->getRedirectLoginHelper();
+
+		// Коллбэк от ФВ
+		if(\Yii::$app->request->get('code')) {
+			try {
+
+				if(!$accessToken = $helper->getAccessToken()) throw new UserException("No access token");
+
+				$oAuth2Client = $fb->getOAuth2Client();
+				$tokenMetadata = $oAuth2Client->debugToken( $accessToken );
+				$tokenMetadata->validateAppId(APP_ID);
+				$tokenMetadata->validateExpiration();
+				if (!$accessToken->isLongLived()) 
+                                      $accessToken = $oAuth2Client->getLongLivedAccessToken( $accessToken );
+
+				// В мессадже чистый токен
+				$message = $accessToken->getValue();
+
+			} catch (FacebookResponseException $e ) {
+				$message = 'Graph returned an error: ' . $e->getMessage();
+			} catch (FacebookSDKException $e ) {
+				$message = 'Facebook SDK returned an error: ' . $e->getMessage();
+			} catch (UserException $e) {
+				$message = "UserException ".$e->getMessage();
+			}
+
+			echo $message;
+
+		} else {
+			// Запрос токена
+			$login_url = $helper->getLoginUrl(Url::to('test/fb-token', 1), [
+				'user_managed_groups', // !!! крайне важное разрешение чтобы публиковать в свои группы
+				'publish_actions',
+				'manage_pages',
+				'publish_pages'
+			]);
+
+			// Редиректим на ФБ, который возвращается сюдаже
+			return $this->redirect($login_url);
+		}
+	}
 }

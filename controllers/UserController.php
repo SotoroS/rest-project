@@ -1,12 +1,13 @@
 <?php
 
-
 namespace micro\controllers;
+
 
 use micro\models\User;
 use Yii;
 use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
+use Facebook;
 
 
 
@@ -129,35 +130,29 @@ class UserController extends Controller
         }
     }
 
-    public function actionFacebook()
+    public function actionLoginFacebook()
     {
-        define ('ID', '559755891418423');
-        define ('SEKRET', 'f5a86f378bca716435d1db271695dedd');
-        define ('URL', '');
 
-        $request = Yii::$app->request;
+        $ID = 559755891418423;
+        $SEKRET = f5a86f378bca716435d1db271695dedd;
+        $URL = 'rest.fokin-team.ru';
 
-        $code = $request->get('code');
-        if(!$code)
-        {
-            return "error code";
-        }
-
-        $token = json_decode(file_get_contents("https://graph.facebook.com/v5.0/oauth/access_token?client_id='.ID.'&redirect_uri='.URL.'&client_secret='.SEKRET.'&code=$code"), true);
-
-        if(!$token)
-        {
-            return "error token";
-        }
-
-        $data = json_decode(file_get_contents("https://graph.facebook.com/v5.0/me?client_id='.ID.'&redirect_uri='.URL.'&client_secret='.SEKRET.'&code=$code'&access_token='.$token['access_token'].'&fields=name,email"), true);
-
-        if(!$data)
-        {
-            return "error data";
-        }
-
-        // https://www.facebook.com/v5.0/dialog/oauth?client_id={'ID'}&redirect_uri={'URL'}&response_type=code&scope=public_profile,email,
+        $fb = new Facebook\Facebook([
+        'app_id' => $ID, // Replace {app-id} with your app id
+        'app_secret' => $SEKRET,
+        'default_graph_version' => 'v3.2',
+        ]);
+        
+        $helper = $fb->getRedirectLoginHelper();
+        
+        $permissions = ['email']; // Optional permissions
+        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/call-back-facebook', $permissions);
+        
+        return $loginUrl;
+    }
+    public function actionCallBackFacebook()
+    {
+        return;
     }
 
     public function actionGoogle()
