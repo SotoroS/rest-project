@@ -27,7 +27,7 @@
             "license": [
                 "http://opensource.org/licenses/mit-license.php"
             ]
-        },
+        }, 
         {
             "name": "bower-asset/jquery",
             "version": "3.4.1",
@@ -705,3 +705,4 @@
     "platform": [],
     "platform-dev": []
 }
+
