@@ -27,7 +27,7 @@ return [
 		],
 		'db' => [
 			'class' => 'yii\db\Connection',
-			'dsn' => 'mysql:host=localhost;dbname=mailer',
+			'dsn' => 'mysql:host=localhost;dbname=rest',
 			'username' => 'root',
 			'password' => '',
 			

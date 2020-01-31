@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace micro\models;
 
 use Yii;
 
