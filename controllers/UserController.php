@@ -176,10 +176,6 @@ class UserController extends Controller
 
         //Step 3 : Get the authorization  code
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
-        
-        $token = $g_client->fetchAccessTokenWithAuthCode($code);
-        $g_client->setAccessToken($token);
-        echo $g_client;
 
         //Step 4: Get access token
         if(isset($code)) 
