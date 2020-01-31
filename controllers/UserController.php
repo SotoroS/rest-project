@@ -37,9 +37,6 @@ class UserController extends Controller
             $model->email = $email;
             $model->password = $password;
             $model->signup_token = $signup_token;
-            $model->gender = s;
-            $model->phone = sd;
-            $model->age = 1;
             
             if(($model->validate()) && ($model->save()))
             {
@@ -126,5 +123,14 @@ class UserController extends Controller
         {
             return 'not exist user with this email';
         }
+    }
+
+    public function actionFacebook()
+    {
+        define ('ID', '559755891418423');
+        define ('SEKRET', 'f5a86f378bca716435d1db271695dedd');
+        define ('URL', '');
+
+
     }
 }
