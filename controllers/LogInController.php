@@ -19,14 +19,13 @@ class LoginController extends Controller
 
         if($user)
         {
-            if ($password == $user->password)
+            if (password_verify($password, $user->password))
             {
-                //логиним юзера
-                return 'chotko';
+                return 'chotko, ti avtorizovan';
             }
             else
             {
-                return 'invalid password';
+                return 'invalid password'.$password.' '.$user->password;
             }
         }
         else
