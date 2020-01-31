@@ -159,4 +159,9 @@ class UserController extends Controller
 
         // https://www.facebook.com/v5.0/dialog/oauth?client_id={'ID'}&redirect_uri={'URL'}&response_type=code&scope=public_profile,email,
     }
+
+    public function actionGoogle()
+    {
+        
+    }
 }

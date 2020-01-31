@@ -11,7 +11,7 @@ use Yii;
  * @property string|null $gender
  * @property string|null $phone
  * @property string $email
- * @property string $password
+ * @property string|null $password
  * @property int|null $age
  * @property int|null $verified
  * @property string|null $signup_token
@@ -36,7 +36,7 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['email', 'password'], 'required'],
+            [['email'], 'required'],
             [['age', 'verified'], 'integer'],
             [['gender'], 'string', 'max' => 1],
             [['phone'], 'string', 'max' => 30],
