@@ -3,15 +3,35 @@
 namespace micro\controllers;
 
 use yii\web\Controller;
+use micro\models\User;
+use Yii;
 
 class LoginController extends Controller
 {
+    public function actionCheckUser()
+    {        
+        $request = Yii::$app->request;
 
-    public function actionHelloWorld()
-    {        if (прошёл проверку){
-            return $this->render('index');
+        $email = $request->get('email');
+        $password = $request->get('password');
+
+        $user = User::findOne(['email' => $email]);
+
+        if($user)
+        {
+            if ($password == $user->password)
+            {
+                //логиним юзера
+                return 'chotko';
+            }
+            else
+            {
+                return 'invalid password';
+            }
         }
         else
-            return 'error';
+        {
+            return 'not exist user with this email';
+        }
     }
 }
