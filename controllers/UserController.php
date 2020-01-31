@@ -8,6 +8,7 @@ use Yii;
 use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
 use Facebook;
+use Google_Client;
 
 
 
@@ -136,7 +137,6 @@ class UserController extends Controller
 
     public function actionLoginFacebook()
     {
-
         $ID = 559755891418423;
         $SEKRET = f5a86f378bca716435d1db271695dedd;
         $URL = 'rest.fokin-team.ru';
@@ -161,9 +161,8 @@ class UserController extends Controller
 
     public function actionGoogle()
     {
-        //require ("vendor/autoload.php");
         //Step 1: Enter you google account credentials
-        
+        include_once __DIR__ . '/../vendor/autoload.php';
         $g_client = new Google_Client();
         
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
@@ -179,34 +178,37 @@ class UserController extends Controller
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
         
         //Step 4: Get access token
-        if(isset($code)) {
-        
-            try {
+        if(isset($code)) 
+        {
+            try 
+            {
         
                 $token = $g_client->fetchAccessTokenWithAuthCode($code);
                 $g_client->setAccessToken($token);
         
-            }catch (Exception $e){
+            }
+            catch (Exception $e)
+            {
                 echo $e->getMessage();
             }
         
-        
-        
-        
-            try {
+            try 
+            {
                 $pay_load = $g_client->verifyIdToken();
         
         
-            }catch (Exception $e) {
+            }
+            catch (Exception $e) 
+            {
                 echo $e->getMessage();
             }
-        
-        } else{
+        } 
+        else
+        {
             $pay_load = null;
         }
         
-        if(isset($pay_load)){
-        }
+        if(isset($pay_load)){}
         return $pay_load['email'];
     }
 }
