@@ -1,12 +1,13 @@
 <?php
 
-
 namespace micro\controllers;
+
 
 use micro\models\User;
 use Yii;
 use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
+use Facebook;
 
 
 
@@ -23,6 +24,10 @@ class UserController extends Controller
 
         $email = $request->get('email');
         $password = $request->get('password');
+        if(!$password)
+        {
+            exit("error password");
+        }
         $password = password_hash($password, PASSWORD_DEFAULT);
         $signup_token = uniqid();
 
@@ -125,13 +130,29 @@ class UserController extends Controller
         }
     }
 
-    public function actionFacebook()
+    public function actionLoginFacebook()
     {
-        define ('ID', '559755891418423');
-        define ('SEKRET', 'f5a86f378bca716435d1db271695dedd');
-        define ('URL', '');
 
+        $ID = 559755891418423;
+        $SEKRET = f5a86f378bca716435d1db271695dedd;
+        $URL = 'rest.fokin-team.ru';
 
+        $fb = new Facebook\Facebook([
+        'app_id' => $ID, // Replace {app-id} with your app id
+        'app_secret' => $SEKRET,
+        'default_graph_version' => 'v3.2',
+        ]);
+        
+        $helper = $fb->getRedirectLoginHelper();
+        
+        $permissions = ['email']; // Optional permissions
+        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/call-back-facebook', $permissions);
+        
+        return $loginUrl;
+    }
+    public function actionCallBackFacebook()
+    {
+        return;
     }
 
     public function actionGoogle()

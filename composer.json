@@ -2,7 +2,8 @@
   "require": {
     "yiisoft/yii2": "~2.0.0",
     "yiisoft/yii2-queue": "dev-master",
-    "phpmailer/phpmailer": "^6.1"
+    "phpmailer/phpmailer": "^6.1",
+    "facebook/graph-sdk": "^5.7"
   },
   "repositories": [
     {
