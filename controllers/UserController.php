@@ -67,7 +67,7 @@ class UserController extends Controller
             $mail->setFrom('arman.shukanov@fokin-team.ru');
             $mail->addAddress($email);
             $mail->Subject = 'Подтверждение аккаунта';
-            $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verify/?token=" . $signup_token;
+            $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verification_code/?token=" . $signup_token;
 
             $mail->isHTML(true);
 
@@ -79,4 +79,26 @@ class UserController extends Controller
         }
 
     }
+
+     public function actionVerify()
+     {
+        $request = Yii::$app->request;
+
+        $verification_code = $request->get('verification_code');
+
+        $user = User::findOne(['signup_token' => $verification_code]);
+
+        if($user)
+        {
+            $user->verified = 1;
+            if($user->save())
+            {
+                return "Ваш аккаунт подтвержден!";
+            }
+        }
+        else
+        {
+            return "Код подтверждения не верен.";
+        }
+     }
 }
