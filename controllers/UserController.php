@@ -100,5 +100,31 @@ class UserController extends Controller
         {
             return "Код подтверждения не верен.";
         }
-     }
+    }
+
+    public function actionLogin()
+    {        
+        $request = Yii::$app->request;
+
+        $email = $request->get('email');
+        $password = $request->get('password');
+
+        $user = User::findOne(['email' => $email]);
+
+        if($user)
+        {
+            if (password_verify($password, $user->password))
+            {
+                return 'chotko, ti avtorizovan';
+            }
+            else
+            {
+                return 'invalid password'.$password.' '.$user->password;
+            }
+        }
+        else
+        {
+            return 'not exist user with this email';
+        }
+    }
 }
