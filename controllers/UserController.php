@@ -161,8 +161,8 @@ class UserController extends Controller
 
     public function actionGoogle()
     {
+        
         //Step 1: Enter you google account credentials
-        include_once __DIR__ . '/../vendor/autoload.php';
         $g_client = new Google_Client();
         
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
@@ -172,11 +172,15 @@ class UserController extends Controller
         
         //Step 2 : Create the url
         $auth_url = $g_client->createAuthUrl();
-        echo "<a href='$auth_url'>Login Through Google </a>";
-        
+        echo '<script>location.replace("'.$auth_url.'")</script>';
+
         //Step 3 : Get the authorization  code
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
         
+        $token = $g_client->fetchAccessTokenWithAuthCode($code);
+        $g_client->setAccessToken($token);
+        echo $g_client;
+
         //Step 4: Get access token
         if(isset($code)) 
         {
@@ -210,5 +214,10 @@ class UserController extends Controller
         
         if(isset($pay_load)){}
         return $pay_load['email'];
+        
+    }
+    public function actionCallBackGoogle()
+    {
+        return;
     }
 }
