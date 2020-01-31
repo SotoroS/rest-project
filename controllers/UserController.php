@@ -166,16 +166,55 @@ class UserController extends Controller
         
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
         $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
-        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/call-back-google");
+        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/google");
         $g_client->setScopes("email");
         
         //Step 2 : Create the url
         $auth_url = $g_client->createAuthUrl();
         echo json_encode($auth_url);
         echo "<a href='$auth_url'>Login Through Google </a>";
+
+        //Step 3 : Get the authorization  code
+        $code = isset($_GET['code']) ? $_GET['code'] : NULL;
+
+        //Step 4: Get access token
+        if(isset($code)) 
+        {
+            try 
+            {
+        
+                $token = $g_client->fetchAccessTokenWithAuthCode($code);
+                $g_client->setAccessToken($token);
+                echo $token;
+        
+            }
+            catch (Exception $e)
+            {
+                echo $e->getMessage();
+            }
+        
+            try 
+            {
+                $pay_load = $g_client->verifyIdToken();
+        
+        
+            }
+            catch (Exception $e) 
+            {
+                echo $e->getMessage();
+            }
+        } 
+        else
+        {
+            $pay_load = null;
+        }
+        
+        if(isset($pay_load)){}
     }
     public function actionCallBackGoogle()
     {
+        http://rest.fokin-team.ru/user/call-back-google?code=4/wAH5QhXNckRkYKCbtVJ6-uCXSiK9GNhT6szf4v94tAWBZk6YgvswXLknBLDNx_fE9L0deeDJEncEqJlFpZ7y6vg&scope=email+openid+
+        https://www.googleapis.com/auth/userinfo.email&authuser=0&prompt=none&session_state=d2a8120a71b94ee7ce222ed8dd1c4c619ca2de8f..8977
         //Step 3 : Get the authorization  code
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
 
