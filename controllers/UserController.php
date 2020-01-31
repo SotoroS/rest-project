@@ -23,6 +23,10 @@ class UserController extends Controller
 
         $email = $request->get('email');
         $password = $request->get('password');
+        if(!$password)
+        {
+            exit("error password");
+        }
         $password = password_hash($password, PASSWORD_DEFAULT);
         $signup_token = uniqid();
 
@@ -131,6 +135,28 @@ class UserController extends Controller
         define ('SEKRET', 'f5a86f378bca716435d1db271695dedd');
         define ('URL', '');
 
+        $request = Yii::$app->request;
 
+        $code = $request->get('code');
+        if(!$code)
+        {
+            return "error code";
+        }
+
+        $token = json_decode(file_get_contents("https://graph.facebook.com/v5.0/oauth/access_token?client_id='.ID.'&redirect_uri='.URL.'&client_secret='.SEKRET.'&code=$code"), true);
+
+        if(!$token)
+        {
+            return "error token";
+        }
+
+        $data = json_decode(file_get_contents("https://graph.facebook.com/v5.0/me?client_id='.ID.'&redirect_uri='.URL.'&client_secret='.SEKRET.'&code=$code'&access_token='.$token['access_token'].'&fields=name,email"), true);
+
+        if(!$data)
+        {
+            return "error data";
+        }
+
+        // https://www.facebook.com/v5.0/dialog/oauth?client_id={'ID'}&redirect_uri={'URL'}&response_type=code&scope=public_profile,email,
     }
 }
