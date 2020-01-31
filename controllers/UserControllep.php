@@ -1,16 +1,19 @@
 <?php
 
+
 namespace micro\controllers;
 
 use micro\models\User;
 use Yii;
-use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
-// use yii\swiftmailer\Mailer;
 
 
 
-class TestController extends Controller
+/**
+ * Class SiteController
+ * @package micro\controllers
+ */
+class UserController extends Controller
 {
     public function actionSignup()
     {
@@ -64,20 +67,4 @@ class TestController extends Controller
         
 
     }
-
-    public function actionUrl()
-    {
-        return $_SERVER['HTTP_HOST'];
-    }
-
-    public function actionCheckUser()
-    {        
-        $user = User::find(1) ;
-        
-        echo $user->email;
-    }
-} 
-
-
-
-// ?email=glebikon@yandex.ru&password=1234
+}

@@ -31,7 +31,7 @@ return [
 			'username' => 'root',
 			'password' => '',
 			
-		],
+		], 
 		'request' => [
 			'enableCookieValidation' => false,
 			'enableCsrfValidation' => false,

@@ -58,6 +58,6 @@ class SiteController extends Controller
 	 */
 	public function actionMailing()
 	{
-		return ;
+		return "Hi";
 	}
 }
