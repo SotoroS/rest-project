@@ -185,7 +185,7 @@ class UserController extends Controller
         
                 $token = $g_client->fetchAccessTokenWithAuthCode($code);
                 $g_client->setAccessToken($token);
-                echo $token;
+                print_r($token);
         
             }
             catch (Exception $e)
