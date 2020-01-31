@@ -36,7 +36,7 @@ class M200130000215CreateUserTable extends Migration
             'gender' => 'VARCHAR(1)',
             'phone' => 'VARCHAR(30)',
             'email' => 'VARCHAR(256) NOT NULL',
-            'password' => 'VARCHAR(256) NOT NULL',
+            'password' => 'VARCHAR(256)',
             'age' => 'INT',
             'verified' => 'BOOLEAN DEFAULT false',
             'signup_token' => 'VARCHAR(13)',
