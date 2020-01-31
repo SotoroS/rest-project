@@ -138,7 +138,7 @@ class UserController extends Controller
     public function actionLoginFacebook()
     {
         $ID = 559755891418423;
-        $SEKRET = f5a86f378bca716435d1db271695dedd;
+        $SEKRET = "f5a86f378bca716435d1db271695dedd";
         $URL = 'rest.fokin-team.ru';
 
         $fb = new Facebook\Facebook([
