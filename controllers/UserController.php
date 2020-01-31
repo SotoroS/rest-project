@@ -107,27 +107,31 @@ class UserController extends Controller
     public function actionLogin()
     {        
         $request = Yii::$app->request;
-
-        $email = $request->get('email');
-        $password = $request->get('password');
-
-        $user = User::findOne(['email' => $email]);
-
-        if($user)
+        if($request->get('email'))
         {
-            if (password_verify($password, $user->password))
+            $email = $request->get('email');
+            $password = $request->get('password');
+
+            $user = User::findOne(['email' => $email]);
+
+            if($user)
             {
-                return 'chotko, ti avtorizovan';
+                if (password_verify($password, $user->password))
+                {
+                    return 'chotko, ti avtorizovan';
+                }
+                else
+                {
+                    return 'invalid password'.$password.' '.$user->password;
+                }
             }
             else
             {
-                return 'invalid password'.$password.' '.$user->password;
+                return 'not exist user with this email';
             }
         }
         else
-        {
-            return 'not exist user with this email';
-        }
+            return 'ну введи запрос, чё ты как этот';
     }
 
     public function actionLoginFacebook()
