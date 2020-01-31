@@ -33,11 +33,11 @@ class M200130000215CreateUserTable extends Migration
     {
         $this->createTable('user', [
             'id' => $this->primaryKey(),
-            'gender' => 'VARCHAR(1) NOT NULL',
-            'phone' => 'VARCHAR(30) NOT NULL',
+            'gender' => 'VARCHAR(1)',
+            'phone' => 'VARCHAR(30)',
             'email' => 'VARCHAR(256) NOT NULL',
             'password' => 'VARCHAR(256) NOT NULL',
-            'age' => 'INT NOT NULL',
+            'age' => 'INT',
             'verified' => 'BOOLEAN DEFAULT false',
             'signup_token' => 'VARCHAR(13)',
             'access_token' => 'VARCHAR(13)'
