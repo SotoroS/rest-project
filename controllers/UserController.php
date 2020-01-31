@@ -161,20 +161,56 @@ class UserController extends Controller
 
     public function actionGoogle()
     {
-        //Enter you google account credentials
+        //Step 1: Enter you google account credentials
         $g_client = new Google_Client();
         
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
         $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
-        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/google");
+        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/call-back-google");
         $g_client->setScopes("email");
         
-        //Create the url
+        //Step 2 : Create the url
         $auth_url = $g_client->createAuthUrl();
         echo json_encode($auth_url);
+        echo "<a href='$auth_url'>Login Through Google </a>";
     }
     public function actionCallBackGoogle()
     {
-        return;
+        //Step 3 : Get the authorization  code
+        $code = isset($_GET['code']) ? $_GET['code'] : NULL;
+
+        //Step 4: Get access token
+        if(isset($code)) 
+        {
+            try 
+            {
+        
+                $token = $g_client->fetchAccessTokenWithAuthCode($code);
+                $g_client->setAccessToken($token);
+        
+            }
+            catch (Exception $e)
+            {
+                echo $e->getMessage();
+            }
+        
+            try 
+            {
+                $pay_load = $g_client->verifyIdToken();
+        
+        
+            }
+            catch (Exception $e) 
+            {
+                echo $e->getMessage();
+            }
+        } 
+        else
+        {
+            $pay_load = null;
+        }
+        
+        if(isset($pay_load)){}
+        return $pay_load['email'];
     }
 }
