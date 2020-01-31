@@ -1,15 +1,19 @@
 <?php
 
+
 namespace micro\controllers;
 
 use micro\models\User;
 use Yii;
 use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
-// use yii\swiftmailer\Mailer;
 
 
 
+/**
+ * Class SiteController
+ * @package micro\controllers
+ */
 class TestController extends Controller
 {
     public function actionSignup()
@@ -19,65 +23,60 @@ class TestController extends Controller
 
         $email = $request->get('email');
         $password = $request->get('password');
+        $password = password_hash($password, PASSWORD_DEFAULT);
         $signup_token = uniqid();
 
-        $model = new User();
+        $user = User::findOne(['email' => $email]);
 
-        $model->email = $email;
-        $model->password = $password;
-        $model->signup_token = $signup_token;
-        $model->gender = s;
-        $model->phone = aa;
-        $model->age = 1;
-        
-        if(!$model->save())
+        if(!$user)
         {
-            echo "no";
+            $model = new User();
+
+            $model->email = $email;
+            $model->password = $password;
+            $model->signup_token = $signup_token;
+            $model->gender = s;
+            $model->phone = sd;
+            $model->age = 1;
+            
+            if(($model->validate()) && ($model->save()))
+            {
+                echo "Вы успешно зарегистрировались!";
+            }
+            else{
+                $errors = $model->errors;
+                return $errors;
+            }
+
+
+            // Отправка на почту
+
+            $mail = new PHPMailer;
+
+            $mail->CharSet = "UTF-8";
+
+            $mail->isSMTP();
+            $mail->Host = 'smtp.yandex.ru';
+            $mail->Port = 465;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl';
+
+            $mail->Username = 'arman.shukanov@fokin-team.ru';
+            $mail->Password = 'arman_shukanov';
+
+            $mail->setFrom('arman.shukanov@fokin-team.ru');
+            $mail->addAddress($email);
+            $mail->Subject = 'Подтверждение аккаунта';
+            $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verify/?token=" . $signup_token;
+
+            $mail->isHTML(true);
+
+            $mail->send();
         }
-        else{
-            echo "yes";
+        else 
+        {
+            return"пользователь с такой почтой уже существует";
         }
 
-        // Отправка на почту
-
-        $mail = new PHPMailer;
-
-        $mail->CharSet = "UTF-8";
-
-        $mail->isSMTP();
-        $mail->Host = 'smtp.yandex.ru';
-        $mail->Port = 465;
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'ssl';
-
-        $mail->Username = 'arman.shukanov@fokin-team.ru';
-        $mail->Password = 'arman_shukanov';
-
-        $mail->setFrom('arman.shukanov@fokin-team.ru');
-        $mail->addAddress($email);
-        $mail->Subject = 'Подтверждение аккаунта';
-        $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verify/?token=" . $signup_token;
-
-        $mail->isHTML(true);
-
-        $mail->send();
-        
-
     }
-
-    public function actionUrl()
-    {
-        return $_SERVER['HTTP_HOST'];
-    }
-
-    public function actionCheckUser()
-    {        
-        $user = User::find(1) ;
-        
-        echo $user->email;
-    }
-} 
-
-
-
-// ?email=glebikon@yandex.ru&password=1234
+}
