@@ -185,10 +185,9 @@ class UserController extends Controller
             {
                 $token = $g_client->fetchAccessTokenWithAuthCode($code);
                 $g_client->setAccessToken($token);
-                $client->setAccessToken($token);
  
                 // Получаем информацию о пользователе
-                $oauth2 = new Google_Service_Oauth2($client);
+                $oauth2 = new Google_Service_Oauth2($g_client);
                 $userInfo = $oauth2->userinfo->get();
                 
                 $userInfo->email; // Email
