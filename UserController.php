@@ -9,7 +9,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
 use Facebook;
 use Google_Client;
-use Google_Service_Oauth2;
 
 
 
@@ -139,7 +138,7 @@ class UserController extends Controller
     public function actionLoginFacebook()
     {
         $ID = 559755891418423;
-        $SEKRET = "f5a86f378bca716435d1db271695dedd";
+        $SEKRET = f5a86f378bca716435d1db271695dedd;
         $URL = 'rest.fokin-team.ru';
 
         $fb = new Facebook\Facebook([
@@ -151,7 +150,7 @@ class UserController extends Controller
         $helper = $fb->getRedirectLoginHelper();
         
         $permissions = ['email']; // Optional permissions
-        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/login-facebook', $permissions);
+        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/call-back-facebook', $permissions);
         
         return $loginUrl;
     }
@@ -163,6 +162,7 @@ class UserController extends Controller
     public function actionGoogle()
     {
         //Step 1: Enter you google account credentials
+        include_once __DIR__ . '/../vendor/autoload.php';
         $g_client = new Google_Client();
         
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
@@ -172,8 +172,7 @@ class UserController extends Controller
         
         //Step 2 : Create the url
         $auth_url = $g_client->createAuthUrl();
-        echo '<a href="'.$auth_url.'">click</a>';
-        echo json_encode($auth_url);
+        echo "<a href='$auth_url'>Login Through Google </a>";
         
         //Step 3 : Get the authorization  code
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
@@ -183,41 +182,33 @@ class UserController extends Controller
         {
             try 
             {
+        
                 $token = $g_client->fetchAccessTokenWithAuthCode($code);
                 $g_client->setAccessToken($token);
-                // Получаем информацию о пользователе
-                $oauth2 = new Google_Service_Oauth2($g_client);
-                $userInfo = $oauth2->userinfo->get();
-                // $userInfo->email; // Email
-                // $userInfo->gender; // Пол (male)
-                // $userInfo->givenName; // Имя (Alex)
-                // $userInfo->familyName; // Фамилия (Codd)
-                // $userInfo->name; // Полное имя (Alex Codd)
-                // $userInfo->id; // ID
-                // $userInfo->link; // Ссылка на профиль в google plus
-                // $userInfo->picture;
-                // echo $userInfo->name;
-
-                $user = User::findOne(['email' => $userInfo->email]);
-                if(!$user)
-                {
-                    $model = new User();
-                    $model->email = $userInfo->email;
-                    $model->signup_token = uniqid();
-                    $model->save();
-                    echo 'Вы успешно зарегистрировались!';
-                }        
-                else
-                    echo 'пользователь с такой почтой уже существует';
+        
             }
             catch (Exception $e)
+            {
+                echo $e->getMessage();
+            }
+        
+            try 
+            {
+                $pay_load = $g_client->verifyIdToken();
+        
+        
+            }
+            catch (Exception $e) 
             {
                 echo $e->getMessage();
             }
         } 
         else
         {
-            echo 'unknown error';
+            $pay_load = null;
         }
+        
+        if(isset($pay_load)){}
+        return $pay_load['email'];
     }
 }
