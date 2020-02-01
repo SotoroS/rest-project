@@ -195,13 +195,13 @@ class UserController extends Controller
                 // $userInfo->link; // Ссылка на профиль в google plus
                 // $userInfo->picture;
                 // echo $userInfo->name;
-
-                $user = User::findOne(['email' => $userInfo->email]);
+                $email = $userInfo->email;
+                $user = User::findOne(['email' => $email]);
                 if(!$user)
                 {
                     $signup_token = uniqid();
                     $model = new User();
-                    $model->email = $userInfo->email;
+                    $model->email = $email;
                     $model->signup_token = $signup_token;
                     $model->save();
                     echo 'Вы успешно зарегистрировались!';
