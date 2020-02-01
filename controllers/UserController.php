@@ -9,6 +9,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
 use Facebook;
 use Google_Client;
+use Google_Service_Oauth2;
 
 
 
@@ -166,23 +167,16 @@ class UserController extends Controller
         
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
         $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
-        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/call-back-google");
+        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/google");
         $g_client->setScopes("email");
         
         //Step 2 : Create the url
         $auth_url = $g_client->createAuthUrl();
-        //echo json_encode($auth_url);
-        echo "<a href='$auth_url'>Login Through Google </a>";
-
-    }
-    public function actionCallBackGoogle()
-    {
-        //Step 1: Enter you google account credentials
-        $g_client = new Google_Client();
-    
+        echo json_encode($auth_url);
+        
         //Step 3 : Get the authorization  code
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
-
+        
         //Step 4: Get access token
         if(isset($code)) 
         {
@@ -190,6 +184,21 @@ class UserController extends Controller
             {
                 $token = $g_client->fetchAccessTokenWithAuthCode($code);
                 $g_client->setAccessToken($token);
+                $client->setAccessToken($token);
+ 
+                // Получаем информацию о пользователе
+                $oauth2 = new Google_Service_Oauth2($client);
+                $userInfo = $oauth2->userinfo->get();
+                
+                $userInfo->email; // Email
+                $userInfo->gender; // Пол (male)
+                $userInfo->givenName; // Имя (Alex)
+                $userInfo->familyName; // Фамилия (Codd)
+                $userInfo->name; // Полное имя (Alex Codd)
+                $userInfo->id; // ID
+                $userInfo->link; // Ссылка на профиль в google plus
+                $userInfo->picture;
+                echo $userInfo->email.' '.$userInfo->gender.' '.$userInfo->givenName.' '.$userInfo->familyName;
         
             }
             catch (Exception $e)
@@ -214,6 +223,6 @@ class UserController extends Controller
         }
         
         if(isset($pay_load)){}
-        return $pay_load['email'];
+        return $pay_load['email'].$pay_load['gender'];
     }
 }
