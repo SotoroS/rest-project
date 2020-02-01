@@ -153,7 +153,11 @@ class UserController extends Controller
         $permissions = ['email']; // Optional permissions
         $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/login-facebook', $permissions);
         
-        return $loginUrl;
+
+        $request = Yii::$app->request;
+
+        print_r($request);
+        // return $loginUrl;
     }
     public function actionCallBackFacebook()
     {
