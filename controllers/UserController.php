@@ -192,7 +192,7 @@ class UserController extends Controller
                 $model->email = $email;
                 $model->signup_token = uniqid();
                 $model->verified = 1;
-                $model->access_token = $token;
+                $model->access_token = $token['access_token'];
                 $model->save();
                 echo 'Вы успешно зарегистрировались!';
             }        
