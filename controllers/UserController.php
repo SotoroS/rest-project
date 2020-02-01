@@ -204,7 +204,7 @@ class UserController extends Controller
                     $model->email = $userInfo->email;
                     $model->signup_token = $signup_token;
                     $model->save();
-                    echo 'Вы успешно зарегистрировались!'.$signup_token;
+                    echo 'Вы успешно зарегистрировались!';
 
                     // Отправка сообщения со ссылкой на почту пользователя
                     $mail = new PHPMailer;
