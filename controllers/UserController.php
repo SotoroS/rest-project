@@ -162,79 +162,43 @@ class UserController extends Controller
 
     public function actionGoogle()
     {
-        //Step 1: Enter you google account credentials
+        //Enter you google account credentials
         $g_client = new Google_Client();
-        
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
         $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
         $g_client->setRedirectUri("http://rest.fokin-team.ru/user/google");
         $g_client->setScopes("email");
         
-        //Step 2 : Create the url
+        //Create the url
         $auth_url = $g_client->createAuthUrl();
         
-        //Step 3 : Get the authorization  code
+        //Get the authorization  code
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
         
-        //Step 4: Get access token
+        //Get access token
         if(isset($code)) 
         {
-            try 
+            $token = $g_client->fetchAccessTokenWithAuthCode($code);
+            $g_client->setAccessToken($token);
+            // Get user information
+            $oauth2 = new Google_Service_Oauth2($g_client);
+            $userInfo = $oauth2->userinfo->get();
+            $email = $userInfo->email;
+            $user = User::findOne(['email' => $email]);
+            // Check user with such email in database
+            if(!$user)
             {
-                $token = $g_client->fetchAccessTokenWithAuthCode($code);
-                $g_client->setAccessToken($token);
-                // Получаем информацию о пользователе
-                $oauth2 = new Google_Service_Oauth2($g_client);
-                $userInfo = $oauth2->userinfo->get();
-                // $userInfo->email; // Email
-                // $userInfo->gender; // Пол (male)
-                // $userInfo->givenName; // Имя (Alex)
-                // $userInfo->familyName; // Фамилия (Codd)
-                // $userInfo->name; // Полное имя (Alex Codd)
-                // $userInfo->id; // ID
-                // $userInfo->link; // Ссылка на профиль в google plus
-                // $userInfo->picture;
-                // echo $userInfo->name;
-                $email = $userInfo->email;
-                $user = User::findOne(['email' => $email]);
-                if(!$user)
-                {
-                    $signup_token = uniqid();
-                    $model = new User();
-                    $model->email = $email;
-                    $model->signup_token = $signup_token;
-                    $model->save();
-                    echo 'Вы успешно зарегистрировались!';
-
-                    // Отправка сообщения со ссылкой на почту пользователя
-                    $mail = new PHPMailer;
-
-                    $mail->CharSet = "UTF-8";
-
-                    $mail->isSMTP();
-                    $mail->Host = 'smtp.yandex.ru';
-                    $mail->Port = 465;
-                    $mail->SMTPAuth = true;
-                    $mail->SMTPSecure = 'ssl';
-
-                    $mail->Username = 'arman.shukanov@fokin-team.ru';
-                    $mail->Password = 'arman_shukanov';
-
-                    $mail->setFrom('arman.shukanov@fokin-team.ru');
-                    $mail->addAddress($email);
-                    $mail->Subject = 'Подтверждение аккаунта';
-                    $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verification_code/?token=" . $signup_token;
-
-                    $mail->isHTML(true);
-
-                    $mail->send();
-                }        
-                else
-                    echo 'пользователь с такой почтой уже существует';
-            }
-            catch (Exception $e)
+                $model = new User();
+                $model->email = $email;
+                $model->signup_token = uniqid();
+                $model->verified->1;
+                $model->access_token = $token;
+                $model->save();
+                echo 'Вы успешно зарегистрировались!';
+            }        
+            else
             {
-                echo $e->getMessage();
+                echo 'пользователь с такой почтой уже существует';
             }
         } 
         else
