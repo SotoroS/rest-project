@@ -151,7 +151,7 @@ class UserController extends Controller
         $helper = $fb->getRedirectLoginHelper();
         
         $permissions = ['email']; // Optional permissions
-        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/call-back-facebook', $permissions);
+        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/login-facebook', $permissions);
         
         return $loginUrl;
     }
