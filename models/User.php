@@ -1,6 +1,6 @@
 <?php
 
-namespace micro\models;
+namespace app\models;
 
 use Yii;
 
@@ -40,8 +40,8 @@ class User extends \yii\db\ActiveRecord
             [['age', 'verified'], 'integer'],
             [['gender'], 'string', 'max' => 1],
             [['phone'], 'string', 'max' => 30],
-            [['email', 'password'], 'string', 'max' => 256],
-            [['signup_token', 'access_token'], 'string', 'max' => 13],
+            [['email', 'password', 'access_token'], 'string', 'max' => 256],
+            [['signup_token'], 'string', 'max' => 13],
         ];
     }
 

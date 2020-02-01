@@ -40,7 +40,7 @@ class M200130000215CreateUserTable extends Migration
             'age' => 'INT',
             'verified' => 'BOOLEAN DEFAULT false',
             'signup_token' => 'VARCHAR(13)',
-            'access_token' => 'VARCHAR(13)'
+            'access_token' => 'VARCHAR(256)'
         ]);
     }
 
