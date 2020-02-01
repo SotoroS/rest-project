@@ -201,11 +201,12 @@ class UserController extends Controller
                 $user = User::findOne(['email' => $userInfo->email]);
                 if(!$user)
                 {
+                    $signup_token = uniqid();
                     $model = new User();
                     $model->email = $userInfo->email;
-                    $model->signup_token = uniqid();
+                    $model->signup_token = $signup_token;
                     $model->save();
-                    echo 'Вы успешно зарегистрировались!';
+                    echo 'Вы успешно зарегистрировались!'.$signup_token;
                 }        
                 else
                     echo 'пользователь с такой почтой уже существует';
