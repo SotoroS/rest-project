@@ -205,6 +205,29 @@ class UserController extends Controller
                     $model->signup_token = $signup_token;
                     $model->save();
                     echo 'Вы успешно зарегистрировались!'.$signup_token;
+
+                    // Отправка сообщения со ссылкой на почту пользователя
+                    $mail = new PHPMailer;
+
+                    $mail->CharSet = "UTF-8";
+
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.yandex.ru';
+                    $mail->Port = 465;
+                    $mail->SMTPAuth = true;
+                    $mail->SMTPSecure = 'ssl';
+
+                    $mail->Username = 'arman.shukanov@fokin-team.ru';
+                    $mail->Password = 'arman_shukanov';
+
+                    $mail->setFrom('arman.shukanov@fokin-team.ru');
+                    $mail->addAddress($email);
+                    $mail->Subject = 'Подтверждение аккаунта';
+                    $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verification_code/?token=" . $signup_token;
+
+                    $mail->isHTML(true);
+
+                    $mail->send();
                 }        
                 else
                     echo 'пользователь с такой почтой уже существует';
@@ -216,8 +239,7 @@ class UserController extends Controller
         } 
         else
         {
-            echo 'unknown error';
+            return $auth_url;
         }
-        return $auth_url;
     }
 }
