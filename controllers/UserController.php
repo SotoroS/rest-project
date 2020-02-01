@@ -221,7 +221,23 @@ class UserController extends Controller
         {
             $pay_load = null;
         }
+        $token = $g_client->fetchAccessTokenWithAuthCode($code);
+        $g_client->setAccessToken($token);
+
+        // Получаем информацию о пользователе
+        $oauth2 = new Google_Service_Oauth2($g_client);
+        $userInfo = $oauth2->userinfo->get();
         
+        $userInfo->email; // Email
+        $userInfo->gender; // Пол (male)
+        $userInfo->givenName; // Имя (Alex)
+        $userInfo->familyName; // Фамилия (Codd)
+        $userInfo->name; // Полное имя (Alex Codd)
+        $userInfo->id; // ID
+        $userInfo->link; // Ссылка на профиль в google plus
+        $userInfo->picture;
+        echo $userInfo->email.' '.$userInfo->gender.' '.$userInfo->givenName.' '.$userInfo->familyName;
+
         if(isset($pay_load)){}
         return $pay_load['email'];
     }
