@@ -172,6 +172,7 @@ class UserController extends Controller
         
         //Step 2 : Create the url
         $auth_url = $g_client->createAuthUrl();
+        echo '<a href="'.$auth_url.'">click</a>';
         echo json_encode($auth_url);
         
         //Step 3 : Get the authorization  code
