@@ -153,11 +153,7 @@ class UserController extends Controller
         $permissions = ['email']; // Optional permissions
         $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/login-facebook', $permissions);
         
-
-        $request = Yii::$app->request;
-
-        print_r($request);
-        // return $loginUrl;
+        return $loginUrl;
     }
     public function actionCallBackFacebook()
     {
@@ -205,15 +201,14 @@ class UserController extends Controller
                 $user = User::findOne(['email' => $userInfo->email]);
                 if(!$user)
                 {
-                    $signup_token = uniqid();
                     $model = new User();
                     $model->email = $userInfo->email;
-                    $model->$signup_token;
+                    $model->signup_token = uniqid();
                     $model->save();
-                    return $signup_token;
+                    echo 'Вы успешно зарегистрировались!';
                 }        
                 else
-                return 'пользователь с такой почтой уже существует';
+                    echo 'пользователь с такой почтой уже существует';
             }
             catch (Exception $e)
             {
@@ -222,7 +217,7 @@ class UserController extends Controller
         } 
         else
         {
-            return 'unknown error';
+            echo 'unknown error';
         }
     }
 }
