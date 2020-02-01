@@ -223,6 +223,6 @@ class UserController extends Controller
         }
         
         if(isset($pay_load)){}
-        return $pay_load['email'].$pay_load['gender'];
+        return $pay_load['email'];
     }
 }
