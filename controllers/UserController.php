@@ -185,44 +185,39 @@ class UserController extends Controller
             {
                 $token = $g_client->fetchAccessTokenWithAuthCode($code);
                 $g_client->setAccessToken($token);
- 
                 // Получаем информацию о пользователе
                 $oauth2 = new Google_Service_Oauth2($g_client);
                 $userInfo = $oauth2->userinfo->get();
-                
-                $userInfo->email; // Email
-                $userInfo->gender; // Пол (male)
-                $userInfo->givenName; // Имя (Alex)
-                $userInfo->familyName; // Фамилия (Codd)
-                $userInfo->name; // Полное имя (Alex Codd)
-                $userInfo->id; // ID
-                $userInfo->link; // Ссылка на профиль в google plus
-                $userInfo->picture;
-                echo $userInfo->email.' '.$userInfo->gender.' '.$userInfo->givenName.' '.$userInfo->familyName;
-        
+                // $userInfo->email; // Email
+                // $userInfo->gender; // Пол (male)
+                // $userInfo->givenName; // Имя (Alex)
+                // $userInfo->familyName; // Фамилия (Codd)
+                // $userInfo->name; // Полное имя (Alex Codd)
+                // $userInfo->id; // ID
+                // $userInfo->link; // Ссылка на профиль в google plus
+                // $userInfo->picture;
+                echo $userInfo->name;
+
+                $user = User::findOne(['email' => $userInfo->email]);
+                if(!$user)
+                {
+                    $model = new User();
+                    $model->email = $userInfo->email;
+                    $model->signup_token = uniqid();
+                    $model->save();
+                    echo 'Вы успешно зарегистрировались!';
+                }        
+                else
+                    echo 'пользователь с такой почтой уже существует';
             }
             catch (Exception $e)
-            {
-                echo $e->getMessage();
-            }
-        
-            try 
-            {
-                $pay_load = $g_client->verifyIdToken();
-        
-        
-            }
-            catch (Exception $e) 
             {
                 echo $e->getMessage();
             }
         } 
         else
         {
-            $pay_load = null;
+            echo 'unknown error';
         }
-
-        if(isset($pay_load)){}
-        return $pay_load['email'];
     }
 }
