@@ -166,7 +166,7 @@ class UserController extends Controller
         $g_client = new Google_Client();
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
         $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
-        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/google");
+        $g_client->setRedirectUri("https://rest.fokin-team.ru/user/google");
         $g_client->setScopes("email");
         
         //Create the url
