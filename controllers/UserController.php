@@ -3,8 +3,8 @@
 namespace micro\controllers;
 
 
-use micro\models\User;
 use Yii;
+use micro\models\User;
 use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
 use Facebook;
@@ -12,11 +12,11 @@ use Google_Client;
 use Google_Service_Oauth2;
 
 
-
 /**
  * Class SiteController
  * @package micro\controllers
  */
+
 class UserController extends Controller
 {
     public function actionSignup()
@@ -137,7 +137,9 @@ class UserController extends Controller
             }
         }
         else
+        {
             return 'No data received.';
+        }
     }
 
     public function actionLoginFacebook()
@@ -170,7 +172,7 @@ class UserController extends Controller
         $g_client = new Google_Client();
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
         $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
-        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/login-with-google");
+        $g_client->setRedirectUri("https://rest.fokin-team.ru/user/login-with-google");
         $g_client->setScopes("email");
         
         //Create the url
@@ -192,8 +194,8 @@ class UserController extends Controller
             $user = User::findOne(['email' => $email]);
 
             // Check user with such email in database
-            if(!$user)
-            {
+            if(!$user) // Create new user
+            {  
                 $model = new User();
                 $model->email = $email;
                 $model->signup_token = uniqid();
@@ -202,9 +204,13 @@ class UserController extends Controller
                 $model->save();
                 echo 'You have successfully registered!';
             }        
-            else
+            else // Assign a token
             {
+                $model = new User();
+                $model->access_token = $token['access_token'];
+                $model->save();
                 echo 'A user with this email already exists.';
+                
             }
         } 
         else
