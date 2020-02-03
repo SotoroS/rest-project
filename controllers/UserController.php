@@ -140,7 +140,7 @@ class UserController extends Controller
     {
         $ID = 559755891418423;
         $SEKRET = "f5a86f378bca716435d1db271695dedd";
-        $URL = 'rest.fokin-team.ru';
+        $URL = 'https://rest.fokin-team.ru/user/login-facebook';
 
         $fb = new Facebook\Facebook([
         'app_id' => $ID, // Replace {app-id} with your app id
@@ -151,9 +151,25 @@ class UserController extends Controller
         $helper = $fb->getRedirectLoginHelper();
         
         $permissions = ['email']; // Optional permissions
-        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/login-facebook', $permissions);
+        $loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
         
-        return $loginUrl;
+	if (isset($_GET['code']))
+	{
+	    $params = array(
+		'client_id' => $ID,
+		'redirect_uri' => 'https://rest.fokin-team.ru/user/login-facebook',
+		'client_secret' => $SEKRET,
+		'code' => $_GET['code']
+		);
+	    $url = 'https://graph.facebook.com/v5.0/oauth/access_token';
+	}        
+
+	//$token = file_get_contents('https://graph.facebook.com/v5.0/oauth/access_token?client_id=559755891418423&redirect_uri=rest.fokin-team.ru&client_secret=f5a86f378bca716435d1db271695dedd&code='.$_GET['code']);
+	//var_dump($URL);
+        $tokenInfo = null;
+        parse_str(file_get_contents($url . '?' . http_build_query($params)), $tokenInfo);
+        
+        var_dump($tokenInfo);
     }
     public function actionCallBackFacebook()
     {
