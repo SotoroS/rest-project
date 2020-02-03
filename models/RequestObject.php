@@ -22,6 +22,8 @@ use Yii;
  * @property float|null $pivot_lt
  * @property float|null $pivot_lg
  * @property float $radius
+ * 
+ * @property array $addresses
  *
  * @property RequestAddress[] $requestAddresses
  * @property City $city
@@ -30,6 +32,9 @@ use Yii;
  */
 class RequestObject extends \yii\db\ActiveRecord
 {
+    // Array of address by request
+    public $addresses = [];
+
     /**
      * {@inheritdoc}
      */
@@ -46,6 +51,7 @@ class RequestObject extends \yii\db\ActiveRecord
         return [
             [['user_id', 'num_of_people', 'family', 'pets', 'request_type_id', 'square_from', 'square_to', 'city_id', 'price_from', 'price_to', 'description', 'radius'], 'required'],
             [['user_id', 'num_of_people', 'family', 'pets', 'request_type_id', 'square_from', 'square_to', 'city_id', 'price_from', 'price_to'], 'integer'],
+            ['address', 'safe'],
             [['description'], 'string'],
             [['pivot_lt', 'pivot_lg', 'radius'], 'number'],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
@@ -76,6 +82,17 @@ class RequestObject extends \yii\db\ActiveRecord
             'pivot_lg' => 'Pivot Lg',
             'radius' => 'Radius',
         ];
+    }
+
+    
+    /**
+     * Find request object by id
+     *
+     * @return \yii\db\BaseActiveRecord
+     */
+    public static function findByIdentity($id)
+    {
+        return static::findOne($id);
     }
 
     /**

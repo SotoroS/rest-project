@@ -13,6 +13,7 @@
     }
   ],
   "require-dev": {
-    "yiisoft/yii2-gii": "^2.1"
+    "yiisoft/yii2-gii": "^2.1",
+    "codeception/module-yii2": "^1.1"
   }
 }

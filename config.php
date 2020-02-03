@@ -13,6 +13,14 @@ return [
 	'aliases' => [
 		'@micro' => __DIR__,
 	],
+	'params' => [
+		'here_api_key' => 'GIGsSEJb9m1LlcOOpL6jQSP-Mz51UEaV-kGj4orep1k',
+		'email_login' => '',
+		'email_pass' => '',
+		'email_port' => '',
+		'email_host' => '',
+		'email_from' => ''
+	],
 	'defaultRoute' => 'site/index',
 	'components' => [
 		'urlManager' => [

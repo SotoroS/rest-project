@@ -2,9 +2,8 @@
 
 namespace micro\controllers;
 
-
-use micro\models\User;
 use Yii;
+use micro\models\User;
 use PHPMailer\PHPMailer\PHPMailer;
 use yii\web\Controller;
 use Facebook;
@@ -12,49 +11,83 @@ use Google_Client;
 use Google_Service_Oauth2;
 
 
-
 /**
  * Class SiteController
  * @package micro\controllers
  */
+
 class UserController extends Controller
 {
+    public function behaviors()
+	{
+		// удаляем rateLimiter, требуется для аутентификации пользователя
+		$behaviors = parent::behaviors();
+
+		return $behaviors;
+	}
+
+	/**
+	 * Function executing before all action
+	 *
+	 * - set json format for response
+	 *
+	 * @param $action
+	 * @return bool
+	 * @throws \yii\web\BadRequestHttpException
+	 */
+	public function beforeAction($action)
+	{
+		if (parent::beforeAction($action)) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			return true;
+		} else {
+			return false;
+		}
+    }
+    
+    /**
+     * Signup function
+     * 
+     * @param string $email - email address
+     * @param string $password - password
+     * 
+     * @return string|bool
+     */
     public function actionSignup()
     {
-
         $request = Yii::$app->request;
 
         $email = $request->get('email');
         $password = $request->get('password');
-        if(!$password)
-        {
-            exit("error password");
+
+        if (is_null($email) || is_null($password)) {
+            return [
+                'error' => 'Fields are not filled'
+            ];
         }
+
         $password = password_hash($password, PASSWORD_DEFAULT);
         $signup_token = uniqid();
 
-        // поиск эл.почты в базе данных
+        // Find user by email
         $user = User::findOne(['email' => $email]);
 
-        // если такой почты не существует, то регистрируем пользователя
-        if(!$user)
-        {
+        // Registration user if not exist user
+        if(!$user) {
             $model = new User();
 
             $model->email = $email;
             $model->password = $password;
             $model->signup_token = $signup_token;
             
-            if(($model->validate()) && ($model->save()))
-            {
-                echo "Вы успешно зарегистрировались!";
-            }
-            else{
-                $errors = $model->errors;
-                return $errors;
+            if(($model->validate()) && ($model->save())) {
+                return true;
+            } else {
+                return $model->errors;
             }
 
-            // Отправка сообщения со ссылкой на почту пользователя
+            // Send email message for verify
             $mail = new PHPMailer;
 
             $mail->CharSet = "UTF-8";
@@ -71,7 +104,7 @@ class UserController extends Controller
             $mail->setFrom('arman.shukanov@fokin-team.ru');
             $mail->addAddress($email);
             $mail->Subject = 'Подтверждение аккаунта';
-            $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verification_code/?token=" . $signup_token;
+            $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verify/?token=" . $signup_token;
 
             $mail->isHTML(true);
 
@@ -81,79 +114,96 @@ class UserController extends Controller
         {
             return"пользователь с такой почтой уже существует";
         }
-
     }
 
-     public function actionVerify()
-     {
+    /**
+     * Verify user function
+     * 
+     * @param string $token - verify token
+     * 
+     * @return string|bool
+     */
+    public function actionVerify()
+    {
         $request = Yii::$app->request;
 
-        $verification_code = $request->get('verification_code');
+        $verification_code = $request->get('token');
 
         $user = User::findOne(['signup_token' => $verification_code]);
 
-        if($user)
-        {
+        if (!is_null($user)) {
             $user->verified = 1;
-            if($user->save())
-            {
-                return "Ваш аккаунт подтвержден!";
+
+            if($user->update()) {
+                return true;
             }
-        }
-        else
-        {
-            return "Код подтверждения не верен.";
+        } else {
+            return false;
         }
     }
 
+    /**
+     * Login function
+     * 
+     * @param $email - email user
+     * @param $password - password user
+     * 
+     * @return string|bool
+     */
     public function actionLogin()
     {   
         // Checking for data availability
         $request = Yii::$app->request;
 
         // Checking for email in the received data
-        if($request->get('email'))
-        {
+        if($request->get('email')) {
             $email = $request->get('email');
             $password = $request->get('password');
 
             // Checking the presence of a user in the database
             $user = User::findOne(['email' => $email]);
-            if($user)
-            {
+            
+            if(!is_null($user)) {
                 // Password verification
-                if (password_verify($password, $user->password))
-                {
+                if (password_verify($password, $user->password)) {
+                    // TODO: return token
                     return 'You are logged in.';
-                }
-                else
-                {
+                } else {
+                    // TODO: return false
                     return 'Invalid password.';
                 }
             }
             else
             {
+                // TODO: return false
                 return 'Not exist user with this email.';
             }
-        }
-        else
+        } else {
+            // TODO: return false
             return 'No data received.';
+        }
     }
 
+    // TODO: add comment
     public function actionLoginFacebook()
     {
+        // TODO: Move to param in config.php
         $ID = 559755891418423;
         $SEKRET = "f5a86f378bca716435d1db271695dedd";
+<<<<<<< HEAD
         $URL = 'https://rest.fokin-team.ru/user/login-facebook';
+=======
+>>>>>>> 2b84050ef88e0e5b3ad5c54801cb406a4a1dc452
 
         $fb = new Facebook\Facebook([
-        'app_id' => $ID, // Replace {app-id} with your app id
-        'app_secret' => $SEKRET,
-        'default_graph_version' => 'v3.2',
+            'app_id' => $ID,
+            'app_secret' => $SEKRET,
+            'default_graph_version' => 'v3.2',
         ]);
         
         $helper = $fb->getRedirectLoginHelper();
         
+<<<<<<< HEAD
         $permissions = ['email'];
         $loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
     
@@ -196,60 +246,66 @@ class UserController extends Controller
 	    //var_dump($URL);
     	    //$tokenInfo = null;
     	    //parse_str(file_get_contents($url . '?' . http_build_query($params)), $tokenInfo);
+=======
+        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/login-facebook', ['email']);
+>>>>>>> 2b84050ef88e0e5b3ad5c54801cb406a4a1dc452
         
     	//    var_dump());
     	//}
     }
-    public function actionCallBackFacebook()
-    {
-        return;
-    }
 
+    // TODO: Add comment
     public function actionLoginWithGoogle()
     {
+        $request = Yii::$app->request;
+
         //Enter you google account credentials
         $g_client = new Google_Client();
+
+        // TODO: Move to param in config.php
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
         $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
-        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/login-with-google");
+        $g_client->setRedirectUri("https://rest.fokin-team.ru/user/login-with-google");
         $g_client->setScopes("email");
         
         //Create the url
         $auth_url = $g_client->createAuthUrl();
         
         // Getting the authorization  code
-        $code = isset($_GET['code']) ? $_GET['code'] : NULL;
+        $code = $request->get('code');
         
-        if(isset($code)) 
-        {
-            // Getting a token
+        if(isset($code)) {
+            // Getting the token
             $token = $g_client->fetchAccessTokenWithAuthCode($code);
             $g_client->setAccessToken($token);
 
             // Getting user information
             $oauth2 = new Google_Service_Oauth2($g_client);
+
             $userInfo = $oauth2->userinfo->get();
             $email = $userInfo->email;
+
             $user = User::findOne(['email' => $email]);
 
             // Check user with such email in database
-            if(!$user)
-            {
+
+            if(!is_null($user)) {
                 $model = new User();
+
                 $model->email = $email;
                 $model->signup_token = uniqid();
                 $model->verified = 1;
                 $model->access_token = $token['access_token'];
-                $model->save();
-                echo 'You have successfully registered!';
-            }        
-            else
-            {
-                echo 'A user with this email already exists.';
+                
+                if ($model->save()) {
+                    // TODO: return access token
+                } else {
+                    return false;
+                }
+            } else {
+               return false;
             }
-        } 
-        else
-        {
+        } else {
             return $auth_url;
         }
     }
