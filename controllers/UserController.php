@@ -150,26 +150,51 @@ class UserController extends Controller
         
         $helper = $fb->getRedirectLoginHelper();
         
-        $permissions = ['email']; // Optional permissions
+        $permissions = ['email'];
         $loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
-        
-	if (isset($_GET['code']))
-	{
-	    $params = array(
-		'client_id' => $ID,
-		'redirect_uri' => 'https://rest.fokin-team.ru/user/login-facebook',
-		'client_secret' => $SEKRET,
-		'code' => $_GET['code']
-		);
-	    $url = 'https://graph.facebook.com/v5.0/oauth/access_token';
-	}        
+    
+	$code = Yii::$app->request->get('code');
 
-	//$token = file_get_contents('https://graph.facebook.com/v5.0/oauth/access_token?client_id=559755891418423&redirect_uri=rest.fokin-team.ru&client_secret=f5a86f378bca716435d1db271695dedd&code='.$_GET['code']);
-	//var_dump($URL);
-        $tokenInfo = null;
-        parse_str(file_get_contents($url . '?' . http_build_query($params)), $tokenInfo);
+	if(isset($code)){        
+	    //return $code;
+    	    try {
+    	        $response = $fb->get('me?access_token='.$code);
+	        $resp = $response->getDecodeBody();
+	        //$fb->setDefaultAccessToken($accessToken);
+	        echo $resp;
+    	    } catch(Facebook\Exceptions\FacebookResponseException $e){
+		    echo 'Graph returned an error: ' . $e->getMessage();
+		    exit;
+		} catch(Facebook\Exceptions\FacebookSDKException $e){
+		echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    		exit;
+    	    }    
+    	}
+    	
+	return $loginUrl;
+        //$helper = $fb->getRedirectLoginHelper();
         
-        var_dump($tokenInfo);
+        //$permissions = ['email']; // Optional permissions
+        //$loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
+        
+        //$request = Yii::$app->request;
+	//if ($request->get('code'))
+	//{
+	//    $params = array(
+	//	'client_id' => $ID,
+	//	'redirect_uri' => 'https://rest.fokin-team.ru/user/login-facebook',
+	//	'client_secret' => $SEKRET,
+	//	'code' => $_GET['code']
+	//	);
+	    //$url = 'https://graph.facebook.com/v5.0/oauth/access_token';        
+
+	    //$token = file_get_contents('https://graph.facebook.com/v5.0/oauth/access_token?client_id=559755891418423&redirect_uri=rest.fokin-team.ru&client_secret=f5a86f378bca716435d1db271695dedd&code='.$_GET['code']);
+	    //var_dump($URL);
+    	    //$tokenInfo = null;
+    	    //parse_str(file_get_contents($url . '?' . http_build_query($params)), $tokenInfo);
+        
+    	//    var_dump());
+    	//}
     }
     public function actionCallBackFacebook()
     {
