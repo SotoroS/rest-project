@@ -107,33 +107,37 @@ class UserController extends Controller
     }
 
     public function actionLogin()
-    {        
+    {   
+        // Checking for data availability
         $request = Yii::$app->request;
+
+        // Checking for email in the received data
         if($request->get('email'))
         {
             $email = $request->get('email');
             $password = $request->get('password');
 
+            // Checking the presence of a user in the database
             $user = User::findOne(['email' => $email]);
-
             if($user)
             {
+                // Password verification
                 if (password_verify($password, $user->password))
                 {
-                    return 'chotko, ti avtorizovan';
+                    return 'You are logged in.';
                 }
                 else
                 {
-                    return 'invalid password'.$password.' '.$user->password;
+                    return 'Invalid password.';
                 }
             }
             else
             {
-                return 'not exist user with this email';
+                return 'Not exist user with this email.';
             }
         }
         else
-            return 'ну введи запрос, чё ты как этот';
+            return 'No data received.';
     }
 
     public function actionLoginFacebook()
@@ -201,31 +205,33 @@ class UserController extends Controller
         return;
     }
 
-    public function actionGoogle()
+    public function actionLoginWithGoogle()
     {
         //Enter you google account credentials
         $g_client = new Google_Client();
         $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
         $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
-        $g_client->setRedirectUri("https://rest.fokin-team.ru/user/google");
+        $g_client->setRedirectUri("http://rest.fokin-team.ru/user/login-with-google");
         $g_client->setScopes("email");
         
         //Create the url
         $auth_url = $g_client->createAuthUrl();
         
-        //Get the authorization  code
+        // Getting the authorization  code
         $code = isset($_GET['code']) ? $_GET['code'] : NULL;
         
-        //Get access token
         if(isset($code)) 
         {
+            // Getting a token
             $token = $g_client->fetchAccessTokenWithAuthCode($code);
             $g_client->setAccessToken($token);
-            // Get user information
+
+            // Getting user information
             $oauth2 = new Google_Service_Oauth2($g_client);
             $userInfo = $oauth2->userinfo->get();
             $email = $userInfo->email;
             $user = User::findOne(['email' => $email]);
+
             // Check user with such email in database
             if(!$user)
             {
@@ -235,11 +241,11 @@ class UserController extends Controller
                 $model->verified = 1;
                 $model->access_token = $token['access_token'];
                 $model->save();
-                echo 'Вы успешно зарегистрировались!';
+                echo 'You have successfully registered!';
             }        
             else
             {
-                echo 'пользователь с такой почтой уже существует';
+                echo 'A user with this email already exists.';
             }
         } 
         else
