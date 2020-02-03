@@ -2,11 +2,6 @@
 
 namespace micro\controllers;
 
-<<<<<<< Updated upstream
-
-=======
-use micro\models\User;
->>>>>>> Stashed changes
 use Yii;
 use micro\models\User;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -183,14 +178,8 @@ class UserController extends Controller
                 // TODO: return false
                 return 'Not exist user with this email.';
             }
-<<<<<<< Updated upstream
-        }
-        else
-        {
-=======
         } else {
             // TODO: return false
->>>>>>> Stashed changes
             return 'No data received.';
         }
     }
