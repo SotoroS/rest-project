@@ -201,7 +201,7 @@ class UserController extends Controller
         
         //Create the url
         $permissions = ['email'];
-        $loginUrl = $helper->getLoginUrl(Yii::$app->params['facebook_redirect_uri'], $permissions);
+        $loginUrl = $helper->getLoginUrl(Yii::$app->params['facebook_client_uri'], $permissions);
     
         // Getting the authorization  code
         $code = Yii::$app->request->get('code');
