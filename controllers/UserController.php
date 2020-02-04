@@ -192,10 +192,10 @@ class UserController extends Controller
         if(!session_id()) {
             session_start();
         }
-
+ 
         $fb = new Facebook\Facebook([
-            'app_id' => 559755891418423,
-            'app_secret' => "f5a86f378bca716435d1db271695dedd",
+            'app_id' => Yii::$app->params['facebook_client_id'],
+            'app_secret' => Yii::$app->params['facebook_client_secret'],
             'default_graph_version' => 'v3.2',
         ]);
         
@@ -203,7 +203,7 @@ class UserController extends Controller
         
         //Create the url
         $permissions = ['email'];
-        $loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
+        $loginUrl = $helper->getLoginUrl(Yii::$app->params['google_redirect_uri'], $permissions);
     
         // Getting the authorization  code
         $code = Yii::$app->request->get('code');
