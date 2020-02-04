@@ -218,12 +218,14 @@ class UserController extends Controller
 
         if(!is_null($code)){        
             try {
-                // Getting the accessToken
+                // Getting array accessToken
                 $accessToken = $helper->getAccessToken();
                 $response = $fb->get('/me?fields=email', $accessToken);
                 // Getting user email
                 $userEmail = $response->getGraphUser();
                 $email = $userEmail['email'];
+                // Getting string accessToken
+                $value = $accessToken->getValue();
 
                 $user = User::findOne(['email' => $email]);
 
@@ -234,17 +236,16 @@ class UserController extends Controller
                     $model->email = $email;
                     $model->signup_token = uniqid();
                     $model->verified = 1;
-                    $model->access_token = $accessToken;
+                    $model->access_token = $value;
                     
                     if ($model->save()) {
-                        // TODO: return access token
+                        return $value;
                     } else {
                         return false;
                     }
                 } else {
                 return false;
                 }
-                
 
                 return print_r($userEmail['email'], true);
 
