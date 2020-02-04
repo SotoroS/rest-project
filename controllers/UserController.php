@@ -184,7 +184,14 @@ class UserController extends Controller
         }
     }
 
-    // TODO: add comment
+    /**
+     * Facebook authorization
+     * 
+     * @param $code - code user
+     * @param $state - state user
+     * 
+     * @return string|bool
+     */
     public function actionLoginFacebook()
     {
         // TODO: Move to param in config.php
@@ -202,16 +209,42 @@ class UserController extends Controller
         
         $helper = $fb->getRedirectLoginHelper();
         
+        //Create the url
         $permissions = ['email'];
         $loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
     
+        // Getting the authorization  code
         $code = Yii::$app->request->get('code');
 
         if(!is_null($code)){        
             try {
+                // Getting the accessToken
                 $accessToken = $helper->getAccessToken();
                 $response = $fb->get('/me?fields=email', $accessToken);
+                // Getting user email
                 $userEmail = $response->getGraphUser();
+                $email = $userEmail['email'];
+
+                $user = User::findOne(['email' => $email]);
+
+                // Check user with such email in database
+                if(!is_null($user)){
+                    $model = new User();
+
+                    $model->email = $email;
+                    $model->signup_token = uniqid();
+                    $model->verified = 1;
+                    $model->access_token = $accessToken;
+                    
+                    if ($model->save()) {
+                        // TODO: return access token
+                    } else {
+                        return false;
+                    }
+                } else {
+                return false;
+                }
+                
 
                 return print_r($userEmail['email'], true);
 
