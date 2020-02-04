@@ -7,4 +7,6 @@ modules:
     enabled:
         - Asserts
         - \Helper\Unit
+        - Yii2:
+            part: [orm, email]
     step_decorators: ~        
