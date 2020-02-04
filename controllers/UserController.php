@@ -182,13 +182,11 @@ class UserController extends Controller
      * Facebook authorization
      * 
      * @param $code - code user
-     * @param $state - state user
      * 
      * @return string|bool
      */
     public function actionLoginFacebook()
     {
-        // TODO: Move to param in config.php
         if(!session_id()) {
             session_start();
         }
@@ -203,7 +201,7 @@ class UserController extends Controller
         
         //Create the url
         $permissions = ['email'];
-        $loginUrl = $helper->getLoginUrl(Yii::$app->params['google_redirect_uri'], $permissions);
+        $loginUrl = $helper->getLoginUrl(Yii::$app->params['facebook_redirect_uri'], $permissions);
     
         // Getting the authorization  code
         $code = Yii::$app->request->get('code');
