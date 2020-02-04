@@ -298,7 +298,7 @@ class UserController extends Controller
                 $model->access_token = $token['access_token'];
                 
                 if ($model->save()) {
-                    return uniqid();
+                    return $token['access_token'];
                 } else {
                     return false;
                 }
