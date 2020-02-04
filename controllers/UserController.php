@@ -234,7 +234,7 @@ class UserController extends Controller
                         return false;
                     }
                 } else {
-                return false;
+                return uniqid();
                 }
 
             } catch(Facebook\Exceptions\FacebookResponseException $e){
