@@ -188,12 +188,11 @@ class UserController extends Controller
     public function actionLoginFacebook()
     {
         // TODO: Move to param in config.php
+        if(!session_id()) {
+            session_start();
+        }
         $ID = 559755891418423;
         $SEKRET = "f5a86f378bca716435d1db271695dedd";
-<<<<<<< HEAD
-        $URL = 'https://rest.fokin-team.ru/user/login-facebook';
-=======
->>>>>>> 2b84050ef88e0e5b3ad5c54801cb406a4a1dc452
 
         $fb = new Facebook\Facebook([
             'app_id' => $ID,
@@ -203,55 +202,27 @@ class UserController extends Controller
         
         $helper = $fb->getRedirectLoginHelper();
         
-<<<<<<< HEAD
         $permissions = ['email'];
         $loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
     
-	$code = Yii::$app->request->get('code');
+        $code = Yii::$app->request->get('code');
 
-	if(isset($code)){        
-	    //return $code;
-    	    try {
-    	        $response = $fb->get('me?access_token='.$code);
-	        $resp = $response->getDecodeBody();
-	        //$fb->setDefaultAccessToken($accessToken);
-	        echo $resp;
-    	    } catch(Facebook\Exceptions\FacebookResponseException $e){
-		    echo 'Graph returned an error: ' . $e->getMessage();
-		    exit;
-		} catch(Facebook\Exceptions\FacebookSDKException $e){
-		echo 'Facebook SDK returned an error: ' . $e->getMessage();
-    		exit;
-    	    }    
-    	}
-    	
-	return $loginUrl;
-        //$helper = $fb->getRedirectLoginHelper();
-        
-        //$permissions = ['email']; // Optional permissions
-        //$loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
-        
-        //$request = Yii::$app->request;
-	//if ($request->get('code'))
-	//{
-	//    $params = array(
-	//	'client_id' => $ID,
-	//	'redirect_uri' => 'https://rest.fokin-team.ru/user/login-facebook',
-	//	'client_secret' => $SEKRET,
-	//	'code' => $_GET['code']
-	//	);
-	    //$url = 'https://graph.facebook.com/v5.0/oauth/access_token';        
+        if(!is_null($code)){        
+            try {
+                $accessToken = $helper->getAccessToken();
+                $response = $fb->get('/me?fields=email', $accessToken);
+                $userEmail = $response->getGraphUser();
 
-	    //$token = file_get_contents('https://graph.facebook.com/v5.0/oauth/access_token?client_id=559755891418423&redirect_uri=rest.fokin-team.ru&client_secret=f5a86f378bca716435d1db271695dedd&code='.$_GET['code']);
-	    //var_dump($URL);
-    	    //$tokenInfo = null;
-    	    //parse_str(file_get_contents($url . '?' . http_build_query($params)), $tokenInfo);
-=======
-        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/login-facebook', ['email']);
->>>>>>> 2b84050ef88e0e5b3ad5c54801cb406a4a1dc452
+                return print_r($userEmail['email'], true);
+
+            } catch(Facebook\Exceptions\FacebookResponseException $e){
+                echo 'Graph returned an error: ' . $e->getMessage();
+            } catch(Facebook\Exceptions\FacebookSDKException $e){
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            }    
+        }
         
-    	//    var_dump());
-    	//}
+    return $loginUrl;
     }
 
     // TODO: Add comment
