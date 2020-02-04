@@ -178,24 +178,75 @@ class UserController extends Controller
         }
     }
 
-    // TODO: add comment
+    /**
+     * Facebook authorization
+     * 
+     * @param $code - code user
+     * @param $state - state user
+     * 
+     * @return string|bool
+     */
     public function actionLoginFacebook()
     {
         // TODO: Move to param in config.php
-        $ID = 559755891418423;
-        $SEKRET = "f5a86f378bca716435d1db271695dedd";
+        if(!session_id()) {
+            session_start();
+        }
 
         $fb = new Facebook\Facebook([
-            'app_id' => $ID,
-            'app_secret' => $SEKRET,
+            'app_id' => 559755891418423,
+            'app_secret' => "f5a86f378bca716435d1db271695dedd",
             'default_graph_version' => 'v3.2',
         ]);
         
         $helper = $fb->getRedirectLoginHelper();
         
-        $loginUrl = $helper->getLoginUrl('rest.fokin-team.ru/user/login-facebook', ['email']);
+        //Create the url
+        $permissions = ['email'];
+        $loginUrl = $helper->getLoginUrl('https://rest.fokin-team.ru/user/login-facebook', $permissions);
+    
+        // Getting the authorization  code
+        $code = Yii::$app->request->get('code');
+
+        if(!is_null($code)){        
+            try {
+                // Getting array accessToken
+                $accessToken = $helper->getAccessToken();
+                $response = $fb->get('/me?fields=email', $accessToken);
+                // Getting user email
+                $userEmail = $response->getGraphUser();
+                $email = $userEmail['email'];
+                // Getting string accessToken
+                $value = $accessToken->getValue();
+
+                $user = User::findOne(['email' => $email]);
+
+                // Check user with such email in database
+                if(is_null($user)){
+                    $model = new User();
+
+                    $model->email = $email;
+                    $model->signup_token = uniqid();
+                    $model->verified = 1;
+                    $model->access_token = $value;
+                    
+                    if ($model->save()) {
+                        return $value;
+                    } else {
+                        return false;
+                    }
+                } else {
+                return false;
+                }
+
+            } catch(Facebook\Exceptions\FacebookResponseException $e){
+                echo 'Graph returned an error: ' . $e->getMessage();
+            } catch(Facebook\Exceptions\FacebookSDKException $e){
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            }    
+        }
         
-        return $loginUrl;
+    return $loginUrl;
     }
 
     
