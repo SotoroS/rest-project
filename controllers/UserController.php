@@ -166,21 +166,15 @@ class UserController extends Controller
             if(!is_null($user)) {
                 // Password verification
                 if (password_verify($password, $user->password)) {
-                    // TODO: return token
-                    return 'You are logged in.';
+                    return uniqid();
                 } else {
-                    // TODO: return false
-                    return 'Invalid password.';
+                    return false;
                 }
-            }
-            else
-            {
-                // TODO: return false
-                return 'Not exist user with this email.';
+            } else {
+                return false;
             }
         } else {
-            // TODO: return false
-            return 'No data received.';
+            return false;
         }
     }
 
@@ -204,18 +198,23 @@ class UserController extends Controller
         return $loginUrl;
     }
 
-    // TODO: Add comment
+    
+    /**
+     * Login function
+     * 
+     * @param $code - authorization code returned by Google
+     * 
+     * @return string|bool
+     */
     public function actionLoginWithGoogle()
     {
         $request = Yii::$app->request;
 
         //Enter you google account credentials
         $g_client = new Google_Client();
-
-        // TODO: Move to param in config.php
-        $g_client->setClientId("156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com");
-        $g_client->setClientSecret("0qepssGons1TcyctkXfW-IPO");
-        $g_client->setRedirectUri("https://rest.fokin-team.ru/user/login-with-google");
+        $g_client->setClientId(Yii::$app->params['google_client_id']);
+        $g_client->setClientSecret(Yii::$app->params['google_client_secret']);
+        $g_client->setRedirectUri(Yii::$app->params['google_redirect_uri']);
         $g_client->setScopes("email");
         
         //Create the url
@@ -239,7 +238,7 @@ class UserController extends Controller
 
             // Check user with such email in database
 
-            if(!is_null($user)) {
+            if(is_null($user)) {
                 $model = new User();
 
                 $model->email = $email;
@@ -248,12 +247,12 @@ class UserController extends Controller
                 $model->access_token = $token['access_token'];
                 
                 if ($model->save()) {
-                    // TODO: return access token
+                    return uniqid();
                 } else {
                     return false;
                 }
             } else {
-               return false;
+                return uniqid();
             }
         } else {
             return $auth_url;
