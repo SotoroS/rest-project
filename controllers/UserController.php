@@ -198,12 +198,10 @@ class UserController extends Controller
         if(!session_id()) {
             session_start();
         }
-        $ID = 559755891418423;
-        $SEKRET = "f5a86f378bca716435d1db271695dedd";
 
         $fb = new Facebook\Facebook([
-            'app_id' => $ID,
-            'app_secret' => $SEKRET,
+            'app_id' => 559755891418423,
+            'app_secret' => "f5a86f378bca716435d1db271695dedd",
             'default_graph_version' => 'v3.2',
         ]);
         
