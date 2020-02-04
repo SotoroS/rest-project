@@ -13,10 +13,4 @@ class ExampleTest extends \Codeception\Test\Unit
     protected function _after()
     {
     }
-
-    // tests
-    public function testSomeFeature()
-    {
-
-    }
 }
