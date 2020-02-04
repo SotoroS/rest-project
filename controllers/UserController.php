@@ -230,7 +230,7 @@ class UserController extends Controller
                 $user = User::findOne(['email' => $email]);
 
                 // Check user with such email in database
-                if(!is_null($user)){
+                if(is_null($user)){
                     $model = new User();
 
                     $model->email = $email;
@@ -246,8 +246,6 @@ class UserController extends Controller
                 } else {
                 return false;
                 }
-
-                return print_r($userEmail['email'], true);
 
             } catch(Facebook\Exceptions\FacebookResponseException $e){
                 echo 'Graph returned an error: ' . $e->getMessage();
