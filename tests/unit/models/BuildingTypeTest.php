@@ -11,6 +11,9 @@ class BuildingTypeTest extends \Codeception\Test\Unit
      */
     public $tester;
 
+    /**
+    * Test model 'BuildingType' column 'name'
+    */
     public function testBuildingName()
     {
         $building = new BuildingType();

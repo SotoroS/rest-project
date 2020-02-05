@@ -11,77 +11,87 @@ class AddressTest extends \Codeception\Test\Unit
      */
     public $tester;
 
-    $address = new  Address();
-
+    /**
+    * Test model 'Address' column 'lt'
+    */
     public function testAddressLT()
     {
+        $address = new  Address();
+
         // Checking for null
-        $building->lt = null;
-        $this->assertFalse($building->validate(['lt']));
+        $address->lt = null;
+        $this->assertFalse($address->validate(['lt']));
 
         // checking for boolean
-        $building->lt = true;
-        $this->assertFalse($building->validate(['lt']));
+        $address->lt = true;
+        $this->assertFalse($address->validate(['lt']));
 
         // checking for integer
-        $building->lt = 1;
-        $this->assertFalse($building->validate(['lt']));
+        $address->lt = 1;
+        $this->assertFalse($address->validate(['lt']));
 
         // checking for string
-        $building->lt = 'name';
-        $this->assertFalse($building->validate(['lt']));
+        $address->lt = 'name';
+        $this->assertFalse($address->validate(['lt']));
 
-        // checking the length (300)
-        $building->lt = 23.12345678;
-        $this->assertFalse($building->validate(['lt']));
-
-        // checking the length (2.7)
-        $building->lt = 23.1234567;
-        $this->assertTrue($building->validate(['lt']));
+        // checking the length (10,8)
+        $address->lt = 12.12345678;
+        $this->assertFalse($address->validate(['lt']));
         
-        // checking for float (-)
-        $building->lt = -23.1345;
-        $this->assertTrue($building->validate(['lt']));
+        // checking the length (11,7)
+        $address->lt = 123.12345678;
+        $this->assertFalse($address->validate(['lt']));
 
-        // checking for float (+)
-        $building->lt = 23.1345;
-        $this->assertTrue($building->validate(['lt']));
+        // checking the length (10,7) float (-)
+        $address->lt = -12.1234567;
+        $this->assertTrue($address->validate(['lt']));
+
+        // checking the length (10,7) float (+)
+        $address->lt = 12.1234567;
+        $this->assertTrue($address->validate(['lt']));
     }
 
     public function testAddressLG()
     {
-        // Checking for null
-        $building->lt = null;
-        $this->assertFalse($building->validate(['lt']));
+        // $address = new  Address();
 
-        // checking for boolean
-        $building->lt = true;
-        $this->assertFalse($building->validate(['lt']));
+        // // Checking for null
+        // $address->lg = null;
+        // $this->assertFalse($address->validate(['lg']));
 
-        // checking for integer
-        $building->lt = 1;
-        $this->assertFalse($building->validate(['lt']));
+        // // checking for boolean
+        // $address->lg = true;
+        // $this->assertFalse($address->validate(['lg']));
 
-        // checking for string
-        $building->lt = 'name';
-        $this->assertFalse($building->validate(['lt']));
+        // // checking for integer
+        // $address->lg = 1;
+        // $this->assertFalse($address->validate(['lg']));
 
-        // checking the length (300)
-        $building->lt = 23.12345678;
-        $this->assertFalse($building->validate(['lt']));
+        // // checking for string
+        // $address->lg = 'name';
+        // $this->assertFalse($address->validate(['lg']));
 
-        // checking the length (2.7)
-        $building->lt = 23.1234567;
-        $this->assertTrue($building->validate(['lt']));
+        // // checking the length (10,8)
+        // $address->lg = 12.12345678;
+        // $this->assertFalse($address->validate(['lg']));
         
-        // checking for float (-)
-        $building->lt = -23.1345;
-        $this->assertTrue($building->validate(['lt']));
+        // // checking the length (11,7)
+        // $address->lg = 123.12345678;
+        // $this->assertFalse($address->validate(['lg']));
 
-        // checking for float (+)
-        $building->lt = 23.1345;
-        $this->assertTrue($building->validate(['lt']));
+        // // checking the length (10,7)
+        // $address->lg = 12.1234567;
+        // $this->assertTrue($address->validate(['lg']));
+        
+        // // checking the length (10,7) float (-)
+        // $address->lg = -12.1234567;
+        // $this->assertTrue($address->validate(['lg']));
+
+        // // checking the length (10,7) float (+)
+        // $address->lg = 12.1234567;
+        // $this->assertTrue($address->validate(['lg']));
     }
+
     public function testAddressCityID()
     {
         
