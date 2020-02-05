@@ -32,8 +32,8 @@ class M200130160310CreateRequestAddressTable extends Migration
     {
         $this->createTable('request_address', [
             'id' => $this->primaryKey(),
-            'request_object_id' => 'INT NOT NULL', //FK
-            'address_id' =>'INT NOT NULL' //FK
+            'request_object_id' => 'INT(19) NOT NULL', //FK
+            'address_id' =>'INT(19) NOT NULL' //FK
         ]);
     }
 

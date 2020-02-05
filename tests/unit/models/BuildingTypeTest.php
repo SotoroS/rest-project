@@ -7,11 +7,6 @@ use micro\models\BuildingType;
 class BuildingTypeTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \UnitTester
-     */
-    public $tester;
-
-    /**
     * Test model 'BuildingType' column 'name'
     */
     public function testBuildingName()

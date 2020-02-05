@@ -1,5 +1,6 @@
-<?php 
-// class ExampleTest extends \Codeception\Test\Unit
+<?php namespace nodels;
+
+// class CityAreaTest extends \Codeception\Test\Unit
 // {
 //     /**
 //      * @var \UnitTester
@@ -12,5 +13,11 @@
 
 //     protected function _after()
 //     {
+//     }
+
+//     // tests
+//     public function testSomeFeature()
+//     {
+
 //     }
 // }
