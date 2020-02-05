@@ -232,7 +232,6 @@ class UserController extends Controller
         
     return $loginUrl;
     }
-
     
     /**
      * Login function
@@ -247,6 +246,7 @@ class UserController extends Controller
 
         //Enter you google account credentials
         $g_client = new Google_Client();
+        
         $g_client->setClientId(Yii::$app->params['google_client_id']);
         $g_client->setClientSecret(Yii::$app->params['google_client_secret']);
         $g_client->setRedirectUri(Yii::$app->params['google_redirect_uri']);
@@ -291,6 +291,47 @@ class UserController extends Controller
             }
         } else {
             return $auth_url;
+        }
+    }
+
+    /**
+     * Update user info function
+     * 
+     * @param $code - authorization code returned by Google
+     * 
+     * @return string|bool
+     */
+    public function actionUpdate()
+    {
+        $request = Yii::$app->request;
+
+        // Check authorized
+        if (!Yii::$app->user->isGuest) {
+            $user = User::find(Yii::$app->user->identity->id);
+
+            if (!is_null($request->post("gender"))) {
+                $user->gender = $request->post("gender");
+            }
+
+            if (!is_null($request->post("phone"))) {
+                $user->phone = $request->post("phone");
+            }
+
+            if (!is_null($request->post("email"))) {
+                $user->email = $request->post("email");
+            }
+
+            if (!is_null($request->post("age"))) {
+                $user->age = $request->post("age");
+            }
+
+            if ($user->update()) {
+                return true;
+            } else {
+                return $user->error;
+            }
+        } else {
+            throw new \yii\web\UnauthorizedHttpException();
         }
     }
 }

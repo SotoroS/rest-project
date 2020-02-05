@@ -77,6 +77,38 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['access_token' => $token]);
     }
+    
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function findIdentity($id)
+	{
+		return static::findOne(['id' => $id]);
+    }
+    
+    /**
+	 * {@inheritdoc}
+	 */
+	public function getId()
+	{
+		return $this->getPrimaryKey();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getAuthKey()
+	{
+		return $this->auth_key;
+    }
+    
+    /**
+	 * {@inheritdoc}
+	 */
+	public function validateAuthKey($authKey)
+	{
+		return $this->getAuthKey() === $authKey;
+	}
 
     /**
      * Gets query for [[EstateObjects]].
