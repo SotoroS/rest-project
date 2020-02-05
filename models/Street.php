@@ -50,6 +50,17 @@ class Street extends \yii\db\ActiveRecord
     }
 
     /**
+     * Find region by name
+     * 
+     * @param name
+     * 
+     * @return Region|null
+     */
+    public static function findByName($name) {
+        return static::find(['name' => $name]);
+    }
+
+    /**
      * Gets query for [[Addresses]].
      *
      * @return \yii\db\ActiveQuery

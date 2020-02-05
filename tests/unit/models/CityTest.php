@@ -3,6 +3,7 @@
 namespace micro\tests\unit\models;
 
 use micro\models\City;
+use micro\models\Region;
 
 class CityTest extends \Codeception\Test\Unit
 {
@@ -12,28 +13,6 @@ class CityTest extends \Codeception\Test\Unit
     public function testCityName()
     {
         $city = new City();
-
-        // validation of correct data 
-        // $street = new Street(); 
-        // $city_area = new CityArea(); 
-        // $city = new City(); 
-        // $region = new Region(); 
-
-        // $region->name = 'nameRegion'; 
-        // $this->assertTrue($region->save()); 
-
-        // $city->name = 'nameCity'; 
-        // $city->region_id = $region->id; 
-        // $this->assertTrue($city->save()); 
-
-        // $city_area->name = 'nameCityArea'; 
-        // $city_area->city_id = $city->id; 
-        // $this->assertTrue($city_area->save(['name'])); 
-
-        // $street->name = 'nameStreet'; 
-        // $street->city_area_id = $city_area->id; 
-        // $this->assertTrue($street->validate(['city_area_id']));
-
         // Checking for null
         $city->name = null;
         $this->assertFalse($city->validate(['name']));
@@ -50,8 +29,8 @@ class CityTest extends \Codeception\Test\Unit
         $city->name = 1.1;
         $this->assertFalse($city->validate(['name']));
 
-        // checking the length (300)
-        $city->name = '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890';
+        // checking the length (257)
+        $city->name = '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567';
         $this->assertFalse($city->validate(['name']));
 
         // checking the length (256)
@@ -68,7 +47,16 @@ class CityTest extends \Codeception\Test\Unit
     */
     public function testCityRegionId()
     {
+        
         $city = new City();
+        $region = new Region(); 
+
+        $region->name = 'nameRegion'; 
+        $this->assertTrue($region->save()); 
+
+        $city->name = 'nameCity'; 
+        $city->region_id = $region->id; 
+        $this->assertTrue($city->validate(['region_id'])); 
 
         // Checking for null
         $city->region_id = null;
@@ -84,14 +72,6 @@ class CityTest extends \Codeception\Test\Unit
 
         // checking for string
         $city->region_id = 'city';
-        $this->assertFalse($city->validate(['region_id']));
-
-        // checking the length (12)
-        $city->region_id = 123456789012;
-        $this->assertFalse($city->validate(['region_id']));
-
-        // // checking the length (11)
-        // $address->region_id = 12345678901;
-        // $this->assertTrue($address->validate(['region_id']));        
+        $this->assertFalse($city->validate(['region_id']));     
     }
 }

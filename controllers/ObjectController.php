@@ -3,7 +3,11 @@
 namespace micro\controllers;
 
 use Yii;
-use yii\web\Controller;
+
+use yii\rest\Controller;
+use yii\web\Response;
+use yii\filters\auth\HttpBearerAuth;
+
 use app\models\EstateObject;
 use app\models\Address;
 use app\models\Metro;
@@ -19,27 +23,12 @@ class ObjectController extends Controller
 		// удаляем rateLimiter, требуется для аутентификации пользователя
 		$behaviors = parent::behaviors();
 
+		// Возвращает результаты экшенов в формате JSON  
+		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
+		// OAuth 2.0
+		$behaviors['authenticator'] = ['class' => HttpBearerAuth::className()];
+
 		return $behaviors;
-	}
-
-	/**
-	 * Function executing before all action
-	 *
-	 * - set json format for response
-	 *
-	 * @param $action
-	 * @return bool
-	 * @throws \yii\web\BadRequestHttpException
-	 */
-	public function beforeAction($action)
-	{
-		if (parent::beforeAction($action)) {
-			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	/**

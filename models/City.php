@@ -52,6 +52,17 @@ class City extends \yii\db\ActiveRecord
     }
 
     /**
+     * Find city by name
+     * 
+     * @param - name
+     * 
+     * @return City|null 
+     */
+    public static function findByName($name) {
+        return static::find(['name' => $name]);
+    }
+ 
+    /**
      * Gets query for [[Addresses]].
      *
      * @return \yii\db\ActiveQuery

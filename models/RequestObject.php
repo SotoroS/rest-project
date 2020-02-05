@@ -23,6 +23,8 @@ use Yii;
  * @property float|null $pivot_lg
  * @property float $radius
  *
+ * @property array $addresses
+ * 
  * @property RequestAddress[] $requestAddresses
  * @property City $city
  * @property RequestType $requestType
@@ -76,6 +78,16 @@ class RequestObject extends \yii\db\ActiveRecord
             'pivot_lg' => 'Pivot Lg',
             'radius' => 'Radius',
         ];
+    }
+
+    /**
+     * Find request object by id
+     *
+     * @return \yii\db\BaseActiveRecord
+     */
+    public static function findByIdentity($id)
+    {
+        return static::findOne($id);
     }
 
     /**
