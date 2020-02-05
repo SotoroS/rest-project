@@ -33,8 +33,8 @@ class M200130005604CreateAddressTable extends Migration
     {
         $this->createTable('address', [
             'id' => $this->primaryKey(),
-            'lt' => 'DECIMAL NOT NULL',
-            'lg' => 'DECIMAL NOT NULL',
+            'lt' => 'DECIMAL(10,7) NOT NULL',
+            'lg' => 'DECIMAL(10,7) NOT NULL',
             'city_id' => 'INT NOT NULL',
             'street_id' => 'INT NOT NULL',
             'region_id' => 'INT',

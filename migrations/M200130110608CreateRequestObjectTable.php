@@ -43,9 +43,9 @@ class M200130110608CreateRequestObjectTable extends Migration
             'price_from' => 'INT NOT NULL',
             'price_to' => 'INT NOT NULL',
             'description' => 'TEXT NOT NULL',
-            'pivot_lt' => 'DECIMAL',
-            'pivot_lg' => 'DECIMAL',
-            'radius' => 'DECIMAL NOT NULL'
+            'pivot_lt' => 'DECIMAL(10,7)',
+            'pivot_lg' => 'DECIMAL(10,7)',
+            'radius' => 'DECIMAL(10,7) NOT NULL'
         ]);
     }
 

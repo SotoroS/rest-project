@@ -17,7 +17,7 @@ class UserTest extends \Codeception\Test\Unit
     {
         $user = new User();
 
-        // $user->email = 'sir.sotoros@ya.ru';
+        $user->email = 'sir.sotoros@ya.ru';
         
         $this->assertTrue($user->validate());
     }
