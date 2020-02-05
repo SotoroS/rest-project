@@ -9,6 +9,7 @@ use yii\web\Response;
 
 use micro\models\User;
 use PHPMailer\PHPMailer\PHPMailer;
+use micro\models\Address;
 
 use Facebook;
 use Google_Client;
@@ -333,5 +334,18 @@ class UserController extends Controller
         } else {
             throw new \yii\web\UnauthorizedHttpException();
         }
+    }
+
+    public function actionAddress()
+    {
+        $address = new Address();
+        $address->lt = 231.41424;
+        $address->lg = 231.42424;
+        $address->streetName = "name";
+        $address->cityAreaName = "name";
+        $address->cityName = "name";
+        $address->regionName = "name";
+        $address->save(TRUE);
+        return $address->errors;
     }
 }

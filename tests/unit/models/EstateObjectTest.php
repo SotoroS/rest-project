@@ -27,6 +27,10 @@ class EstateObjectTest extends \Codeception\Test\Unit
         $city_area = new CityArea();
         $city = new City();
         $region = new Region();
+        $address->regionName = 'name';
+        $address->cityName = 'name';
+        $address->cityAreaName = 'name';
+        $address->streetName = 'name';
 
         $region->name = 'nameRegion';
         $this->assertTrue($region->save());

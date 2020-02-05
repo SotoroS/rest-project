@@ -138,5 +138,4 @@ class RequestAddressTest extends \Codeception\Test\Unit
         $request_address->address_id = null;
         $this->assertFalse($request_address->validate(['address_id']));
     }
-
 }
