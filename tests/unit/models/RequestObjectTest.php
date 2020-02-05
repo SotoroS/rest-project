@@ -2,11 +2,11 @@
 
 namespace micro\tests\unit\models;
 
-use micro\models\Street;
-use micro\models\CityArea;
 use micro\models\City;
 use micro\models\Region;
 use micro\models\RequestObject;
+use micro\models\RequestType;
+use micro\models\User;
 
 class RequestObjectTest extends \Codeception\Test\Unit
 {
@@ -250,13 +250,62 @@ class RequestObjectTest extends \Codeception\Test\Unit
 
         // checking for incorrect null data
         $request_object->pivot_lt = null;
-        $this->assertFalse($request_object->validate(['pivot_lt']));
+        $this->assertTrue($request_object->validate(['pivot_lt']));
 
         // checking for incorrect string data
         $request_object->pivot_lt = 'string';
         $this->assertFalse($request_object->validate(['pivot_lt']));
     }
+    
+    // checking data Pivot Lg 
+    public function testRequestObjectPivotLg()
+    {
 
+        // validation of correct data
+        $request_object = new RequestObject();
+
+        // checking the length (10,7) float 
+        $request_object->pivot_lg = 43.24134;
+        $this->assertTrue($request_object->validate(['pivot_lg']));
+
+        // checking for incorrect bool data
+        $request_object->pivot_lg = true;
+        $this->assertFalse($request_object->validate(['pivot_lg']));
+
+        // checking for incorrect null data
+        $request_object->pivot_lg = null;
+        $this->assertTrue($request_object->validate(['pivot_lg']));
+
+        // checking for incorrect string data
+        $request_object->pivot_lg = 'string';
+        $this->assertFalse($request_object->validate(['pivot_lg']));
+    }
+    
+    // checking data Radius 
+    public function testRequestObjectRadius()
+    {
+
+        // validation of correct data
+        $request_object = new RequestObject();
+
+        // checking the length (10,7) float 
+        $request_object->radius = 43.24134;
+        $this->assertTrue($request_object->validate(['radius']));
+
+        // checking for incorrect bool data
+        $request_object->radius = true;
+        $this->assertFalse($request_object->validate(['radius']));
+
+        // checking for incorrect null data
+        $request_object->radius = null;
+        $this->assertFalse($request_object->validate(['radius']));
+
+        // checking for incorrect string data
+        $request_object->radius = 'string';
+        $this->assertFalse($request_object->validate(['radius']));
+    }
+
+    // checking data City ID 
     public function testRequestObjectCity_id()
     {
         // validation of correct data
@@ -273,25 +322,82 @@ class RequestObjectTest extends \Codeception\Test\Unit
 
         $request_object->city_id = $city->id;
         $this->assertTrue($request_object->validate(['city_id']));
+
+        // checking for incorrect bool data
+        $request_object->city_id = true;
+        $this->assertFalse($request_object->validate(['city_id']));
+
+        // checking for incorrect string data
+        $request_object->city_id = 'one';
+        $this->assertFalse($request_object->validate(['city_id']));
+
+        // checking for incorrect double data
+        $request_object->city_id = 3132.124;
+        $this->assertFalse($request_object->validate(['city_id']));
+
+        // checking for incorrect null data
+        $request_object->city_id = null;
+        $this->assertFalse($request_object->validate(['city_id']));
     }
     
-    // public function testRequestObjectRequest_type_id()
-    // {
+    // checking data Request Type ID 
+    public function testRequestObjectRequest_type_id()
+    {
         // validation of correct data
-        // $request_object = new RequestObject();
-        // $city = new City();
-        // $region = new Region();
+        $request_object = new RequestObject();
+        $request_type = new RequestType();
 
-        // $region->name = 'nameRegion';
-        // $this->assertTrue($region->save());
+        $request_type->name = 'nameRequestType';
+        $this->assertTrue($request_type->save());
 
-        // $city->name = 'nameCity';
-        // $city->region_id = $region->id;
-        // $this->assertTrue($city->save());
+        $request_object->request_type_id = $request_type->id;
+        $this->assertTrue($request_object->validate(['request_type_id']));
+        
+        // checking for incorrect bool data
+        $request_object->request_type_id = true;
+        $this->assertFalse($request_object->validate(['request_type_id']));
 
-        // $request_object->city_id = $city->id;
-        // $this->assertTrue($request_object->validate(['city_id']));
-    // }
+        // checking for incorrect string data
+        $request_object->request_type_id = 'one';
+        $this->assertFalse($request_object->validate(['request_type_id']));
 
+        // checking for incorrect double data
+        $request_object->request_type_id = 3132.124;
+        $this->assertFalse($request_object->validate(['request_type_id']));
+
+        // checking for incorrect null data
+        $request_object->request_type_id = null;
+        $this->assertFalse($request_object->validate(['request_type_id']));
+    }
+    
+    // checking data User ID
+    public function testRequestObjectUser_id()
+    {
+        // validation of correct data
+        $request_object = new RequestObject();
+        $user = new User();
+
+        $user->email = 'shukanov@yandex.ru';
+        $this->assertTrue($user->save());
+
+        $request_object->user_id = $user->id;
+        $this->assertTrue($request_object->validate(['user_id']));
+        
+        // checking for incorrect bool data
+        $request_object->user_id = true;
+        $this->assertFalse($request_object->validate(['user_id']));
+
+        // checking for incorrect string data
+        $request_object->user_id = 'one';
+        $this->assertFalse($request_object->validate(['user_id']));
+
+        // checking for incorrect double data
+        $request_object->user_id = 3132.124;
+        $this->assertFalse($request_object->validate(['user_id']));
+
+        // checking for incorrect null data
+        $request_object->user_id = null;
+        $this->assertFalse($request_object->validate(['user_id']));
+    }
 
 }
