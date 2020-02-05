@@ -24,10 +24,10 @@ use Yii;
  */
 class Address extends \yii\db\ActiveRecord
 {
-    public $regionName;
-    public $cityName;
-    public $cityAreaName;
-    public $streetName;
+    public $regionName = null;
+    public $cityName = null;
+    public $cityAreaName = null;
+    public $streetName = null;
  
     /**
      * {@inheritdoc}
@@ -75,6 +75,14 @@ class Address extends \yii\db\ActiveRecord
      */
     public function beforeValidate() 
     {
+        // Check exist needed variable value
+        if (is_null($this->regionName) 
+            || is_null($this->cityName)
+            || is_null($this->cityAreaName)
+            || is_null($this->streetName)) {
+                return false;
+            }
+
         // Find exist Region
         $region = Region::findByName($this->regionName);
 
@@ -119,7 +127,7 @@ class Address extends \yii\db\ActiveRecord
         // Find exist Street
         $street = Street::findByName($this->streetName);
 
-        if (!is_null($street)) {
+        if (is_null($street)) {
             $street = new Street();
 
             $street->name = $this->streetName;
