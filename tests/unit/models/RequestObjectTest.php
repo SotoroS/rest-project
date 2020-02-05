@@ -240,24 +240,21 @@ class RequestObjectTest extends \Codeception\Test\Unit
         // validation of correct data
         $request_object = new RequestObject();
 
-        $request_object->price_to = 4;
-        $this->assertTrue($request_object->validate(['price_to']));
+        // checking the length (10,7) float 
+        $request_object->pivot_lt = 43.24134;
+        $this->assertTrue($request_object->validate(['pivot_lt']));
 
         // checking for incorrect bool data
-        $request_object->price_to = true;
-        $this->assertFalse($request_object->validate(['price_to']));
-
-        // checking for incorrect double data
-        $request_object->price_to = 3132.124;
-        $this->assertFalse($request_object->validate(['price_to']));
+        $request_object->pivot_lt = true;
+        $this->assertFalse($request_object->validate(['pivot_lt']));
 
         // checking for incorrect null data
-        $request_object->price_to = null;
-        $this->assertFalse($request_object->validate(['price_to']));
+        $request_object->pivot_lt = null;
+        $this->assertFalse($request_object->validate(['pivot_lt']));
 
         // checking for incorrect string data
-        $request_object->price_to = 'string';
-        $this->assertFalse($request_object->validate(['price_to']));
+        $request_object->pivot_lt = 'string';
+        $this->assertFalse($request_object->validate(['pivot_lt']));
     }
 
     public function testRequestObjectCity_id()
