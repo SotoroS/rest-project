@@ -3,6 +3,8 @@
 namespace micro\tests\unit\models;
 
 use micro\models\CityArea;
+use micro\models\City;
+use micro\models\Region;
 
 class CityAreaTest extends \Codeception\Test\Unit
 {
@@ -29,8 +31,8 @@ class CityAreaTest extends \Codeception\Test\Unit
         $city_area->name = 1.1;
         $this->assertFalse($city_area->validate(['name']));
 
-        // checking the length (300)
-        $city_area->name = '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890';
+        // checking the length (257)
+        $city_area->name = '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567';
         $this->assertFalse($city_area->validate(['name']));
 
         // checking the length (256)
@@ -48,6 +50,20 @@ class CityAreaTest extends \Codeception\Test\Unit
     public function testCityAreaCityId()
     {
         $city_area = new CityArea();
+        $city = new City();
+        $region = new Region();
+
+        $region->name = 'nameRegion';
+        $this->assertTrue($region->save());
+
+        $city->name = 'nameCity';
+        $city->region_id = $region->id;
+        $this->assertTrue($city->save());
+
+        // checking relationship
+        $city_area->name = 'nameCityArea';
+        $city_area->city_id = $city->id;
+        $this->assertTrue($city_area->validate(['city_id']));
 
         // Checking for null
         $city_area->city_id = null;
@@ -63,14 +79,6 @@ class CityAreaTest extends \Codeception\Test\Unit
 
         // checking for string
         $city_area->city_id = 'city';
-        $this->assertFalse($city_area->validate(['city_id']));
-
-        // checking the length (12)
-        $city_area->city_id = 123456789012;
-        $this->assertFalse($city_area->validate(['city_id']));
-
-        // // checking the length (11)
-        // $address->city_id = 12345678901;
-        // $this->assertTrue($address->validate(['city_id']));        
+        $this->assertFalse($city_area->validate(['city_id']));     
     }
 }

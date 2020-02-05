@@ -3,6 +3,10 @@
 namespace micro\tests\unit\models;
 
 use micro\models\Address;
+use micro\models\Street;
+use micro\models\CityArea;
+use micro\models\City;
+use micro\models\Region;
 
 class AddressTest extends \Codeception\Test\Unit
 {
@@ -68,6 +72,14 @@ class AddressTest extends \Codeception\Test\Unit
     public function testAddressRegionID()
     {
         $address = new  Address();
+        $region = new Region(); 
+        
+        $region->name = 'name'; 
+        $this->assertTrue($region->save()); 
+
+        // checking relationship
+        $address->region_id = $region->id;
+        $this->assertTrue($address->validate(['region_id']));
 
         // checking for boolean
         $address->region_id = true;
@@ -79,15 +91,7 @@ class AddressTest extends \Codeception\Test\Unit
 
         // checking for string
         $address->region_id = 'region_id';
-        $this->assertFalse($address->validate(['region_id']));
-
-        // checking the length (12)
-        $address->region_id = 123456789012;
-        $this->assertFalse($address->validate(['region_id']));
-
-        // // checking the length (11)
-        // $address->region_id = 1234567890;
-        // $this->assertTrue($address->validate(['region_id']));        
+        $this->assertFalse($address->validate(['region_id']));    
     }
 
     /**
@@ -96,6 +100,19 @@ class AddressTest extends \Codeception\Test\Unit
     public function testAddressCityID()
     {
         $address = new  Address();
+        $city = new City();
+        $region = new Region();
+
+        $region->name = 'name';
+        $this->assertTrue($region->save());
+
+        $city->name = 'name';
+        $city->region_id = $region->id;
+        $this->assertTrue($city->save());
+
+        // checking relationship
+        $address->city_id = $city->id;
+        $this->assertTrue($address->validate(['city_id']));
 
         // Checking for null
         $address->city_id = null;
@@ -112,14 +129,6 @@ class AddressTest extends \Codeception\Test\Unit
         // checking for string
         $address->city_id = 'city_id';
         $this->assertFalse($address->validate(['city_id']));
-
-        // checking the length (12)
-        $address->city_id = 1234567890;
-        $this->assertFalse($address->validate(['city_id']));
-
-        // // checking the length (11)
-        // $address->city_id = 12345678901;
-        // $this->assertTrue($address->validate(['city_id']));   
     }
     
     /**
@@ -128,6 +137,24 @@ class AddressTest extends \Codeception\Test\Unit
     public function testAddressCityAreaID()
     {
         $address = new  Address();
+        $city_area = new CityArea();
+        $city = new City();
+        $region = new Region();
+
+        $region->name = 'nameRegion';
+        $this->assertTrue($region->save());
+
+        $city->name = 'nameCity';
+        $city->region_id = $region->id;
+        $this->assertTrue($city->save());
+
+        $city_area->name = 'nameCityArea';
+        $city_area->city_id = $city->id;
+        $this->assertTrue($city_area->save(['name']));
+
+        // checking relationship
+        $address->city_area_id = $city_area->id;
+        $this->assertTrue($address->validate(['city_area_id']));
 
         // checking for boolean
         $address->city_area_id = true;
@@ -139,15 +166,7 @@ class AddressTest extends \Codeception\Test\Unit
 
         // checking for string
         $address->city_area_id = 'city_area_id';
-        $this->assertFalse($address->validate(['city_area_id']));
-
-        // checking the length (12)
-        $address->city_area_id = 123456789012;
-        $this->assertFalse($address->validate(['city_area_id']));
-
-        // // checking the length (11)
-        // $address->city_area_id = 12345678901;
-        // $this->assertTrue($address->validate(['city_area_id']));        
+        $this->assertFalse($address->validate(['city_area_id']));     
     }
 
     /**
@@ -156,6 +175,29 @@ class AddressTest extends \Codeception\Test\Unit
     public function testAddressStreetID()
     {
         $address = new  Address();
+        $street = new Street();
+        $city_area = new CityArea();
+        $city = new City();
+        $region = new Region();
+
+        $region->name = 'nameRegion';
+        $this->assertTrue($region->save());
+
+        $city->name = 'nameCity';
+        $city->region_id = $region->id;
+        $this->assertTrue($city->save());
+
+        $city_area->name = 'nameCityArea';
+        $city_area->city_id = $city->id;
+        $this->assertTrue($city_area->save());
+
+        $street->name = 'nameStreet';
+        $street->city_area_id = $city_area->id;
+        $this->assertTrue($street->save());
+
+        // checking relationship
+        $address->street_id = $street->id;
+        $this->assertTrue($address->validate(['street_id']));
 
         // Checking for null
         $address->street_id = null;
@@ -172,14 +214,5 @@ class AddressTest extends \Codeception\Test\Unit
         // checking for string
         $address->street_id = 'street_id';
         $this->assertFalse($address->validate(['street_id']));
-
-        // checking the length (12)
-        $address->street_id = 123456789012;
-        $this->assertFalse($address->validate(['street_id']));
-
-        // // checking the length (11)
-        // $address->street_id = 12345678901;
-        // $this->assertTrue($address->validate(['street_id']));        
-
     }
 }
