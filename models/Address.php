@@ -24,6 +24,11 @@ use Yii;
  */
 class Address extends \yii\db\ActiveRecord
 {
+    public $regionName;
+    public $cityName;
+    public $cityAreaName;
+    public $streetName;
+ 
     /**
      * {@inheritdoc}
      */
@@ -39,6 +44,7 @@ class Address extends \yii\db\ActiveRecord
     {
         return [
             [['lt', 'lg', 'city_id', 'street_id'], 'required'],
+            [['regionName', 'cityName', 'cityAreaName', 'streetName'], 'string'],
             [['lt', 'lg'], 'number'],
             [['city_id', 'street_id', 'region_id', 'city_area_id'], 'integer'],
             [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
@@ -62,6 +68,84 @@ class Address extends \yii\db\ActiveRecord
             'region_id' => 'Region ID',
             'city_area_id' => 'City Area ID',
         ];
+    }
+ 
+    /**
+     * {@inheritdoc}
+     */
+    public function beforeValidate() 
+    {
+        // Find exist Region
+        $region = Region::findByName($this->regionName);
+
+        if (is_null($region)) {
+            $region = new Region();
+
+            $region->name = $this->regionName;
+
+            if (!$region->save()) {
+                return false;
+            }
+        }
+
+        // Find exist City
+        $city = City::findByName($this->cityName);
+
+        if (is_null($city)) {
+            $city = new City();
+
+            $city->name = $this->cityName;
+            $city->region_id = $region->id;
+
+            if (!$city->save()) {
+                return false;
+            }
+        }
+
+        // Find exist City Area
+        $cityArea = CityArea::findByName($this->cityAreaName);
+
+        if (is_null($cityArea)) {
+            $cityArea = new CityArea();
+
+            $cityArea->name = $this->cityAreaName;
+            $cityArea->city_id = $city->id;
+
+            if (!$cityArea->save()) {
+                return false;
+            }
+        }
+
+        // Find exist Street
+        $street = Street::findByName($this->streetName);
+
+        if (!is_null($street)) {
+            $street = new Street();
+
+            $street->name = $this->streetName;
+            $street->city_area_id = $cityArea->id;
+    
+            if (!$street->save()) {
+                return false;
+            }
+        }
+
+        // Links
+        $this->region_id = $region->id;
+        $this->city_id = $city->id;
+        $this->city_area_id = $cityArea->id;
+        $this->street_id = $street->id;
+
+        return parent::beforeValidate();
+    }
+
+    /**
+     * Find address by lt, lg
+     *
+     * @return \yii\db\BaseActiveRecord
+     */
+    public static function findByCoordinates($lt, $lg) {
+        return static::findOne(['lt' => $lt, 'lg' => $lg]);
     }
 
     /**

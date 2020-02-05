@@ -3,6 +3,8 @@
 namespace micro\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -20,7 +22,7 @@ use Yii;
  * @property EstateObject[] $estateObjects
  * @property RequestObject[] $requestObjects
  */
-class User extends \yii\db\ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
     /**
      * {@inheritdoc}
@@ -61,6 +63,19 @@ class User extends \yii\db\ActiveRecord
             'signup_token' => 'Signup Token',
             'access_token' => 'Access Token',
         ];
+    }
+
+    /**
+     * Find user by access token
+     * 
+     * @param $token - access token's user
+     * @param $type
+     * 
+     * @return User user with token user
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
     }
 
     /**

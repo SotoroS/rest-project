@@ -65,15 +65,10 @@ return [
 		'mailer' => [
 			'class' => 'yii\swiftmailer\Mailer',
 		],
-		'queue' => [
-			'class' => \yii\queue\db\Queue::class,
-			'db' => 'db', // DB connection component or its config
-			'tableName' => '{{%queue}}', // Table name
-			'channel' => 'default', // Queue channel key
-			'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
-			'ttr' => 12960000,
-		],
-
+		'user' => [
+            'identityClass' => 'micro\models\User',
+            'enableSession' => false,  
+        ],
 	],
 
 ];

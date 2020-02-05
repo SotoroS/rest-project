@@ -3,13 +3,16 @@
 namespace micro\controllers;
 
 use Yii;
+
+use yii\rest\Controller;
+use yii\web\Response;
+
 use micro\models\User;
 use PHPMailer\PHPMailer\PHPMailer;
-use yii\web\Controller;
+
 use Facebook;
 use Google_Client;
 use Google_Service_Oauth2;
-
 
 /**
  * Class SiteController
@@ -21,29 +24,12 @@ class UserController extends Controller
     public function behaviors()
 	{
 		// удаляем rateLimiter, требуется для аутентификации пользователя
-		$behaviors = parent::behaviors();
+        $behaviors = parent::behaviors();
+        
+        // Возвращает результаты экшенов в формате JSON  
+		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
 
 		return $behaviors;
-	}
-
-	/**
-	 * Function executing before all action
-	 *
-	 * - set json format for response
-	 *
-	 * @param $action
-	 * @return bool
-	 * @throws \yii\web\BadRequestHttpException
-	 */
-	public function beforeAction($action)
-	{
-		if (parent::beforeAction($action)) {
-			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-			return true;
-		} else {
-			return false;
-		}
     }
     
     /**
