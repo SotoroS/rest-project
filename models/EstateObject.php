@@ -37,8 +37,6 @@ use Yii;
  */
 class EstateObject extends \yii\db\ActiveRecord
 {
-    public $address;
-
     /**
      * {@inheritdoc}
      */
@@ -55,7 +53,7 @@ class EstateObject extends \yii\db\ActiveRecord
         return [
             [['address_id', 'rent_type_id', 'property_type_id', 'building_type_id', 'name', 'description', 'price', 'square', 'kitchen_square', 'ln', 'lt', 'agent'], 'required'],
             [['address_id', 'rent_type_id', 'property_type_id', 'building_type_id', 'metro_id', 'level', 'rooms', 'internal', 'agent', 'published', 'user_id'], 'integer'],
-            [['description', 'address'], 'string'],
+            [['description'], 'string'],
             [['price', 'square', 'kitchen_square', 'ln', 'lt'], 'number'],
             [['name', 'url'], 'string', 'max' => 256],
             [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['address_id' => 'id']],
@@ -94,16 +92,6 @@ class EstateObject extends \yii\db\ActiveRecord
             'published' => 'Published',
             'user_id' => 'User ID',
         ];
-    }
-
-    /**
-     * Find estate object by id
-     *
-     * @return \yii\db\BaseActiveRecord
-     */
-    public static function findByIdentity($id)
-    {
-        return static::findOne($id);
     }
 
     /**

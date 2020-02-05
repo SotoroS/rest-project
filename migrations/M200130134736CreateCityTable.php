@@ -33,7 +33,7 @@ class M200130134736CreateCityTable extends Migration
         $this->createTable('city', [
             'id' => $this->primaryKey(),
             'name' => 'VARCHAR(256) NOT NULL',
-            'region_id' => 'INT NOT NULL' //FK
+            'region_id' => 'INT(19) NOT NULL' //FK
         ]);
     }
 

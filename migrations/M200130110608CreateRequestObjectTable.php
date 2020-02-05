@@ -32,20 +32,20 @@ class M200130110608CreateRequestObjectTable extends Migration
     {
         $this->createTable('request_object', [
             'id' => $this->primaryKey(),
-            'user_id' => 'INT NOT NULL', //fk users
-            'num_of_people' => 'INT NOT NULL',
+            'user_id' => 'INT(19) NOT NULL', //fk users
+            'num_of_people' => 'INT(19) NOT NULL',
             'family' => 'BOOLEAN NOT NULL',
             'pets' => 'BOOLEAN NOT NULL',
-            'request_type_id' => 'INT NOT NULL', //fk request_type
-            'square_from' => 'INT NOT NULL',
-            'square_to' => 'INT NOT NULL',
-            'city_id' => 'INT NOT NULL', //fk  city
-            'price_from' => 'INT NOT NULL',
-            'price_to' => 'INT NOT NULL',
+            'request_type_id' => 'INT(19) NOT NULL', //fk request_type
+            'square_from' => 'INT(19) NOT NULL',
+            'square_to' => 'INT(19) NOT NULL',
+            'city_id' => 'INT(19) NOT NULL', //fk  city
+            'price_from' => 'INT(19) NOT NULL',
+            'price_to' => 'INT(19) NOT NULL',
             'description' => 'TEXT NOT NULL',
-            'pivot_lt' => 'DECIMAL',
-            'pivot_lg' => 'DECIMAL',
-            'radius' => 'DECIMAL NOT NULL'
+            'pivot_lt' => 'DECIMAL(10,7)',
+            'pivot_lg' => 'DECIMAL(10,7)',
+            'radius' => 'DECIMAL(10,7) NOT NULL'
         ]);
     }
 
