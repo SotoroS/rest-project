@@ -121,6 +121,22 @@ class RequestAddressTest extends \Codeception\Test\Unit
 
         $request_address->address_id = $address->id;
         $this->assertTrue($request_address->validate(['request_address']));
+
+        // checking for incorrect bool data
+        $request_address->address_id = true;
+        $this->assertFalse($request_address->validate(['address_id']));
+
+        // checking for incorrect string data
+        $request_address->address_id = 'one';
+        $this->assertFalse($request_address->validate(['address_id']));
+
+        // checking for incorrect double data
+        $request_address->address_id = 3132.124;
+        $this->assertFalse($request_address->validate(['address_id']));
+
+        // checking for incorrect null data
+        $request_address->address_id = null;
+        $this->assertFalse($request_address->validate(['address_id']));
     }
 
 }
