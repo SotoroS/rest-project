@@ -42,8 +42,8 @@ return [
 		'db' => [
 			'class' => 'yii\db\Connection',
 			'dsn' => 'mysql:host=localhost;dbname=rest',
-			'username' => 'GodOfDB',
-			'password' => 'hard_pass!',
+			'username' => 'root',
+			'password' => '',
 			
 		], 
 		'request' => [

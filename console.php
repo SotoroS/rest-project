@@ -30,8 +30,8 @@ return [
 		'db' => [
 			'class' => 'yii\db\Connection',
 			'dsn' => 'mysql:host=localhost;dbname=rest',
-			'username' => 'GodOfDB',
-			'password' => 'hard_pass!',
+			'username' => 'root',
+			'password' => '',
 		],
 		'queue' => [
 			'class' => \yii\queue\db\Queue::class,
