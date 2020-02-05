@@ -111,13 +111,17 @@ class RequestAddressTest extends \Codeception\Test\Unit
         $street->city_area_id = $city_area->id;
         $this->assertTrue($street->save());
 
+        $address->regionName = 'RegionName';
+        $address->cityName = 'cityName';
+        $address->cityAreaName = 'cityAreaName';
+        $address->streetName = 'streetName';
         $address->lt = 231.41424;
         $address->lg = 231.42424;
         $address->region_id = $region->id;
         $address->city_id = $city->id;
         $address->city_area_id = $city_area->id;
         $address->street_id = $street->id;
-        $this->assertTrue($address->save());
+        $this->assertTrue($address->save()); 
 
         $request_address->address_id = $address->id;
         $this->assertTrue($request_address->validate(['request_address']));
