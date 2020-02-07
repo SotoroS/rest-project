@@ -6,6 +6,8 @@ use Yii;
 
 use yii\rest\Controller;
 use yii\web\Response;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\AccessControl;
 
 use micro\models\User;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -23,14 +25,36 @@ use Google_Service_Oauth2;
 class UserController extends Controller
 {
     public function behaviors()
-	{
-		// удаляем rateLimiter, требуется для аутентификации пользователя
+    {
+	// удаляем rateLimiter, требуется для аутентификации пользователя
         $behaviors = parent::behaviors();
+    
+	$behaviors['access'] = [
+	    'class' => AccessControl::className(),
+	    'only' => ['login', 'signup', 'verify', 'update', 'login-facebook', 'login-google'],
+	    'rules' => [
+	        [
+	            'actions' => ['login', 'signup', 'verify', 'login-facebook', 'login-google'],
+		    'allow' => true,
+		    'roles' => ['?'],
+	        ],
+	        [
+	    	    'actions' => ['update'],
+	    	    'allow' => true,
+	    	    'roles' => ['@'],
+	    	],
+	    ],
+	];
         
         // Возвращает результаты экшенов в формате JSON  
-		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
+	$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
+		
+	$behaviors['authenticator'] = [
+	    'except' => ['login', 'signup', 'verify', 'login-facebook', 'login-goole'],
+	    'class' => HttpBearerAuth::className()
+	];
 
-		return $behaviors;
+	return $behaviors;
     }
     
     /**
@@ -45,8 +69,8 @@ class UserController extends Controller
     {
         $request = Yii::$app->request;
 
-        $email = $request->get('email');
-        $password = $request->get('password');
+        $email = $request->post('email');
+        $password = $request->post('password');
 
         if (is_null($email) || is_null($password)) {
             return [
@@ -68,9 +92,7 @@ class UserController extends Controller
             $model->password = $password;
             $model->signup_token = $signup_token;
             
-            if(($model->validate()) && ($model->save())) {
-                return true;
-            } else {
+            if(!$model->validate() || !$model->save()) {
                 return $model->errors;
             }
 
@@ -91,15 +113,17 @@ class UserController extends Controller
             $mail->setFrom('arman.shukanov@fokin-team.ru');
             $mail->addAddress($email);
             $mail->Subject = 'Подтверждение аккаунта';
-            $mail->Body = 'Для подтверждения перейдите по ссылке: '. $_SERVER['HTTP_HOST'] . "/verify/?token=" . $signup_token;
+            $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify/?token=" . $signup_token . '">по ссылке</a>';
 
             $mail->isHTML(true);
 
-            $mail->send();
-        }
-        else 
-        {
-            return"пользователь с такой почтой уже существует";
+            return [
+        	"mailSend" => $mail->send()
+    	    ];
+        } else {
+            return [
+        	"error" => "User exsist."
+    	    ];
         }
     }
 
@@ -114,18 +138,20 @@ class UserController extends Controller
     {
         $request = Yii::$app->request;
 
-        $verification_code = $request->get('token');
+        $verification_code = $request->post('token');
 
-        $user = User::findOne(['signup_token' => $verification_code]);
+        $user = User::find(['signup_token' => $verification_code])->one();
 
         if (!is_null($user)) {
             $user->verified = 1;
 
             if($user->update()) {
-                return true;
+                return [
+            	    "result" => true
+                ];
             }
         } else {
-            return false;
+            return ["result" => false];
         }
     }
 
@@ -143,9 +169,9 @@ class UserController extends Controller
         $request = Yii::$app->request;
 
         // Checking for email in the received data
-        if($request->get('email')) {
-            $email = $request->get('email');
-            $password = $request->get('password');
+        if($request->post('email')) {
+            $email = $request->post('email');
+            $password = $request->post('password');
 
             // Checking the presence of a user in the database
             $user = User::findOne(['email' => $email]);
@@ -153,15 +179,29 @@ class UserController extends Controller
             if(!is_null($user)) {
                 // Password verification
                 if (password_verify($password, $user->password)) {
-                    return uniqid();
+            	    if ($user->verified == 1) {
+            		$user->access_token = uniqid();
+			
+			if ($user->update()) {
+            		    return [
+            			"access_token" => $user->access_token
+            		    ];
+            		} else {
+            		    return [
+            			"error" => "Cann't generate new access token"
+            		    ];
+            		}
+            	    } else {
+            		return ["result" => "Подтвердите ваш аккаунт, перейдя по ссылке на почте"];
+            	    }
                 } else {
-                    return false;
+                    return ["result" => false];
                 }
             } else {
-                return false;
+                return ["result"  => false];
             }
         } else {
-            return false;
+            return ["result" => false];
         }
     }
 
@@ -218,7 +258,7 @@ class UserController extends Controller
                     if ($model->save()) {
                         return $value;
                     } else {
-                        return false;
+                        return ["result" => false];
                     }
                 } else {
                 return uniqid();
@@ -241,7 +281,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLoginWithGoogle()
+    public function actionLoginGoogle()
     {
         $request = Yii::$app->request;
 
@@ -285,7 +325,7 @@ class UserController extends Controller
                 if ($model->save()) {
                     return $token['access_token'];
                 } else {
-                    return false;
+                    return ["result" => false];
                 }
             } else {
                 return uniqid();
@@ -304,6 +344,14 @@ class UserController extends Controller
      */
     public function actionUpdate()
     {
+    
+	$arr = [
+	    'headers' => Yii::$app->request->getHeaders(),
+	    'user' => Yii::$app->user->identity->id
+	];
+	
+	return $arr;
+    
         $request = Yii::$app->request;
 
         // Check authorized
@@ -327,25 +375,14 @@ class UserController extends Controller
             }
 
             if ($user->update()) {
-                return true;
+                return [
+            	    "return" => true
+            	];
             } else {
                 return $user->error;
             }
         } else {
             throw new \yii\web\UnauthorizedHttpException();
         }
-    }
-
-    public function actionAddress()
-    {
-        $address = new Address();
-        $address->lt = 231.41424;
-        $address->lg = 231.42424;
-        $address->streetName = "name";
-        $address->cityAreaName = "name";
-        $address->cityName = "name";
-        $address->regionName = "name";
-        $address->save(TRUE);
-        return $address->errors;
     }
 }

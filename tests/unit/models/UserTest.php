@@ -42,6 +42,10 @@ class UserTest extends \Codeception\Test\Unit
         // mail validation
         $user->email = 24.31;
         $this->assertFalse($user->validate(['email']));
+        
+        // mail validation
+        $user->email = 'string';
+        $this->assertFalse($user->validate(['email']));
 
         // ---------------------------Age------------------------------------------------------
 

@@ -22,7 +22,7 @@ return [
 		'email_from' => '',
 		'google_client_id' => '156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com',
 		'google_client_secret' => '0qepssGons1TcyctkXfW-IPO',
-		'google_redirect_uri' => 'https://rest.fokin-team.ru/user/login-with-google',
+		'google_redirect_uri' => 'https://rest.fokin-team.ru/user/login-google',
 		'facebook_client_id' => 559755891418423,
 		'facebook_client_secret' => 'f5a86f378bca716435d1db271695dedd',
 		'facebook_client_uri' => 'https://rest.fokin-team.ru/user/login-facebook',
@@ -42,8 +42,8 @@ return [
 		'db' => [
 			'class' => 'yii\db\Connection',
 			'dsn' => 'mysql:host=localhost;dbname=rest',
-			'username' => 'root',
-			'password' => '',
+			'username' => 'GodOfDB',
+			'password' => 'hard_pass!',
 			
 		], 
 		'request' => [

@@ -39,10 +39,10 @@ class RequestController extends Controller
 	public function actionNew()
 	{
 		$model = new RequestObject();
-		$request = Yii::$app->request->get();
+		$request = Yii::$app->request->post();
 		$addressIds = [];
 
-        if ($model->load($request, '')) {
+    		if ($model->load($request, '')) {
 			$model->user_id = Yii::$app->user->identity->id;
 
 			foreach ($model->addresses as $address) {
@@ -112,7 +112,7 @@ class RequestController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = RequestObject::findByIdentity($id);
-		$request = Yii::$app->request->get();
+		$request = Yii::$app->request->post();
 		
         if ($model->load($request, '') && $model->update()) {
             return true;
@@ -133,7 +133,7 @@ class RequestController extends Controller
         if (!is_null($model)) {
             return $model;
         } else {
-            return false;
+            return ["result"=>false];
         }
 	}
 

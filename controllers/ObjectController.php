@@ -39,7 +39,7 @@ class ObjectController extends Controller
 	public function actionNew()
 	{
         $model = new EstateObject();
-		$request = Yii::$app->request->get();
+		$request = Yii::$app->request->post();
 
         if ($model->load($request, '')) {
 			// Get address info by search address
@@ -110,14 +110,14 @@ class ObjectController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model = EstateObject::findByIdentity($id);
-		$request = Yii::$app->request->post();
+	    $model = EstateObject::findByIdentity($id);
+	    $request = Yii::$app->request->post();
 		
-        if ($model->load($request, '') && $model->update()) {
-            return true;
-        } else {
-            return $model->errors;
-        }
+    	    if ($model->load($request, '') && $model->update()) {
+        	return true;
+    	    } else {
+        	return $model->errors;
+    	    }
 	}
 
 	/**
@@ -127,13 +127,13 @@ class ObjectController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = EstateObject::findByIdentity($id);
+	    $model = EstateObject::findByIdentity($id);
 		
-        if (!is_null($model)) {
-            return $model;
-        } else {
-            return false;
-        }
+    	    if (!is_null($model)) {
+        	return $model;
+    	    } else {
+        	return ["result"=>false];
+    	    }
 	}
 
 	/**
