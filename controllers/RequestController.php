@@ -72,14 +72,14 @@ class RequestController extends Controller
 						// Add id address after save in array od ids
 						array_push($addressIds, $address->id);
 					} else { // Return error if not save address
-						return $address->errors;
+						return ["error" => $address->errors];
 					}
 				} else { // if exist address model
 					// Add id address after save in array od ids
 					array_push($addressIds, $address->id);
 				}
 			}
- 
+	
 			if ($model->save()) {
 				// Create rows in request_address table
 				foreach ($addressIds as $addressId) {
@@ -89,19 +89,17 @@ class RequestController extends Controller
 					$requestAdrress->request_object_id = $model->id;
 
 					if (!$requestAdrress->save()) {
-						return $requestAdrress->errors;
+						return ["errors" => $requestAdrress->errors];
 					}
 				}
 
-				return true;
+				return ["result" => true];
 			} else {
-				return $model->errors;
+				return ["errors" => $model->errors];
 			}
         } else {
-            return [
-				'erorr' => 'empty request'
-			];
-        }
+            return ['error' => 'empty request'];
+    	    }
 	}
 
 	/**
@@ -115,9 +113,9 @@ class RequestController extends Controller
 		$request = Yii::$app->request->post();
 		
         if ($model->load($request, '') && $model->update()) {
-            return true;
+            return ["result" => true];
         } else {
-            return $model->errors;
+            return ["errors" => $model->errors];
         }
 	}
 

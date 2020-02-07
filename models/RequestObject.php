@@ -32,6 +32,8 @@ use Yii;
  */
 class RequestObject extends \yii\db\ActiveRecord
 {
+    public $addresses = [];
+
     /**
      * {@inheritdoc}
      */
@@ -46,9 +48,10 @@ class RequestObject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'num_of_people', 'family', 'pets', 'request_type_id', 'square_from', 'square_to', 'city_id', 'price_from', 'price_to', 'description', 'radius'], 'required'],
+            [['user_id', 'num_of_people', 'family', 'pets', 'request_type_id', 'square_from', 'square_to', 'price_from', 'price_to', 'description', 'radius'], 'required'],
             [['user_id', 'num_of_people', 'family', 'pets', 'request_type_id', 'square_from', 'square_to', 'city_id', 'price_from', 'price_to'], 'integer'],
             [['description'], 'string'],
+            ['addresses', 'safe'],
             [['pivot_lt', 'pivot_lg', 'radius'], 'number'],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
             [['request_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestType::className(), 'targetAttribute' => ['request_type_id' => 'id']],

@@ -50,7 +50,7 @@ class UserController extends Controller
 	$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
 		
 	$behaviors['authenticator'] = [
-	    'except' => ['login', 'signup', 'verify', 'login-facebook', 'login-goole'],
+	    'except' => ['login', 'signup', 'verify', 'login-facebook', 'login-google'],
 	    'class' => HttpBearerAuth::className()
 	];
 
@@ -93,7 +93,9 @@ class UserController extends Controller
             $model->signup_token = $signup_token;
             
             if(!$model->validate() || !$model->save()) {
-                return $model->errors;
+                return [
+                "errors" => $model->errors
+                ];
             }
 
             // Send email message for verify
@@ -107,13 +109,13 @@ class UserController extends Controller
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl';
 
-            $mail->Username = 'username@yandex.ru';
-            $mail->Password = 'password';
+            $mail->Username = 'arman.shukanov@fokin-team.ru';
+            $mail->Password = 'arman_shukanov';
 
-            $mail->setFrom('username@yandex.ru');
+            $mail->setFrom('arman.shukanov@fokin-team.ru');
             $mail->addAddress($email);
             $mail->Subject = 'Подтверждение аккаунта';
-            $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify/?token=" . $signup_token . '">по ссылке</a>';
+            $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
 
             $mail->isHTML(true);
 
@@ -138,21 +140,22 @@ class UserController extends Controller
     {
         $request = Yii::$app->request;
 
-        $verification_code = $request->post('token');
-
-        $user = User::find(['signup_token' => $verification_code])->one();
-
+        $verification_code = $request->get('token');
+        $user = User::find()->where(['signup_token' => $verification_code])->one();
+        
         if (!is_null($user)) {
             $user->verified = 1;
 
             if($user->update()) {
                 return [
-            	    "result" => true
+            	    "result" => true,
                 ];
+            } else {
+        	return ["errors" => $user->errors];
             }
         } else {
             return ["result" => false];
-        }
+    	}
     }
 
     /**
@@ -192,7 +195,9 @@ class UserController extends Controller
             		    ];
             		}
             	    } else {
-            		return ["result" => "Подтвердите ваш аккаунт, перейдя по ссылке на почте"];
+            		return [
+            		    "result" => "Confirm your account by clicking on the link in the mail"
+            		];
             	    }
                 } else {
                     return ["result" => false];
@@ -251,17 +256,27 @@ class UserController extends Controller
                     $model = new User();
 
                     $model->email = $email;
-                    $model->signup_token = uniqid();
                     $model->verified = 1;
                     $model->access_token = $value;
                     
                     if ($model->save()) {
-                        return $value;
+                        return [
+                	    "access_token" => $value
+                        ];
                     } else {
                         return ["result" => false];
                     }
                 } else {
-                return uniqid();
+            	    $user->access_token = uniqid();
+            	    if ($user->update()) {
+            		return [
+            		    "access_token" => $user->access_token
+            		];
+            	    } else {
+            		return [
+            		    "errors" => $user->errors
+            		];
+            	    }
                 }
 
             } catch(Facebook\Exceptions\FacebookResponseException $e){
@@ -271,7 +286,7 @@ class UserController extends Controller
             }    
         }
         
-    return $loginUrl;
+    return ["redirect_uri " => $loginUrl];
     }
     
     /**
@@ -323,15 +338,20 @@ class UserController extends Controller
                 $model->access_token = $token['access_token'];
                 
                 if ($model->save()) {
-                    return $token['access_token'];
+                    return ["access_token" => $token['access_token']];
                 } else {
                     return ["result" => false];
                 }
             } else {
-                return uniqid();
+        	$user->access_token = uniqid();
+		if ($user->update()) {
+		    return ["access_token" => $user->access_token];
+		} else {
+		    return ["errors" => $user->errors];
+		}
             }
         } else {
-            return $auth_url;
+            return ["redirect_uri" => $auth_url];
         }
     }
 
@@ -344,20 +364,11 @@ class UserController extends Controller
      */
     public function actionUpdate()
     {
-    
-	$arr = [
-	    'headers' => Yii::$app->request->getHeaders(),
-	    'user' => Yii::$app->user->identity->id
-	];
-	
-	return $arr;
-    
         $request = Yii::$app->request;
 
         // Check authorized
         if (!Yii::$app->user->isGuest) {
-            $user = User::find(Yii::$app->user->identity->id);
-
+            $user = User::find(Yii::$app->user->identity->id)->one();
             if (!is_null($request->post("gender"))) {
                 $user->gender = $request->post("gender");
             }
@@ -379,7 +390,7 @@ class UserController extends Controller
             	    "return" => true
             	];
             } else {
-                return $user->error;
+                return ["error" => 'Nothing to change'];
             }
         } else {
             throw new \yii\web\UnauthorizedHttpException();

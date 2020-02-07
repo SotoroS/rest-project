@@ -38,7 +38,7 @@ use Yii;
 class EstateObject extends \yii\db\ActiveRecord
 {
     public $address;
-
+    
     /**
      * {@inheritdoc}
      */

@@ -39,7 +39,7 @@ class M200130110608CreateRequestObjectTable extends Migration
             'request_type_id' => 'INT(19) NOT NULL', //fk request_type
             'square_from' => 'INT(19) NOT NULL',
             'square_to' => 'INT(19) NOT NULL',
-            'city_id' => 'INT(19) NOT NULL', //fk  city
+            'city_id' => 'INT(19)', //fk  city
             'price_from' => 'INT(19) NOT NULL',
             'price_to' => 'INT(19) NOT NULL',
             'description' => 'TEXT NOT NULL',

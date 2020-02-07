@@ -337,7 +337,7 @@ class RequestObjectTest extends \Codeception\Test\Unit
 
         // checking for incorrect null data
         $request_object->city_id = null;
-        $this->assertFalse($request_object->validate(['city_id']));
+        $this->assertTrue($request_object->validate(['city_id']));
     }
     
     // checking data Request Type ID 

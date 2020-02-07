@@ -8,9 +8,9 @@ use yii\rest\Controller;
 use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
 
-use app\models\EstateObject;
-use app\models\Address;
-use app\models\Metro;
+use micro\models\EstateObject;
+use micro\models\Address;
+use micro\models\Metro;
 
 /**
  * Class SiteController
@@ -39,9 +39,9 @@ class ObjectController extends Controller
 	public function actionNew()
 	{
         $model = new EstateObject();
-		$request = Yii::$app->request->post();
+	$request = Yii::$app->request;
 
-        if ($model->load($request, '')) {
+        if ($model->load($request->post(), '')) {    			
 			// Get address info by search address
 			$infoObject = static::getAddress($model->address);
 
@@ -52,7 +52,7 @@ class ObjectController extends Controller
 			);
 
 			// If address no exsist create new address
-			if (!is_null($address)) {
+			if (is_null($address)) {
 				$address = new Address();
 
 				$address->lt = $infoObject->DisplayPosition->Latitude;
@@ -79,27 +79,25 @@ class ObjectController extends Controller
 					}
 
 					if ($model->save()) {
-						return true;
+						return ["result" => true];
 					} else {
-						return $model->errors;
+						return ["errors" => $model->errors];
 					}
 				} else { // Return error if not save address
-					return $address->errors;
+					return ["error" => $address->errors];
 				}
 			} else { // if exist address model
 				// Link address to model
 				$model->address_id = $address->id;
 
 				if ($model->save()) {
-					return true;
+					return ["result" => true];
 				} else {
-					return $model->errors;
+					return ["error" => $model->errors];
 				}
 			}
         } else {
-            return [
-				'erorr' => 'empty request'
-			];
+            return ['error' => 'empty request'];
         }
 	}
 
@@ -114,9 +112,9 @@ class ObjectController extends Controller
 	    $request = Yii::$app->request->post();
 		
     	    if ($model->load($request, '') && $model->update()) {
-        	return true;
+        	return ["result" => true];
     	    } else {
-        	return $model->errors;
+        	return ["error" => $model->errors];
     	    }
 	}
 
