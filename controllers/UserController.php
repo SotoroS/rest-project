@@ -107,10 +107,10 @@ class UserController extends Controller
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl';
 
-            $mail->Username = 'arman.shukanov@fokin-team.ru';
-            $mail->Password = 'arman_shukanov';
+            $mail->Username = 'username@yandex.ru';
+            $mail->Password = 'password';
 
-            $mail->setFrom('arman.shukanov@fokin-team.ru');
+            $mail->setFrom('username@yandex.ru');
             $mail->addAddress($email);
             $mail->Subject = 'Подтверждение аккаунта';
             $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify/?token=" . $signup_token . '">по ссылке</a>';
