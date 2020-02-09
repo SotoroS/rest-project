@@ -41,7 +41,9 @@ class ObjectController extends Controller
         $model = new EstateObject();
 	$request = Yii::$app->request;
 
-        if ($model->load($request->post(), '')) {    			
+        if ($model->load($request->post(), '')) {
+    			$model->user_id = Yii::$app->user->identity->getId();
+            			
 			// Get address info by search address
 			$infoObject = static::getAddress($model->address);
 
@@ -66,7 +68,7 @@ class ObjectController extends Controller
 				// Save address & object
 				if ($address->save()) {
 					// Get nearby station info
-					$metroInfo = static::getStation($model->lt, $model->lg);
+					$metroInfo = static::getStation($address->lt, $address->lg);
 					
 					// Create metro station
 					$metro = new Metro();
@@ -77,9 +79,12 @@ class ObjectController extends Controller
 					if ($metro->save()) {
 						$model->metro_id = $metro->id;
 					}
+					
+					$model->ln = $address->lt;
+					$model->lt = $address->lg;
 
 					if ($model->save()) {
-						return ["result" => true];
+						return ["id" => $model->id];
 					} else {
 						return ["errors" => $model->errors];
 					}
@@ -89,9 +94,12 @@ class ObjectController extends Controller
 			} else { // if exist address model
 				// Link address to model
 				$model->address_id = $address->id;
+				
+				$model->ln = $address->lt;
+				$model->lt = $address->lg;
 
 				if ($model->save()) {
-					return ["result" => true];
+					return ["id" => $model->id];
 				} else {
 					return ["error" => $model->errors];
 				}
