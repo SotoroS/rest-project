@@ -5,23 +5,22 @@ namespace micro\models;
 use Yii;
 
 /**
- * This is the model class for table "street".
+ * This is the model class for table "region".
  *
  * @property int $id
  * @property string $name
- * @property int $city_area_id
  *
  * @property Address[] $addresses
- * @property CityArea $cityArea
+ * @property City[] $cities
  */
-class Street extends \yii\db\ActiveRecord
+class Region extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'street';
+        return 'region';
     }
 
     /**
@@ -30,10 +29,8 @@ class Street extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'city_area_id'], 'required'],
-            [['city_area_id'], 'integer'],
+            [['name'], 'required'],
             [['name'], 'string', 'max' => 256],
-            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
         ];
     }
 
@@ -45,7 +42,6 @@ class Street extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'city_area_id' => 'City Area ID',
         ];
     }
 
@@ -67,16 +63,16 @@ class Street extends \yii\db\ActiveRecord
      */
     public function getAddresses()
     {
-        return $this->hasMany(Address::className(), ['street_id' => 'id']);
+        return $this->hasMany(Address::className(), ['region_id' => 'id']);
     }
 
     /**
-     * Gets query for [[CityArea]].
+     * Gets query for [[Cities]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCityArea()
+    public function getCities()
     {
-        return $this->hasOne(CityArea::className(), ['id' => 'city_area_id']);
+        return $this->hasMany(Cities::className(), ['region_id' => 'id']);
     }
 }

@@ -45,12 +45,12 @@ class PropertyType extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[EstateObjects]].
+     * Gets query for [[Objects]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEstateObjects()
+    public function getObjects()
     {
-        return $this->hasMany(EstateObject::className(), ['property_type_id' => 'id']);
+        return $this->hasMany(Objects::className(), ['property_type' => 'id']);
     }
 }

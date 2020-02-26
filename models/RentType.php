@@ -45,12 +45,12 @@ class RentType extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[EstateObjects]].
+     * Gets query for [[Objects]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEstateObjects()
+    public function getObjects()
     {
-        return $this->hasMany(EstateObject::className(), ['rent_type_id' => 'id']);
+        return $this->hasMany(Objects::className(), ['rent_type' => 'id']);
     }
 }

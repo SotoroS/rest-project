@@ -16,14 +16,14 @@ use Yii;
  * @property CityArea[] $cityAreas
  * @property RequestObject[] $requestObjects
  */
-class City extends \yii\db\ActiveRecord
+class Cities extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'city';
+        return 'cities';
     }
 
     /**
@@ -32,10 +32,8 @@ class City extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'region_id'], 'required'],
-            [['region_id'], 'integer'],
+            [['name'], 'required'],
             [['name'], 'string', 'max' => 256],
-            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Region::className(), 'targetAttribute' => ['region_id' => 'id']],
         ];
     }
 
@@ -47,7 +45,6 @@ class City extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'region_id' => 'Region ID',
         ];
     }
 
@@ -56,30 +53,30 @@ class City extends \yii\db\ActiveRecord
      * 
      * @param - name
      * 
-     * @return City|null 
+     * @return Cities|null 
      */
     public static function findByName($name) {
         return static::find(['name' => $name])->one();
     }
  
     /**
-     * Gets query for [[Addresses]].
+     * Gets query for [[Regions]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getAddresses()
+    public function getRegions()
     {
-        return $this->hasMany(Address::className(), ['city_id' => 'id']);
+        return $this->hasMany(Regions::className(), ['city_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Region]].
+     * Gets query for [[Filters]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRegion()
+    public function getFilter()
     {
-        return $this->hasOne(Region::className(), ['id' => 'region_id']);
+        return $this->hasOne(Filters::className(), ['city_id' => 'id']);
     }
 
     /**
@@ -89,16 +86,16 @@ class City extends \yii\db\ActiveRecord
      */
     public function getCityAreas()
     {
-        return $this->hasMany(CityArea::className(), ['city_id' => 'id']);
+        return $this->hasMany(CityAreas::className(), ['city_id' => 'id']);
     }
 
     /**
-     * Gets query for [[RequestObjects]].
+     * Gets query for [[Objects]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRequestObjects()
+    public function getObjects()
     {
-        return $this->hasMany(RequestObject::className(), ['city_id' => 'id']);
+        return $this->hasMany(Objects::className(), ['city_id' => 'id']);
     }
 }

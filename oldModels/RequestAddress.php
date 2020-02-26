@@ -36,7 +36,7 @@ class RequestAddress extends \yii\db\ActiveRecord
             [['request_object_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestObject::className(), 'targetAttribute' => ['request_object_id' => 'id']],
         ];
     }
-
+ 
     /**
      * {@inheritdoc}
      */

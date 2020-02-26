@@ -5,21 +5,21 @@ namespace micro\models;
 use Yii;
 
 /**
- * This is the model class for table "metro".
+ * This is the model class for table "country_areas".
  *
  * @property int $id
  * @property string $name
  *
- * @property EstateObject[] $estateObjects
+ * @property Regions[] $regions
  */
-class Metro extends \yii\db\ActiveRecord
+class CountryAreas extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'metro';
+        return 'country_areas';
     }
 
     /**
@@ -45,12 +45,12 @@ class Metro extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Objects]].
+     * Gets query for [[Regions]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getObjects()
+    public function getRegions()
     {
-        return $this->hasMany(Objects::className(), ['metro_id' => 'id']);
+        return $this->hasMany(Regions::className(), ['area_id' => 'id']);
     }
 }
