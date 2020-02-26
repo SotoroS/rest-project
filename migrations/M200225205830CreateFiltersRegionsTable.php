@@ -5,9 +5,9 @@ namespace micro\migrations;
 use yii\db\Migration;
 
 /**
- * Class M200130134709CreateCityAreaTable
+ * Class M200225205830CreateFiltersRegionsTable
  */
-class M200130134709CreateCityAreaTable extends Migration
+class M200225205830CreateFiltersRegionsTable extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class M200130134709CreateCityAreaTable extends Migration
      */
     public function safeDown()
     {
-        echo "M200130134709CreateCityAreaTable cannot be reverted.\n";
+        echo "M200225205830CreateFiltersRegionsTable cannot be reverted.\n";
 
         return false;
     }
@@ -30,15 +30,15 @@ class M200130134709CreateCityAreaTable extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable('city_area', [
+        $this->createTable('filters_regions', [
             'id' => $this->primaryKey(),
-            'name' => 'VARCHAR(256) NOT NULL',
-            'city_id' => 'INT(19) NOT NULL' //FK
+            'regions_id' => 'INT(19) DEFAULT 1', // fk regions
+            'filters_id' => 'INT(19) DEFAULT 1' // fk filters
         ]);
     }
 
     public function down()
     {
-        $this->dropTable('city_area');
+        $this->dropTable('filters_regions');
     }
 }

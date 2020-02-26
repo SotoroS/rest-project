@@ -5,9 +5,9 @@ namespace micro\migrations;
 use yii\db\Migration;
 
 /**
- * Class M200130155533CreateRentTypeTable
+ * Class M200225220200CreateRentTypeTable
  */
-class M200130155533CreateRentTypeTable extends Migration
+class M200225220200CreateRentTypeTable extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class M200130155533CreateRentTypeTable extends Migration
      */
     public function safeDown()
     {
-        echo "M200130155533CreateRentTypeTable cannot be reverted.\n";
+        echo "M200225220200CreateRentTypeTable cannot be reverted.\n";
 
         return false;
     }
@@ -32,7 +32,7 @@ class M200130155533CreateRentTypeTable extends Migration
     {
         $this->createTable('rent_type', [
             'id' => $this->primaryKey(),
-            'name' => 'VARCHAR(256) NOT NULL'
+            'name' => 'VARCHAR(256) NOT NULL',
         ]);
     }
 

@@ -5,9 +5,9 @@ namespace micro\migrations;
 use yii\db\Migration;
 
 /**
- * Class M200130141910CreateBuildingTypeTable
+ * Class M200225220925CreatePhonesTable
  */
-class M200130141910CreateBuildingTypeTable extends Migration
+class M200225220925CreatePhonesTable extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class M200130141910CreateBuildingTypeTable extends Migration
      */
     public function safeDown()
     {
-        echo "M200130141910CreateBuildingTypeTable cannot be reverted.\n";
+        echo "M200225220925CreatePhonesTable cannot be reverted.\n";
 
         return false;
     }
@@ -30,14 +30,17 @@ class M200130141910CreateBuildingTypeTable extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable('building_type', [
+        $this->createTable('phones', [
             'id' => $this->primaryKey(),
-            'name' => 'VARCHAR(256) NOT NULL'
+            'phone' => 'VARCHAR(256)',
+            'object_id' => 'INT(19) DEFAULT 1', //FK
+            'created_at' => 'TIMESTAMP',
+            'updated_at' => 'TIMESTAMP',
         ]);
     }
 
     public function down()
     {
-        $this->dropTable('building_type');
+        $this->dropTable('phones');
     }
 }

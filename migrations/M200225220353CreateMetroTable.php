@@ -5,9 +5,9 @@ namespace micro\migrations;
 use yii\db\Migration;
 
 /**
- * Class M200130160310CreateRequestAddressTable
+ * Class M200225220353CreateMetroTable
  */
-class M200130160310CreateRequestAddressTable extends Migration
+class M200225220353CreateMetroTable extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class M200130160310CreateRequestAddressTable extends Migration
      */
     public function safeDown()
     {
-        echo "M200130160310CreateRequestAddressTable cannot be reverted.\n";
+        echo "M200225220353CreateMetroTable cannot be reverted.\n";
 
         return false;
     }
@@ -30,15 +30,14 @@ class M200130160310CreateRequestAddressTable extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable('request_address', [
+        $this->createTable('metro', [
             'id' => $this->primaryKey(),
-            'request_object_id' => 'INT(19) NOT NULL', //FK
-            'address_id' =>'INT(19) NOT NULL' //FK
+            'name' => 'VARCHAR(256) NOT NULL',
         ]);
     }
 
     public function down()
     {
-        $this->dropTable('request_address');
+        $this->dropTable('metro');
     }
 }

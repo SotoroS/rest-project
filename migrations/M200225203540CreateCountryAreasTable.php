@@ -5,9 +5,9 @@ namespace micro\migrations;
 use yii\db\Migration;
 
 /**
- * Class M200130141929CreatePropertyTypeTable
+ * Class M200225203540CreateCountryAreasTable
  */
-class M200130141929CreatePropertyTypeTable extends Migration
+class M200225203540CreateCountryAreasTable extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class M200130141929CreatePropertyTypeTable extends Migration
      */
     public function safeDown()
     {
-        echo "M200130141929CreatePropertyTypeTable cannot be reverted.\n";
+        echo "M200225203540CreateCountryAreasTable cannot be reverted.\n";
 
         return false;
     }
@@ -30,14 +30,14 @@ class M200130141929CreatePropertyTypeTable extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable('property_type', [
+        $this->createTable('country_areas', [
             'id' => $this->primaryKey(),
-            'name' => 'VARCHAR(256) NOT NULL'
+            'name' => 'VARCHAR(256) NOT NULL',
         ]);
     }
 
     public function down()
     {
-        $this->dropTable('property_type');
+        $this->dropTable('country_areas');
     }
 }

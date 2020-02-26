@@ -5,9 +5,9 @@ namespace micro\migrations;
 use yii\db\Migration;
 
 /**
- * Class M200130134753CreateRegionTable
+ * Class M200225220506CreateImagesTable
  */
-class M200130134753CreateRegionTable extends Migration
+class M200225220506CreateImagesTable extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class M200130134753CreateRegionTable extends Migration
      */
     public function safeDown()
     {
-        echo "M200130134753CreateRegionTable cannot be reverted.\n";
+        echo "M200225220506CreateImagesTable cannot be reverted.\n";
 
         return false;
     }
@@ -30,14 +30,16 @@ class M200130134753CreateRegionTable extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable('region', [
+        $this->createTable('images', [
             'id' => $this->primaryKey(),
-            'name' => 'VARCHAR(256) NOT NULL'
+            'path' => 'VARCHAR(256)',
+            'object_id' => 'INT(19) DEFAULT 1', //FK
+            'position' => 'INT(19)'
         ]);
     }
 
     public function down()
     {
-        $this->dropTable('region');
+        $this->dropTable('images');
     }
 }

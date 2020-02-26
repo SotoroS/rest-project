@@ -5,9 +5,9 @@ namespace micro\migrations;
 use yii\db\Migration;
 
 /**
- * Class M200130160037CreateRequestTypeTable
+ * Class M200225220257CreatePropertyTypeTable
  */
-class M200130160037CreateRequestTypeTable extends Migration
+class M200225220257CreatePropertyTypeTable extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,22 +22,21 @@ class M200130160037CreateRequestTypeTable extends Migration
      */
     public function safeDown()
     {
-        echo "M200130160037CreateRequestTypeTable cannot be reverted.\n";
+        echo "M200225220257CreatePropertyTypeTable cannot be reverted.\n";
 
         return false;
     }
-
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable('request_type', [
+        $this->createTable('property_type', [
             'id' => $this->primaryKey(),
-            'name' => 'VARCHAR(256) NOT NULL'
+            'name' => 'VARCHAR(256) NOT NULL',
         ]);
     }
 
     public function down()
     {
-        $this->dropTable('request_type');
+        $this->dropTable('property_type');
     }
 }
