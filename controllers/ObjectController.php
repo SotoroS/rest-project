@@ -3,6 +3,9 @@
 namespace micro\controllers;
 
 use Yii;
+use \Datetime;
+use Yii\db\Query;
+use Yii\web\UrlManager;
 
 use yii\rest\Controller;
 use yii\web\Response;
@@ -11,6 +14,11 @@ use yii\filters\auth\HttpBearerAuth;
 use micro\models\EstateObject;
 use micro\models\Address;
 use micro\models\Metro;
+use micro\models\Users;
+use micro\models\Filters;
+use micro\models\Images;
+use micro\models\Phones;
+use PharIo\Manifest\Url;
 
 /**
  * Class SiteController
@@ -26,10 +34,121 @@ class ObjectController extends Controller
 		// Возвращает результаты экшенов в формате JSON  
 		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
 		// OAuth 2.0
-		$behaviors['authenticator'] = ['class' => HttpBearerAuth::className()];
+		// $behaviors['authenticator'] = ['class' => HttpBearerAuth::className()];
 
 		return $behaviors;
 	}
+
+	public function actionGetObjects()
+    {
+        // DB::update('SET time_zone = "SYSTEM"');
+        $output = [];
+        try {
+			// $user = Auth::user();
+			// $user = Users::findOne(Yii::$app->users->identity->id);
+			$user = Users::findOne(1);
+			// get filter current user
+            $filterObject = Filters::find()->where(['user_id' => $user->id])->one();
+            if (is_null($filterObject)) {
+                throw new \Exception("filter not set");
+            }
+            $columnsToGet = [
+                'objects.id', 'objects.name',
+                'objects.description',
+                'objects.price',
+                'objects.data',
+                'objects.url',
+                'objects.created_at',
+                'cities.name as city_name',
+                'rent_type.name as rent_type'
+			];
+
+			$query = new Query();
+			// left join tables
+			$query->leftJoin('cities', 'cities.id = objects.city_id');
+			$query->leftJoin('rent_type', 'rent_type.id = objects.rent_type'); // поменял местами
+
+            // complement request
+            if ($filterObject->city_id) {
+                $query->where("city_id = $filterObject->city_id");
+            }
+
+//            if ($filterObject->city_area_id) {
+//                $query->where('city_area_id', $filterObject->city_id);
+//            }
+
+            if ($filterObject->rent_type) {
+                $query->where(['in', 'rent_type', array_filter(explode(',', $filterObject->rent_type))]);
+            }
+            if ($filterObject->property_type) {
+                $query->where(['in', 'property_type', array_filter(explode(',', $filterObject->property_type))]);
+            }
+
+            $query->where("price >= $filterObject->price_from");
+            $query->where("price <= $filterObject->price_to");
+
+            if ($filterObject->substring) {
+                $query->where(['like', 'description', $filterObject->substring])
+                    ->orWhere(['like', 'name', $filterObject->substring]);
+            }
+
+            $lastFetchDate = $user->last_fetch;
+            if ($lastFetchDate) {
+                $query->where("objects.created_at > $lastFetchDate");
+            }
+
+			// query result as array
+			$results = $query->select($columnsToGet)->orderBy(['created_at' => SORT_DESC])->limit(100);
+
+
+            $objects = [];
+            foreach ($results as $singleObject) {
+				// each element as an array
+				$singleObjectArray = (Array)$singleObject;
+				// search image
+                $images = Images::find()->where(function ($q)
+                use ($singleObjectArray) {
+					$singleObjectId = $singleObjectArray['id'];
+                    $q->where("object_id = $singleObjectId");
+				})
+				->orderBy('position')->pluck('path')->asArray()->all(); // pluck
+				
+				// if there is an imagery array, then replace each element with url
+                if (is_array($images)) {
+                    $images = array_map(function ($i) {
+                        return ('images/' . $i);
+                    }, $images);
+				}
+				// search phone
+                $phones = Phones::find()->where(function ($q) use ($singleObjectArray) {
+					$singleObjectId = $singleObjectArray['id'];
+                    $q->where("object_id = $singleObjectId");
+				})
+				->pluck('phone')->toArray()->all();
+				
+				// fill the array
+                $singleObjectArray['images'] = $images;
+                $singleObjectArray['phones'] = $phones;
+				$singleObjectArray['created_at'] = strtotime($singleObjectArray['created_at']) * 1000;
+				// add to the array objects
+                $objects[] = $singleObjectArray;
+            }
+
+            if (sizeof($objects) > 0) {
+				// set the time of Kiev
+				$dateTime = new DateTime(null, new \DateTimeZone("Europe/Kiev"));
+                $user->last_fetch = $dateTime->format('Y-m-d H:i:s');
+                $user->save();
+            }
+
+        } catch (\Throwable $e) {
+            $this->_writeLog($e);
+            $output['error'] = $e->getMessage();
+        } finally {
+            $output['data'] = $objects;
+            return $output;
+        }
+    }
 
 	/**
 	 * Create new object

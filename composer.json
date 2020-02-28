@@ -7,7 +7,9 @@
         "google/apiclient": "^2.0",
         "codeception/module-phpbrowser": "^1.0.0",
         "codeception/module-asserts": "^1.0.0",
-        "codeception/module-yii2": "^1.0.0"
+        "codeception/module-yii2": "^1.0.0",
+        "grptx/yii2-firebase": "~0.3.1",
+        "yii2tech/illuminate": "*"
     },
     "repositories": [
         {

@@ -3,19 +3,24 @@
 namespace micro\controllers;
 
 use Yii;
+use \Datetime;
 
 use yii\rest\Controller;
 use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\AccessControl;
 
-use micro\models\User;
+use micro\models\Users;
+use micro\models\CityAreas;
+use micro\models\RentType;
+use micro\models\PropertyType;
 use PHPMailer\PHPMailer\PHPMailer;
 use micro\models\Address;
 
 use Facebook;
 use Google_Client;
 use Google_Service_Oauth2;
+use micro\models\Cities;
 
 /**
  * Class SiteController
@@ -26,35 +31,41 @@ class UserController extends Controller
 {
     public function behaviors()
     {
-	// удаляем rateLimiter, требуется для аутентификации пользователя
+        // удаляем rateLimiter, требуется для аутентификации пользователя
         $behaviors = parent::behaviors();
-    
-	$behaviors['access'] = [
-	    'class' => AccessControl::className(),
-	    'only' => ['login', 'signup', 'verify', 'update', 'login-facebook', 'login-google'],
-	    'rules' => [
-	        [
-	            'actions' => ['login', 'signup', 'verify', 'login-facebook', 'login-google'],
-		    'allow' => true,
-		    'roles' => ['?'],
-	        ],
-	        [
-	    	    'actions' => ['update'],
-	    	    'allow' => true,
-	    	    'roles' => ['@'],
-	    	],
-	    ],
-	];
         
-        // Возвращает результаты экшенов в формате JSON  
-	$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
-		
-	$behaviors['authenticator'] = [
-	    'except' => ['login', 'signup', 'verify', 'login-facebook', 'login-google'],
-	    'class' => HttpBearerAuth::className()
-	];
+        $behaviors['access'] = [
+            'class' => AccessControl::className(),
+            'only' => ['login', 'signup', 'get-areas', 'verify', 'update', 'login-facebook', 'login-google', 'get-time'],
+            'rules' => [
+                [
+                    'actions' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+                'allow' => true,
+                'roles' => ['?'],
+                ],
+                [
+                    'actions' => ['update', 'get-areas', 'get-time'],
+                    'allow' => true,
+                    'roles' => ['@'],
+                ],
+            ],
+        ];
+            
+            // Возвращает результаты экшенов в формате JSON  
+        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
+            
+        $behaviors['authenticator'] = [
+            'except' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+            'class' => HttpBearerAuth::className()
+        ];
 
-	return $behaviors;
+        return $behaviors;
+    }
+
+    public function actionGetTime()
+    {
+        $dateTime = new DateTime(null, new \DateTimeZone("Europe/Kiev"));
+        return $dateTime->format('Y-m-d H:i:s');
     }
     
     /**
@@ -69,63 +80,118 @@ class UserController extends Controller
     {
         $request = Yii::$app->request;
 
-        $email = $request->post('email');
-        $password = $request->post('password');
+        $output = [];
+        try {
+            $account_id = $request->post('account_id');
 
-        if (is_null($email) || is_null($password)) {
-            return [
-                'error' => 'Fields are not filled'
-            ];
+            // looking for a user by id, if not - create a new one
+            $user = Users::findOne($account_id) ?: new Users();
+
+            $user->deviceType = $request->post('deviceType');
+            $user->fcmToken = $request->post('fcmToken');
+            $user->save();
+
+            // fill the array
+            $output['status'] = true;
+            $output['cities'] = Cities::find()->asArray()->all();
+            $output['city_areas'] = CityAreas::find()->asArray()->all();
+            $output['rent_types'] = RentType::find()->asArray()->all();
+            $output['property_types'] = PropertyType::find()->asArray()->all();
+
+        } catch (\Throwable $e) {
+
+            $output['status'] = false;
+            $output['error'] = $e->getMessage();
+
+            Yii::$app->response->statusCode = 500;
+            return $output;
         }
 
-        $password = password_hash($password, PASSWORD_DEFAULT);
-        $signup_token = uniqid();
+        Yii::$app->response->statusCode = 200;
+        return $output;
+        
 
-        // Find user by email
-        $user = User::findOne(['email' => $email]);
 
-        // Registration user if not exist user
-        if(!$user) {
-            $model = new User();
 
-            $model->email = $email;
-            $model->password = $password;
-            $model->signup_token = $signup_token;
+        // $email = $request->post('email');
+        // $password = $request->post('password');
+
+        // if (is_null($email) || is_null($password)) {
+        //     return [
+        //         'error' => 'Fields are not filled'
+        //     ];
+        // }
+
+        // $password = password_hash($password, PASSWORD_DEFAULT);
+        // $signup_token = uniqid();
+
+        // // Find user by email
+        // $user = User::findOne(['email' => $email]);
+
+        // // Registration user if not exist user
+        // if(!$user) {
+        //     $model = new User();
+
+        //     $model->email = $email;
+        //     $model->password = $password;
+        //     $model->signup_token = $signup_token;
             
-            if(!$model->validate() || !$model->save()) {
-                return [
-                "errors" => $model->errors
+        //     if(!$model->validate() || !$model->save()) {
+        //         return [
+        //         "errors" => $model->errors
+        //         ];
+        //     }
+
+        //     // Send email message for verify
+        //     $mail = new PHPMailer;
+
+        //     $mail->CharSet = "UTF-8";
+
+        //     $mail->isSMTP();
+        //     $mail->Host = 'smtp.yandex.ru';
+        //     $mail->Port = 465;
+        //     $mail->SMTPAuth = true;
+        //     $mail->SMTPSecure = 'ssl';
+
+        //     $mail->Username = 'arman.shukanov@fokin-team.ru';
+        //     $mail->Password = 'arman_shukanov';
+
+        //     $mail->setFrom('arman.shukanov@fokin-team.ru');
+        //     $mail->addAddress($email);
+        //     $mail->Subject = 'Подтверждение аккаунта';
+        //     $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
+
+        //     $mail->isHTML(true);
+
+        //     return [
+        // 	"mailSend" => $mail->send()
+    	//     ];
+        // } else {
+        //     return [
+        // 	"error" => "User exsist."
+    	//     ];
+        // }
+    }
+
+    public function actionGetAreas()
+    {
+        $output = [];
+        try {
+            $citiesArray = [];
+            // print all cities and add them to the array
+            $cities = Cities::find()->all();
+            foreach ($cities as $city) {
+                $citiesArray[] = [
+                    'name' => $city->name,
+                    'id' => $city->id,
                 ];
             }
+            $output['data'] = $citiesArray;
+        } catch (\Exception $e) {
+            $output['error'] = $e->getMessage();
 
-            // Send email message for verify
-            $mail = new PHPMailer;
-
-            $mail->CharSet = "UTF-8";
-
-            $mail->isSMTP();
-            $mail->Host = 'smtp.yandex.ru';
-            $mail->Port = 465;
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'ssl';
-
-            $mail->Username = 'arman.shukanov@fokin-team.ru';
-            $mail->Password = 'arman_shukanov';
-
-            $mail->setFrom('arman.shukanov@fokin-team.ru');
-            $mail->addAddress($email);
-            $mail->Subject = 'Подтверждение аккаунта';
-            $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
-
-            $mail->isHTML(true);
-
-            return [
-        	"mailSend" => $mail->send()
-    	    ];
-        } else {
-            return [
-        	"error" => "User exsist."
-    	    ];
+        } finally {
+            return $output;
         }
     }
 

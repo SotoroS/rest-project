@@ -66,7 +66,7 @@ return [
 			'class' => 'yii\swiftmailer\Mailer',
 		],
 		'user' => [
-            'identityClass' => 'micro\models\User',
+            'identityClass' => 'micro\models\Users',
             'enableSession' => false,  
         ],
 	],

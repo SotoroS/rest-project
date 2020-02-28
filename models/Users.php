@@ -48,7 +48,7 @@ class Users extends ActiveRecord implements IdentityInterface
             [['last_fetch', 'created_at', 'updated_at'], 'safe'],
             [['gender'], 'string', 'max' => 1],
             [['phone'], 'string', 'max' => 30],
-            [['email', 'password', 'fcmToken', 'deviceType'], 'string', 'max' => 256],
+            [['email', 'password', 'fcmToken', 'access_token', 'deviceType'], 'string', 'max' => 256],
         ];
     }
 
@@ -63,6 +63,7 @@ class Users extends ActiveRecord implements IdentityInterface
             'phone' => 'Phone',
             'email' => 'Email',
             'password' => 'Password',
+            'access_token' => 'Access Token',
             'age' => 'Age',
             'verified' => 'Verified',
             'notifications' => 'Notifications',

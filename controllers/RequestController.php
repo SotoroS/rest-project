@@ -11,6 +11,9 @@ use yii\filters\auth\HttpBearerAuth;
 use micro\models\RequestAddress;
 use micro\models\RequestObject;
 use micro\models\Address;
+use micro\models\Users;
+use micro\models\Filters;
+use micro\models\Cities;
 
 /**
  * Class SiteController
@@ -29,6 +32,83 @@ class RequestController extends Controller
 		$behaviors['authenticator'] = ['class' => HttpBearerAuth::className()];
 
 		return $behaviors;
+	}
+
+	public function actionSetFilter()
+	{
+		$request = Yii::$app->request;
+		$output = [];
+
+		try {
+			$fcmToken = $request->post('fcmToken');
+			$cityId = (int)$request->post('city') ?: null;
+            $cityAreaId = (int)$request->post('city_area_id') ?: null;
+			$notification = (int)$request->post('push_notification') ?: null;
+			
+			$rentType = json_decode($request->post('rent_type')) ?: null;
+			$propertyType = json_decode($request->post('property_type')) ?: null;
+			
+			// $propertyType = implode(',', $propertyType);
+			// $rentType = implode(',', $rentType);
+
+			$requestData = [
+                'city' => $cityId,
+                'city_area_id' => $cityAreaId,
+                'rent_type' => $rentType,
+                'property_type' => $propertyType,
+                'price_from' => (int)$request->post('price_from') ?: 0,
+                'price_to' => (int)$request->post('price_to') ?: 500000000,
+                'substring' => $request->post('substring') ?: "",
+            ];
+
+			// get current user
+			// $user = Yii::$app->user;
+			// $user = Users::findOne(Yii::$app->users->identity->id);
+			$user = Users::findOne(1);
+
+			// current user filter
+			$filterObject = Filters::findOne(['user_id' => $user->id]);
+			$user->notifications = $request->post('push_enabled') ? 1 : 0;
+			
+			// if there is a fcmToken, fill in the user
+            if ($fcmToken) {
+                $user->fcmToken = $fcmToken;
+            }
+            $user->save();
+
+            if (is_null($filterObject)) {
+                $filterObject = new Filters();
+                $filterObject->user_id = $user->id;
+            }
+
+            $user->notifications = $notification;
+			$user->save();
+			
+			// fill in the data
+			$filterObject->rent_type = $rentType ?: null;
+            $filterObject->property_type = $propertyType ?: null;
+            $filterObject->city_area_id = $cityAreaId ?: NULL;
+            $filterObject->city_id = $cityId ?: NULL;
+            $filterObject->price_from = $requestData['price_from'];
+            $filterObject->price_to = $requestData['price_to'];
+            $filterObject->substring = $requestData['substring'];
+            $filterObject->save();
+			
+            $output['cities'] = Cities::find()->asArray()->all();
+			return $output;
+
+		} catch (\Exception $e) {
+            $output['error'] = "Invalid data provided;";
+			$this->_writeLog($e);
+			
+        } catch (\Throwable $e) {
+            $this->_writeLog($e);
+			$output['error'] = $e->getMessage();
+			
+        } finally {
+            $output['status'] = true;
+            return $output;
+        }
 	}
 
 	/**
@@ -154,4 +234,14 @@ class RequestController extends Controller
 		
 		return $searchResult->Response->View[0]->Result[0]->Location;
 	}
+
+	/**
+     * @param $e
+     */
+    protected function _writeLog($e)
+    {
+        $f = fopen("log.txt", 'a');
+        fwrite($f, "[ERR] {$e->getMessage()}");
+        fclose($f);
+    }
 }
