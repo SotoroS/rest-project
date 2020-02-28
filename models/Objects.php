@@ -37,6 +37,7 @@ use Yii;
  */
 class Objects extends \yii\db\ActiveRecord
 {
+    
     /**
      * {@inheritdoc}
      */

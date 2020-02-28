@@ -68,7 +68,7 @@ return [
 		'user' => [
             'identityClass' => 'micro\models\Users',
             'enableSession' => false,  
-        ],
+		],
 	],
 
 ];
