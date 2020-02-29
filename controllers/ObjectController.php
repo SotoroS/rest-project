@@ -36,15 +36,15 @@ class ObjectController extends Controller
         
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['login', 'signup', 'get-areas', 'verify', 'update', 'login-facebook', 'login-google', 'get-objects'],
+            'only' => ['get-objects'],
             'rules' => [
                 [
-                    'actions' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-objects'],
+                    'actions' => ['get-objects'],
                 'allow' => true,
                 'roles' => ['?'],
                 ],
                 [
-                    'actions' => ['update', 'get-areas', 'get-objects'],
+                    'actions' => ['get-objects'],
                     'allow' => true,
                     'roles' => ['@'],
                 ],
@@ -55,7 +55,7 @@ class ObjectController extends Controller
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
-            'except' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google'],
+            'except' => ['login'],
             'class' => HttpBearerAuth::className()
         ];
 
@@ -192,7 +192,8 @@ class ObjectController extends Controller
 	 */
 	public function actionNew()
 	{
-        $model = new EstateObject();
+        // $model = new EstateObject();
+        $model = new Object();
 	$request = Yii::$app->request;
 
         if ($model->load($request->post(), '')) {
@@ -270,7 +271,8 @@ class ObjectController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-	    $model = EstateObject::findByIdentity($id);
+	    // $model = EstateObject::findByIdentity($id);
+	    $model = Object::findByIdentity($id);
 	    $request = Yii::$app->request->post();
 		
     	    if ($model->load($request, '') && $model->update()) {
@@ -287,7 +289,7 @@ class ObjectController extends Controller
 	 */
 	public function actionView($id)
 	{
-	    $model = EstateObject::findByIdentity($id);
+	    $model = Object::findByIdentity($id);
 		
     	    if (!is_null($model)) {
         	return $model;

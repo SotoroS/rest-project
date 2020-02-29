@@ -207,7 +207,7 @@ class UserController extends Controller
         $request = Yii::$app->request;
 
         $verification_code = $request->get('token');
-        $user = User::find()->where(['signup_token' => $verification_code])->one();
+        $user = Users::find()->where(['signup_token' => $verification_code])->one();
         
         if (!is_null($user)) {
             $user->verified = 1;
@@ -243,7 +243,7 @@ class UserController extends Controller
             $password = $request->post('password');
 
             // Checking the presence of a user in the database
-            $user = User::findOne(['email' => $email]);
+            $user = Users::findOne(['email' => $email]);
             
             if(!is_null($user)) {
                 // Password verification
@@ -315,11 +315,11 @@ class UserController extends Controller
                 // Getting string accessToken
                 $value = $accessToken->getValue();
 
-                $user = User::findOne(['email' => $email]);
+                $user = Users::findOne(['email' => $email]);
 
                 // Check user with such email in database
                 if(is_null($user)){
-                    $model = new User();
+                    $model = new Users();
 
                     $model->email = $email;
                     $model->verified = 1;
@@ -391,12 +391,12 @@ class UserController extends Controller
             $userInfo = $oauth2->userinfo->get();
             $email = $userInfo->email;
 
-            $user = User::findOne(['email' => $email]);
+            $user = Users::findOne(['email' => $email]);
 
             // Check user with such email in database
 
             if(is_null($user)) {
-                $model = new User();
+                $model = new Users();
 
                 $model->email = $email;
                 $model->signup_token = uniqid();
@@ -434,7 +434,7 @@ class UserController extends Controller
 
         // Check authorized
         if (!Yii::$app->user->isGuest) {
-            $user = User::find(Yii::$app->user->identity->id)->one();
+            $user = Users::find(Yii::$app->user->identity->id)->one();
             if (!is_null($request->post("gender"))) {
                 $user->gender = $request->post("gender");
             }

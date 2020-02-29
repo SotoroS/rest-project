@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
 
 use micro\models\RequestAddress;
+use micro\models\FiltersAddress;
 use micro\models\RequestObject;
 use micro\models\Address;
 use micro\models\Users;
@@ -118,7 +119,7 @@ class RequestController extends Controller
 	 */
 	public function actionNew()
 	{
-		$model = new RequestObject();
+		$model = new Filters();
 		$request = Yii::$app->request->post();
 		$addressIds = [];
 
@@ -163,7 +164,8 @@ class RequestController extends Controller
 			if ($model->save()) {
 				// Create rows in request_address table
 				foreach ($addressIds as $addressId) {
-					$requestAdrress = new RequestAddress();
+					// $requestAdrress = new RequestAddress();
+					$requestAdrress = new FiltersAddress();
 
 					$requestAdrress->address_id = $addressId;
 					$requestAdrress->request_object_id = $model->id;
@@ -189,7 +191,8 @@ class RequestController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model = RequestObject::findByIdentity($id);
+		// $model = RequestObject::findByIdentity($id);
+		$model = Filters::findByIdentity($id);
 		$request = Yii::$app->request->post();
 		
         if ($model->load($request, '') && $model->update()) {
@@ -206,7 +209,8 @@ class RequestController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = RequestObject::findByIdentity($id);
+		// $model = RequestObject::findByIdentity($id);
+		$model = Filters::findByIdentity($id);
 		
         if (!is_null($model)) {
             return $model;
