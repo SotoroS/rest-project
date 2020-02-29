@@ -32,6 +32,7 @@ class M200225195302CreateObjectsTable extends Migration
     {
         $this->createTable('objects', [
             'id' => $this->primaryKey(),
+            'address_id' => 'INT(19) DEFAULT 1',//FK
             'building_type_id' => 'INT(19) DEFAULT 1',//FK
             'rent_type' => 'INT(19) DEFAULT 1', //FK
             'property_type' => 'INT(19) DEFAULT 1', //FK

@@ -5,23 +5,23 @@ namespace micro\models;
 use Yii;
 
 /**
- * This is the model class for table "request_address".
+ * This is the model class for table "filters_address".
  *
  * @property int $id
- * @property int $request_object_id
- * @property int $address_id
+ * @property int|null $address_id
+ * @property int|null $filters_id
  *
  * @property Address $address
- * @property RequestObject $requestObject
+ * @property Filters $filters
  */
-class RequestAddress extends \yii\db\ActiveRecord
+class FiltersAddress extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'request_address';
+        return 'filters_address';
     }
 
     /**
@@ -30,13 +30,12 @@ class RequestAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['request_object_id', 'address_id'], 'required'],
-            [['request_object_id', 'address_id'], 'integer'],
+            [['address_id', 'filters_id'], 'integer'],
             [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['address_id' => 'id']],
-            [['request_object_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestObject::className(), 'targetAttribute' => ['request_object_id' => 'id']],
+            [['filters_id'], 'exist', 'skipOnError' => true, 'targetClass' => Filters::className(), 'targetAttribute' => ['filters_id' => 'id']],
         ];
     }
- 
+
     /**
      * {@inheritdoc}
      */
@@ -44,8 +43,8 @@ class RequestAddress extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'request_object_id' => 'Request Object ID',
             'address_id' => 'Address ID',
+            'filters_id' => 'Filters ID',
         ];
     }
 
@@ -60,12 +59,12 @@ class RequestAddress extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[RequestObject]].
+     * Gets query for [[Filters]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRequestObject()
+    public function getFilters()
     {
-        return $this->hasOne(RequestObject::className(), ['id' => 'request_object_id']);
+        return $this->hasOne(Filters::className(), ['id' => 'filters_id']);
     }
 }

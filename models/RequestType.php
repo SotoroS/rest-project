@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property string $name
  *
- * @property RequestObject[] $requestObjects
+ * @property Filters[] $filters
  */
 class RequestType extends \yii\db\ActiveRecord
 {
@@ -45,12 +45,12 @@ class RequestType extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[RequestObjects]].
+     * Gets query for [[Filters]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRequestObjects()
+    public function getFilters()
     {
-        return $this->hasMany(RequestObject::className(), ['request_type_id' => 'id']);
+        return $this->hasMany(Filters::className(), ['request_type_id' => 'id']);
     }
 }

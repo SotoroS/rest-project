@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "objects".
  *
  * @property int $id
+ * @property int|null $address_id
  * @property int|null $building_type_id
  * @property int|null $rent_type
  * @property int|null $property_type
@@ -25,6 +26,7 @@ use Yii;
  * @property string|null $data
  *
  * @property Images[] $images
+ * @property Address $address
  * @property BuildingType $buildingType
  * @property CityAreas $cityArea
  * @property Cities $city
@@ -37,7 +39,6 @@ use Yii;
  */
 class Objects extends \yii\db\ActiveRecord
 {
-    
     /**
      * {@inheritdoc}
      */
@@ -52,12 +53,13 @@ class Objects extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['building_type_id', 'rent_type', 'property_type', 'metro_id', 'user_id', 'city_id', 'region_id', 'city_area_id'], 'integer'],
+            [['address_id', 'building_type_id', 'rent_type', 'property_type', 'metro_id', 'user_id', 'city_id', 'region_id', 'city_area_id'], 'integer'],
             [['name', 'description', 'price'], 'required'],
             [['description', 'url', 'data'], 'string'],
             [['price'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 256],
+            [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['address_id' => 'id']],
             [['building_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => BuildingType::className(), 'targetAttribute' => ['building_type_id' => 'id']],
             [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityAreas::className(), 'targetAttribute' => ['city_area_id' => 'id']],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
@@ -76,6 +78,7 @@ class Objects extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'address_id' => 'Address ID',
             'building_type_id' => 'Building Type ID',
             'rent_type' => 'Rent Type',
             'property_type' => 'Property Type',
@@ -112,6 +115,16 @@ class Objects extends \yii\db\ActiveRecord
     public function getImages()
     {
         return $this->hasMany(Images::className(), ['object_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Address]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddress()
+    {
+        return $this->hasOne(Address::className(), ['id' => 'address_id']);
     }
 
     /**

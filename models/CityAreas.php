@@ -5,15 +5,18 @@ namespace micro\models;
 use Yii;
 
 /**
- * This is the model class for table "city_area".
+ * This is the model class for table "city_areas".
  *
  * @property int $id
  * @property string $name
- * @property int $city_id
+ * @property int|null $city_id
  *
  * @property Address[] $addresses
- * @property City $city
- * @property Street[] $streets
+ * @property Cities $city
+ * @property Filters[] $filters
+ * @property Objects[] $objects
+ * @property Regions[] $regions
+ * @property Streets[] $streets
  */
 class CityAreas extends \yii\db\ActiveRecord
 {
@@ -62,33 +65,23 @@ class CityAreas extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Regions]].
+     * Gets query for [[Addresses]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRegions()
+    public function getAddresses()
     {
-        return $this->hasMany(Regions::className(), ['city_area_id' => 'id']);
+        return $this->hasMany(Address::className(), ['city_area_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Cities]].
+     * Gets query for [[City]].
      *
      * @return \yii\db\ActiveQuery
      */
     public function getCity()
     {
         return $this->hasOne(Cities::className(), ['id' => 'city_id']);
-    }
-
-    /**
-     * Gets query for [[Streets]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStreets()
-    {
-        return $this->hasMany(Streets::className(), ['city_area_id' => 'id']);
     }
 
     /**
@@ -109,5 +102,25 @@ class CityAreas extends \yii\db\ActiveRecord
     public function getObjects()
     {
         return $this->hasMany(Objects::className(), ['city_area_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Regions]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRegions()
+    {
+        return $this->hasMany(Regions::className(), ['city_area_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Streets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStreets()
+    {
+        return $this->hasMany(Streets::className(), ['city_area_id' => 'id']);
     }
 }

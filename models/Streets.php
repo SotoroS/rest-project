@@ -5,14 +5,15 @@ namespace micro\models;
 use Yii;
 
 /**
- * This is the model class for table "street".
+ * This is the model class for table "streets".
  *
  * @property int $id
  * @property string $name
- * @property int $city_area_id
+ * @property int|null $city_area_id
  *
  * @property Address[] $addresses
- * @property CityArea $cityArea
+ * @property Regions[] $regions
+ * @property CityAreas $cityArea
  */
 class Streets extends \yii\db\ActiveRecord
 {
@@ -21,7 +22,7 @@ class Streets extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'street';
+        return 'streets';
     }
 
     /**
@@ -61,6 +62,16 @@ class Streets extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Addresses]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddresses()
+    {
+        return $this->hasMany(Address::className(), ['street_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Regions]].
      *
      * @return \yii\db\ActiveQuery
@@ -71,7 +82,7 @@ class Streets extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[CityAreas]].
+     * Gets query for [[CityArea]].
      *
      * @return \yii\db\ActiveQuery
      */

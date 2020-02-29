@@ -5,16 +5,16 @@ namespace micro\models;
 use Yii;
 
 /**
- * This is the model class for table "city".
+ * This is the model class for table "cities".
  *
  * @property int $id
  * @property string $name
- * @property int $region_id
  *
  * @property Address[] $addresses
- * @property Region $region
- * @property CityArea[] $cityAreas
- * @property RequestObject[] $requestObjects
+ * @property CityAreas[] $cityAreas
+ * @property Filters[] $filters
+ * @property Objects[] $objects
+ * @property Regions[] $regions
  */
 class Cities extends \yii\db\ActiveRecord
 {
@@ -58,25 +58,15 @@ class Cities extends \yii\db\ActiveRecord
     public static function findByName($name) {
         return static::find(['name' => $name])->one();
     }
- 
-    /**
-     * Gets query for [[Regions]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRegions()
-    {
-        return $this->hasMany(Regions::className(), ['city_id' => 'id']);
-    }
 
     /**
-     * Gets query for [[Filters]].
+     * Gets query for [[Addresses]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFilter()
+    public function getAddresses()
     {
-        return $this->hasOne(Filters::className(), ['city_id' => 'id']);
+        return $this->hasMany(Address::className(), ['city_id' => 'id']);
     }
 
     /**
@@ -90,6 +80,16 @@ class Cities extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Filters]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFilters()
+    {
+        return $this->hasMany(Filters::className(), ['city_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Objects]].
      *
      * @return \yii\db\ActiveQuery
@@ -97,5 +97,15 @@ class Cities extends \yii\db\ActiveRecord
     public function getObjects()
     {
         return $this->hasMany(Objects::className(), ['city_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Regions]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRegions()
+    {
+        return $this->hasMany(Regions::className(), ['city_id' => 'id']);
     }
 }

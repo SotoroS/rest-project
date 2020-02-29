@@ -9,8 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property string|null $name
- * @property float|null $lt
- * @property float|null $lg
  * @property int|null $area_id
  * @property int|null $city_id
  * @property int|null $street_id
@@ -18,7 +16,7 @@ use Yii;
  * @property string|null $created_at
  * @property string|null $updated_at
  *
- * @property FiltersRegions[] $filtersRegions
+ * @property Address[] $addresses
  * @property Objects[] $objects
  * @property CountryAreas $area
  * @property CityAreas $cityArea
@@ -41,7 +39,6 @@ class Regions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lt', 'lg'], 'number'],
             [['area_id', 'city_id', 'street_id', 'city_area_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 256],
@@ -60,8 +57,6 @@ class Regions extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'lt' => 'Lt',
-            'lg' => 'Lg',
             'area_id' => 'Area ID',
             'city_id' => 'City ID',
             'street_id' => 'Street ID',
@@ -71,24 +66,25 @@ class Regions extends \yii\db\ActiveRecord
         ];
     }
 
-
     /**
-     * Find address by lt, lg
-     *
-     * @return \yii\db\BaseActiveRecord
+     * Find region by name
+     * 
+     * @param name
+     * 
+     * @return Region|null
      */
-    public static function findByCoordinates($lt, $lg) {
-        return static::findOne(['lt' => $lt, 'lg' => $lg]);
+    public static function findByName($name) {
+        return static::find(['name' => $name])->one();
     }
 
     /**
-     * Gets query for [[FiltersRegions]].
+     * Gets query for [[Addresses]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFiltersRegions()
+    public function getAddresses()
     {
-        return $this->hasMany(FiltersRegions::className(), ['regions_id' => 'id']);
+        return $this->hasMany(Address::className(), ['region_id' => 'id']);
     }
 
     /**
@@ -140,83 +136,4 @@ class Regions extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Streets::className(), ['id' => 'street_id']);
     }
-
-    // ---Был необходим для создания экземпляра класса--- // 
-
-    // /**
-    //  * {@inheritdoc}
-    //  */
-    // public function beforeValidate() 
-    // {
-    //     // Check exist needed variable value
-    //     if (is_null($this->regionName) 
-    //         || is_null($this->cityName)
-    //         || is_null($this->cityAreaName)
-    //         || is_null($this->streetName)) {
-    //             return false;
-    //         }
-
-    //     // Find exist Region
-    //     $region = Region::findByName($this->regionName);
-
-    //     if (is_null($region)) {
-    //         $region = new Region();
-
-    //         $region->name = $this->regionName;
-
-    //         if (!$region->save()) {
-    //             return false;
-    //         }
-    //     }
-
-    //     // Find exist City
-    //     $city = City::findByName($this->cityName);
-
-    //     if (is_null($city)) {
-    //         $city = new City();
-
-    //         $city->name = $this->cityName;
-    //         $city->region_id = $region->id;
-
-    //         if (!$city->save()) {
-    //             return false;
-    //         }
-    //     }
-
-    //     // Find exist City Area
-    //     $cityArea = CityAreas::findByName($this->cityAreaName);
-
-    //     if (is_null($cityArea)) {
-    //         $cityArea = new CityAreas();
-
-    //         $cityArea->name = $this->cityAreaName;
-    //         $cityArea->city_id = $city->id;
-
-    //         if (!$cityArea->save()) {
-    //             return false;
-    //         }
-    //     }
-
-    //     // Find exist Street
-    //     $street = Streets::findByName($this->streetName);
-
-    //     if (is_null($street)) {
-    //         $street = new Streets();
-
-    //         $street->name = $this->streetName;
-    //         $street->city_area_id = $cityArea->id;
-    
-    //         if (!$street->save()) {
-    //             return false;
-    //         }
-    //     }
-
-    //     // Links
-    //     $this->region_id = $region->id;
-    //     $this->city_id = $city->id;
-    //     $this->city_area_id = $cityArea->id;
-    //     $this->street_id = $street->id;
-
-    //     return parent::beforeValidate();
-    // }
 }

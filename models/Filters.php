@@ -31,8 +31,9 @@ use Yii;
  *
  * @property CityAreas $cityArea
  * @property Cities $city
+ * @property RequestType $requestType
  * @property Users $user
- * @property FiltersRegions[] $filtersRegions
+ * @property FiltersAddress[] $filtersAddresses
  */
 class Filters extends \yii\db\ActiveRecord
 {
@@ -57,6 +58,7 @@ class Filters extends \yii\db\ActiveRecord
             [['rent_type', 'property_type', 'substring'], 'string', 'max' => 256],
             [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityAreas::className(), 'targetAttribute' => ['city_area_id' => 'id']],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['request_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestType::className(), 'targetAttribute' => ['request_type_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -122,6 +124,16 @@ class Filters extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[RequestType]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRequestType()
+    {
+        return $this->hasOne(RequestType::className(), ['id' => 'request_type_id']);
+    }
+
+    /**
      * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
@@ -132,12 +144,12 @@ class Filters extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[FiltersRegions]].
+     * Gets query for [[FiltersAddresses]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFiltersRegions()
+    public function getFiltersAddresses()
     {
-        return $this->hasMany(FiltersRegions::className(), ['filters_id' => 'id']);
+        return $this->hasMany(FiltersAddress::className(), ['filters_id' => 'id']);
     }
 }

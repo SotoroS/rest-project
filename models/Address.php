@@ -8,19 +8,19 @@ use Yii;
  * This is the model class for table "address".
  *
  * @property int $id
- * @property float $lt
- * @property float $lg
- * @property int $city_id
- * @property int $street_id
+ * @property float|null $lt
+ * @property float|null $lg
  * @property int|null $region_id
+ * @property int|null $city_id
  * @property int|null $city_area_id
+ * @property int|null $street_id
  *
- * @property CityArea $cityArea
- * @property City $city
- * @property Region $region
- * @property Street $street
- * @property EstateObject[] $estateObjects
- * @property RequestAddress[] $requestAddresses
+ * @property CityAreas $cityArea
+ * @property Cities $city
+ * @property Regions $region
+ * @property Streets $street
+ * @property FiltersAddress[] $filtersAddresses
+ * @property Objects[] $objects
  */
 class Address extends \yii\db\ActiveRecord
 {
@@ -29,6 +29,7 @@ class Address extends \yii\db\ActiveRecord
     public $cityAreaName = null;
     public $streetName = null;
  
+
     /**
      * {@inheritdoc}
      */
@@ -43,14 +44,12 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lt', 'lg', 'city_id', 'street_id'], 'required'],
-            [['regionName', 'cityName', 'cityAreaName', 'streetName'], 'string'],
             [['lt', 'lg'], 'number'],
-            [['city_id', 'street_id', 'region_id', 'city_area_id'], 'integer'],
-            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
-            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Region::className(), 'targetAttribute' => ['region_id' => 'id']],
-            [['street_id'], 'exist', 'skipOnError' => true, 'targetClass' => Street::className(), 'targetAttribute' => ['street_id' => 'id']],
+            [['region_id', 'city_id', 'city_area_id', 'street_id'], 'integer'],
+            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityAreas::className(), 'targetAttribute' => ['city_area_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Regions::className(), 'targetAttribute' => ['region_id' => 'id']],
+            [['street_id'], 'exist', 'skipOnError' => true, 'targetClass' => Streets::className(), 'targetAttribute' => ['street_id' => 'id']],
         ];
     }
 
@@ -63,13 +62,13 @@ class Address extends \yii\db\ActiveRecord
             'id' => 'ID',
             'lt' => 'Lt',
             'lg' => 'Lg',
-            'city_id' => 'City ID',
-            'street_id' => 'Street ID',
             'region_id' => 'Region ID',
+            'city_id' => 'City ID',
             'city_area_id' => 'City Area ID',
+            'street_id' => 'Street ID',
         ];
     }
- 
+
     /**
      * {@inheritdoc}
      */
@@ -84,10 +83,10 @@ class Address extends \yii\db\ActiveRecord
             }
 
         // Find exist Region
-        $region = Region::findByName($this->regionName);
+        $region = Regions::findByName($this->regionName);
 
         if (is_null($region)) {
-            $region = new Region();
+            $region = new Regions();
 
             $region->name = $this->regionName;
 
@@ -97,10 +96,10 @@ class Address extends \yii\db\ActiveRecord
         }
 
         // Find exist City
-        $city = City::findByName($this->cityName);
+        $city = Cities::findByName($this->cityName);
 
         if (is_null($city)) {
-            $city = new City();
+            $city = new Cities();
 
             $city->name = $this->cityName;
             $city->region_id = $region->id;
@@ -111,10 +110,10 @@ class Address extends \yii\db\ActiveRecord
         }
 
         // Find exist City Area
-        $cityArea = CityArea::findByName($this->cityAreaName);
+        $cityArea = CityAreas::findByName($this->cityAreaName);
 
         if (is_null($cityArea)) {
-            $cityArea = new CityArea();
+            $cityArea = new CityAreas();
 
             $cityArea->name = $this->cityAreaName;
             $cityArea->city_id = $city->id;
@@ -125,10 +124,10 @@ class Address extends \yii\db\ActiveRecord
         }
 
         // Find exist Street
-        $street = Street::findByName($this->streetName);
+        $street = Streets::findByName($this->streetName);
 
         if (is_null($street)) {
-            $street = new Street();
+            $street = new Streets();
 
             $street->name = $this->streetName;
             $street->city_area_id = $cityArea->id;
@@ -163,7 +162,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getCityArea()
     {
-        return $this->hasOne(CityArea::className(), ['id' => 'city_area_id']);
+        return $this->hasOne(CityAreas::className(), ['id' => 'city_area_id']);
     }
 
     /**
@@ -173,7 +172,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(City::className(), ['id' => 'city_id']);
+        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -183,7 +182,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getRegion()
     {
-        return $this->hasOne(Region::className(), ['id' => 'region_id']);
+        return $this->hasOne(Regions::className(), ['id' => 'region_id']);
     }
 
     /**
@@ -193,26 +192,26 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getStreet()
     {
-        return $this->hasOne(Street::className(), ['id' => 'street_id']);
+        return $this->hasOne(Streets::className(), ['id' => 'street_id']);
     }
 
     /**
-     * Gets query for [[EstateObjects]].
+     * Gets query for [[FiltersAddresses]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEstateObjects()
+    public function getFiltersAddresses()
     {
-        return $this->hasMany(EstateObject::className(), ['address_id' => 'id']);
+        return $this->hasMany(FiltersAddress::className(), ['address_id' => 'id']);
     }
 
     /**
-     * Gets query for [[RequestAddresses]].
+     * Gets query for [[Objects]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRequestAddresses()
+    public function getObjects()
     {
-        return $this->hasMany(RequestAddress::className(), ['address_id' => 'id']);
+        return $this->hasMany(Objects::className(), ['address_id' => 'id']);
     }
 }

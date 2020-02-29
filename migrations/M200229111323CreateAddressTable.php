@@ -5,9 +5,9 @@ namespace micro\migrations;
 use yii\db\Migration;
 
 /**
- * Class M200225203754CreateRegionsTable
+ * Class M200229111323CreateAddressTable
  */
-class M200225203754CreateRegionsTable extends Migration
+class M200229111323CreateAddressTable extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class M200225203754CreateRegionsTable extends Migration
      */
     public function safeDown()
     {
-        echo "M200225203754CreateRegionsTable cannot be reverted.\n";
+        echo "M200229111323CreateAddressTable cannot be reverted.\n";
 
         return false;
     }
@@ -30,20 +30,19 @@ class M200225203754CreateRegionsTable extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable('regions', [
+        $this->createTable('address', [
             'id' => $this->primaryKey(),
-            'name' => 'VARCHAR(256)',
-            'area_id' => 'INT(19) DEFAULT 1', //FK
+            'lt' => 'DECIMAL(10,7)',
+            'lg' => 'DECIMAL(10,7)',
+            'region_id' => 'INT(19) DEFAULT 1', //FK
             'city_id' => 'INT(19) DEFAULT 1', //FK
-            'street_id' => 'INT(19) DEFAULT 1', //FK
             'city_area_id' => 'INT(19) DEFAULT 1', //FK
-            'created_at' => 'TIMESTAMP',
-            'updated_at' => 'TIMESTAMP',
+            'street_id' => 'INT(19) DEFAULT 1', //FK
         ]);
     }
 
     public function down()
     {
-        $this->dropTable('regions');
+        $this->dropTable('address');
     }
 }
