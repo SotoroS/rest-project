@@ -35,7 +35,6 @@ class UserController extends Controller
     {
         // удаляем rateLimiter, требуется для аутентификации пользователя
         $behaviors = parent::behaviors();
-<<<<<<< Updated upstream
         
         $behaviors['access'] = [
             'class' => AccessControl::className(),
@@ -43,24 +42,11 @@ class UserController extends Controller
             'rules' => [
                 [
                     'actions' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
-=======
-    
-        $behaviors['access'] = [
-            'class' => AccessControl::className(),
-            'only' => ['login', 'signup', 'verify', 'update', 'login-facebook', 'login-google'],
-            'rules' => [
-                [
-                    'actions' => ['login', 'signup', 'verify', 'login-facebook', 'login-google'],
->>>>>>> Stashed changes
-                'allow' => true,
-                'roles' => ['?'],
+                    'allow' => true,
+                    'roles' => ['?'],
                 ],
                 [
-<<<<<<< Updated upstream
                     'actions' => ['update', 'get-areas', 'get-time'],
-=======
-                    'actions' => ['update'],
->>>>>>> Stashed changes
                     'allow' => true,
                     'roles' => ['@'],
                 ],
@@ -71,24 +57,17 @@ class UserController extends Controller
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
-<<<<<<< Updated upstream
             'except' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
-=======
-            'except' => ['login', 'signup', 'verify', 'login-facebook', 'login-google'],
->>>>>>> Stashed changes
             'class' => HttpBearerAuth::className()
         ];
 
         return $behaviors;
-<<<<<<< Updated upstream
     }
 
-    public function actionGetTime()
+    public function actionGetTime(): string
     {
         $dateTime = new DateTime(null, new \DateTimeZone("Europe/Kiev"));
         return $dateTime->format('Y-m-d H:i:s');
-=======
->>>>>>> Stashed changes
     }
     
     /**
@@ -99,7 +78,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionSignup(): string
+    public function actionSignup(): array
     {
         $request = Yii::$app->request;
 
@@ -136,20 +115,8 @@ class UserController extends Controller
 
 
 
-<<<<<<< Updated upstream
         // $email = $request->post('email');
         // $password = $request->post('password');
-=======
-            $model->email = $email;
-            $model->password = $password;
-            $model->signup_token = $signup_token;
-            
-            if(!$model->validate() || !$model->save()) {
-                return [
-                    "errors" => $model->errors
-                ];
-            }
->>>>>>> Stashed changes
 
         // if (is_null($email) || is_null($password)) {
         //     return [
@@ -208,7 +175,7 @@ class UserController extends Controller
         // }
     }
 
-    public function actionGetAreas()
+    public function actionGetAreas(): array
     {
         $output = [];
         try {
@@ -225,18 +192,8 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $output['error'] = $e->getMessage();
 
-<<<<<<< Updated upstream
         } finally {
             return $output;
-=======
-            return [
-        	    "mailSend" => $mail->send()
-    	    ];
-        } else {
-            return [
-        	    "error" => "User exsist."
-    	    ];
->>>>>>> Stashed changes
         }
     }
 
@@ -288,8 +245,8 @@ class UserController extends Controller
 
         // Checking for email in the received data
         if($request->post('email')) {
-            $email = $request->post('email'));
-            $password = $request->post('password'));
+            $email = $request->post('email');
+            $password = $request->post('password');
 
             // Checking the presence of a user in the database
             $user = Users::findOne(['email' => $email]);
@@ -298,7 +255,7 @@ class UserController extends Controller
                 // Password verification
                 if (password_verify($password, $user->password)) {
             	    if ($user->verified == 1) {
-                        $user->access_token = uniqid());
+                        $user->access_token = uniqid();
                 
                         if ($user->update()) {
                             return [
@@ -345,12 +302,12 @@ class UserController extends Controller
         }
  
         $fb = new Facebook\Facebook([
-            'app_id' => Yii::$app->params['facebook_client_id']),
-            'app_secret' => Yii::$app->params['facebook_client_secret']),
-            'default_graph_version' => 'v3.2'),
+            'app_id' => Yii::$app->params['facebook_client_id'],
+            'app_secret' => Yii::$app->params['facebook_client_secret'],
+            'default_graph_version' => 'v3.2',
         ]);
         
-        FacebookRedirectLoginHelper $helper = $fb->getRedirectLoginHelper();
+        $helper = $fb->getRedirectLoginHelper();
         
         //Create the url
         $permissions = ['email'];

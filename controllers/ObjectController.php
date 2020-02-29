@@ -9,6 +9,7 @@ use Yii\web\UrlManager;
 
 use yii\rest\Controller;
 use yii\web\Response;
+use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 
@@ -187,18 +188,37 @@ class ObjectController extends Controller
 
 	/**
 	 * Create new object
-	 *
+	 * 
+	 * @param int|null $address_id
+	 * @param int|null $building_type_id
+	 * @param int|null $rent_type
+	 * @param int|null $property_type
+	 * @param int|null $metro_id
+	 * @param string $name
+	 * @param string $description
+	 * @param float $price
+	 * @param string|null $url
+	 * @param int|null $user_id
+	 * @param int|null $city_id
+	 * @param int|null $region_id
+	 * @param int|null $city_area_id
+	 * @param string|null $created_at
+	 * @param string|null $updated_at
+	 * @param string|null $data
+	 * 
+	 * @param file|null $images[] - files of images
+	 * 
 	 * @return array|bool
 	 */
 	public function actionNew()
 	{
         // $model = new EstateObject();
         $model = new Object();
-	$request = Yii::$app->request;
+		$request = Yii::$app->request;
 
         if ($model->load($request->post(), '')) {
-    			$model->user_id = Yii::$app->user->identity->getId();
-            			
+    		$model->user_id = Yii::$app->user->identity->getId();
+		
 			// Get address info by search address
 			$infoObject = static::getAddress($model->address);
 
@@ -207,6 +227,15 @@ class ObjectController extends Controller
 				$infoObject->DisplayPosition->Latitude,
 				$infoObject->DisplayPosition->Longitude
 			);
+
+			// Create images
+			$images = UploadedFile::getInstancesByName('images');
+
+			if (!is_null($images)) {
+				return "Hi bitch";
+			} else {
+				return "Bye bitch";
+			}
 
 			// If address no exsist create new address
 			if (is_null($address)) {
@@ -239,12 +268,18 @@ class ObjectController extends Controller
 					$model->lt = $address->lg;
 
 					if ($model->save()) {
-						return ["id" => $model->id];
+						return [
+							"id" => $model->id
+						];
 					} else {
-						return ["errors" => $model->errors];
+						return [
+							"errors" => $model->errors
+						];
 					}
 				} else { // Return error if not save address
-					return ["error" => $address->errors];
+					return [
+						"error" => $address->errors
+					];
 				}
 			} else { // if exist address model
 				// Link address to model
@@ -254,13 +289,19 @@ class ObjectController extends Controller
 				$model->lt = $address->lg;
 
 				if ($model->save()) {
-					return ["id" => $model->id];
+					return [
+						"id" => $model->id
+					];
 				} else {
-					return ["error" => $model->errors];
+					return [
+						"error" => $model->errors
+					];
 				}
 			}
         } else {
-            return ['error' => 'empty request'];
+            return [
+				'error' => 'empty request'
+			];
         }
 	}
 
@@ -276,9 +317,13 @@ class ObjectController extends Controller
 	    $request = Yii::$app->request->post();
 		
     	    if ($model->load($request, '') && $model->update()) {
-        	return ["result" => true];
+        		return [
+					"result" => true
+				];
     	    } else {
-        	return ["error" => $model->errors];
+        		return [
+					"error" => $model->errors
+				];
     	    }
 	}
 
