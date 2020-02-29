@@ -1,4 +1,6 @@
 <?php
+//Строгая типизация
+declare(strict_types=1);
 
 namespace micro\controllers;
 
@@ -33,6 +35,7 @@ class UserController extends Controller
     {
         // удаляем rateLimiter, требуется для аутентификации пользователя
         $behaviors = parent::behaviors();
+<<<<<<< Updated upstream
         
         $behaviors['access'] = [
             'class' => AccessControl::className(),
@@ -40,11 +43,24 @@ class UserController extends Controller
             'rules' => [
                 [
                     'actions' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+=======
+    
+        $behaviors['access'] = [
+            'class' => AccessControl::className(),
+            'only' => ['login', 'signup', 'verify', 'update', 'login-facebook', 'login-google'],
+            'rules' => [
+                [
+                    'actions' => ['login', 'signup', 'verify', 'login-facebook', 'login-google'],
+>>>>>>> Stashed changes
                 'allow' => true,
                 'roles' => ['?'],
                 ],
                 [
+<<<<<<< Updated upstream
                     'actions' => ['update', 'get-areas', 'get-time'],
+=======
+                    'actions' => ['update'],
+>>>>>>> Stashed changes
                     'allow' => true,
                     'roles' => ['@'],
                 ],
@@ -55,17 +71,24 @@ class UserController extends Controller
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
+<<<<<<< Updated upstream
             'except' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+=======
+            'except' => ['login', 'signup', 'verify', 'login-facebook', 'login-google'],
+>>>>>>> Stashed changes
             'class' => HttpBearerAuth::className()
         ];
 
         return $behaviors;
+<<<<<<< Updated upstream
     }
 
     public function actionGetTime()
     {
         $dateTime = new DateTime(null, new \DateTimeZone("Europe/Kiev"));
         return $dateTime->format('Y-m-d H:i:s');
+=======
+>>>>>>> Stashed changes
     }
     
     /**
@@ -76,7 +99,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionSignup()
+    public function actionSignup(): string
     {
         $request = Yii::$app->request;
 
@@ -113,8 +136,20 @@ class UserController extends Controller
 
 
 
+<<<<<<< Updated upstream
         // $email = $request->post('email');
         // $password = $request->post('password');
+=======
+            $model->email = $email;
+            $model->password = $password;
+            $model->signup_token = $signup_token;
+            
+            if(!$model->validate() || !$model->save()) {
+                return [
+                    "errors" => $model->errors
+                ];
+            }
+>>>>>>> Stashed changes
 
         // if (is_null($email) || is_null($password)) {
         //     return [
@@ -190,8 +225,18 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $output['error'] = $e->getMessage();
 
+<<<<<<< Updated upstream
         } finally {
             return $output;
+=======
+            return [
+        	    "mailSend" => $mail->send()
+    	    ];
+        } else {
+            return [
+        	    "error" => "User exsist."
+    	    ];
+>>>>>>> Stashed changes
         }
     }
 
@@ -202,7 +247,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionVerify()
+    public function actionVerify(): string
     {
         $request = Yii::$app->request;
 
@@ -217,10 +262,14 @@ class UserController extends Controller
             	    "result" => true,
                 ];
             } else {
-        	return ["errors" => $user->errors];
+                return [
+                    "errors" => $user->errors
+                ];
             }
         } else {
-            return ["result" => false];
+            return [
+                "result" => false
+            ];
     	}
     }
 
@@ -232,15 +281,15 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLogin()
+    public function actionLogin(): string
     {   
         // Checking for data availability
         $request = Yii::$app->request;
 
         // Checking for email in the received data
         if($request->post('email')) {
-            $email = $request->post('email');
-            $password = $request->post('password');
+            $email = $request->post('email'));
+            $password = $request->post('password'));
 
             // Checking the presence of a user in the database
             $user = Users::findOne(['email' => $email]);
@@ -249,30 +298,36 @@ class UserController extends Controller
                 // Password verification
                 if (password_verify($password, $user->password)) {
             	    if ($user->verified == 1) {
-            		$user->access_token = uniqid();
-			
-			if ($user->update()) {
-            		    return [
-            			"access_token" => $user->access_token
-            		    ];
-            		} else {
-            		    return [
-            			"error" => "Cann't generate new access token"
-            		    ];
-            		}
-            	    } else {
-            		return [
-            		    "result" => "Confirm your account by clicking on the link in the mail"
-            		];
-            	    }
+                        $user->access_token = uniqid());
+                
+                        if ($user->update()) {
+                            return [
+                                "access_token" => $user->access_token
+                            ];
+                        } else {
+                            return [
+                                "error" => "Cann't generate new access token"
+                            ];
+                        }
+                    } else {
+                        return [
+                            "result" => "Confirm your account by clicking on the link in the mail"
+                        ];
+                    }
                 } else {
-                    return ["result" => false];
+                    return [
+                        "result" => false
+                    ];
                 }
             } else {
-                return ["result"  => false];
+                return [
+                    "result"  => false
+                ];
             }
         } else {
-            return ["result" => false];
+            return [
+                "result" => false
+            ];
         }
     }
 
@@ -283,19 +338,19 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLoginFacebook()
+    public function actionLoginFacebook(): string
     {
         if(!session_id()) {
             session_start();
         }
  
         $fb = new Facebook\Facebook([
-            'app_id' => Yii::$app->params['facebook_client_id'],
-            'app_secret' => Yii::$app->params['facebook_client_secret'],
-            'default_graph_version' => 'v3.2',
+            'app_id' => Yii::$app->params['facebook_client_id']),
+            'app_secret' => Yii::$app->params['facebook_client_secret']),
+            'default_graph_version' => 'v3.2'),
         ]);
         
-        $helper = $fb->getRedirectLoginHelper();
+        FacebookRedirectLoginHelper $helper = $fb->getRedirectLoginHelper();
         
         //Create the url
         $permissions = ['email'];
@@ -327,32 +382,32 @@ class UserController extends Controller
                     
                     if ($model->save()) {
                         return [
-                	    "access_token" => $value
+                	        "access_token" => $value
                         ];
                     } else {
-                        return ["result" => false];
+                        return [
+                            "result" => false
+                        ];
                     }
                 } else {
             	    $user->access_token = uniqid();
             	    if ($user->update()) {
-            		return [
-            		    "access_token" => $user->access_token
-            		];
+            		    return [
+            		        "access_token" => $user->access_token
+            		    ];
             	    } else {
-            		return [
-            		    "errors" => $user->errors
-            		];
+                        return [
+                            "errors" => $user->errors
+                        ];
             	    }
                 }
-
             } catch(Facebook\Exceptions\FacebookResponseException $e){
                 echo 'Graph returned an error: ' . $e->getMessage();
             } catch(Facebook\Exceptions\FacebookSDKException $e){
                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
             }    
         }
-        
-    return ["redirect_uri " => $loginUrl];
+        return ["redirect_uri " => $loginUrl];
     }
     
     /**
@@ -362,7 +417,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLoginGoogle()
+    public function actionLoginGoogle(): string
     {
         $request = Yii::$app->request;
 
@@ -404,20 +459,30 @@ class UserController extends Controller
                 $model->access_token = $token['access_token'];
                 
                 if ($model->save()) {
-                    return ["access_token" => $token['access_token']];
+                    return [
+                        "access_token" => $token['access_token']
+                    ];
                 } else {
-                    return ["result" => false];
+                    return [
+                        "result" => false
+                    ];
                 }
             } else {
-        	$user->access_token = uniqid();
-		if ($user->update()) {
-		    return ["access_token" => $user->access_token];
-		} else {
-		    return ["errors" => $user->errors];
-		}
+                $user->access_token = uniqid();
+                if ($user->update()) {
+                    return [
+                        "access_token" => $user->access_token
+                    ];
+                } else {
+                    return [
+                        "errors" => $user->errors
+                    ];
+                }
             }
         } else {
-            return ["redirect_uri" => $auth_url];
+            return [
+                "redirect_uri" => $auth_url
+            ];
         }
     }
 
@@ -428,7 +493,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionUpdate()
+    public function actionUpdate(): string
     {
         $request = Yii::$app->request;
 
@@ -456,7 +521,9 @@ class UserController extends Controller
             	    "return" => true
             	];
             } else {
-                return ["error" => 'Nothing to change'];
+                return [
+                    "error" => 'Nothing to change'
+                ];
             }
         } else {
             throw new \yii\web\UnauthorizedHttpException();
