@@ -13,6 +13,8 @@ use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 
+use yii\helpers\FileHelper;
+
 use micro\models\EstateObject;
 use micro\models\Address;
 use micro\models\Metro;
@@ -41,8 +43,8 @@ class ObjectController extends Controller
             'rules' => [
                 [
                     'actions' => ['get-objects'],
-                'allow' => true,
-                'roles' => ['?'],
+                	'allow' => true,
+                	'roles' => ['?'],
                 ],
                 [
                     'actions' => ['get-objects'],
@@ -185,6 +187,7 @@ class ObjectController extends Controller
 			
         }
     }
+	
 
 	/**
 	 * Create new object
@@ -213,16 +216,16 @@ class ObjectController extends Controller
 	public function actionNew()
 	{
         // $model = new EstateObject();
-        $model = new Object();
+        $model = new Objects();
 		$request = Yii::$app->request;
-
+		
         if ($model->load($request->post(), '')) {
     		$model->user_id = Yii::$app->user->identity->getId();
 		
 			// Get address info by search address
 			$infoObject = static::getAddress($model->address);
 
-			// Find address by coordinates
+			// Find address by coordinates 
 			$address = Address::findByCoordinates(
 				$infoObject->DisplayPosition->Latitude,
 				$infoObject->DisplayPosition->Longitude
@@ -231,10 +234,41 @@ class ObjectController extends Controller
 			// Create images
 			$images = UploadedFile::getInstancesByName('images');
 
-			if (!is_null($images)) {
-				return "Hi bitch";
-			} else {
-				return "Bye bitch";
+			//Add images
+			if (!empty($images)) {
+				//Директория для изображений
+				$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $model->id;
+	
+				//Если добавляеться первое изображение, то создаётся директория для изображений
+				if (!file_exists($dir)) {
+					FileHelper::createDirectory($dir);
+				}
+	
+				//Обработка каждого изображения
+				foreach ($images as $file) {
+					//Создание нового изображения
+					$image = new Images();
+	
+					//Запись данных изображения в объект image
+					$image->file = $file;
+	
+					//Путь к изображению
+					$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+	
+					//Присвоение $path (путь к изображению) к атрибуту $image->path(string)
+					$image->path = $path;
+					$image->object_id = $model->id;
+
+					//????position
+					//$image->position = $request->post('position');
+					$image->position = 0;
+	
+					//Сохранение нового изображения в БД
+					$image->save();
+	
+					//Сохранение изображения в директроии $dir
+					$image->file->saveAs($image->path);
+				}
 			}
 
 			// If address no exsist create new address
@@ -308,23 +342,76 @@ class ObjectController extends Controller
 	/**
 	 * Update object by id
 	 *
+	 * @param file $images[] 
+	 * @param string $urlsToDeleteImage[]
+	 * 
 	 * @return array|bool
 	 */
 	public function actionUpdate($id)
 	{
 	    // $model = EstateObject::findByIdentity($id);
-	    $model = Object::findByIdentity($id);
+	    $model = Objects::findByIdentity($id);
 	    $request = Yii::$app->request->post();
+
+		//Images update
+		//Delete images
+		if (isset($request['urlsToDeleteImage'])) {
+			foreach ($request['urlsToDeleteImage'] as $url) {
+				$images = Images::findOne('path'=>$url);
+
+				FileHelper::removeDirectory($image->path);
+
+				$image->delete();
+			}
+		}
+
+		$newImages = UploadedFile::getInstancesByName('images');
+		//Add new images
+		if (!empty($newImage)) {
+			//Директория для изображений
+			$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $id;
+	
+			//Если добавляеться первое изображение, то создаётся директория для изображений
+			if (!file_exists($dir)) {
+				FileHelper::createDirectory($dir);
+			}
+
+			//Обработка каждого изображения
+			foreach ($newImages as $file) {
+				//Создание нового изображения
+				$image = new Images();
+
+				//Запись данных изображения в объект image
+				$image->file = $file;
+
+				//Путь к изображению
+				$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+
+				$image->path = $path;
+				$image->object_id = $model->id;
+
+				//????position
+				//$image->position = $request->post('position');
+				$image->position = 0;
+
+				//Сохранение нового изображения в БД
+				$image->save();
+
+				//Сохранение изображения в директроии $dir
+				$image->file->saveAs($image->path);
+			}
+		}
 		
-    	    if ($model->load($request, '') && $model->update()) {
-        		return [
-					"result" => true
-				];
-    	    } else {
-        		return [
-					"error" => $model->errors
-				];
-    	    }
+		// Object update
+		if ($model->load($request, '') && $model->update()) {
+			return [
+				"result" => true
+			];
+		} else {
+			return [
+				"error" => $model->errors
+			];
+		}
 	}
 
 	/**
@@ -334,12 +421,14 @@ class ObjectController extends Controller
 	 */
 	public function actionView($id)
 	{
-	    $model = Object::findByIdentity($id);
+	    $model = Objects::findByIdentity($id);
 		
     	    if (!is_null($model)) {
-        	return $model;
+        		return $model;
     	    } else {
-        	return ["result"=>false];
+        		return [
+					"result"=>false
+				];
     	    }
 	}
 

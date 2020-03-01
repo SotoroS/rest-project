@@ -73,6 +73,7 @@ class UserController extends Controller
     /**
      * Signup function
      * 
+     * 
      * @param string $email - email address
      * @param string $password - password
      * 
@@ -91,6 +92,10 @@ class UserController extends Controller
 
             $user->deviceType = $request->post('deviceType');
             $user->fcmToken = $request->post('fcmToken');
+
+            //$user->email = $request->post('email');
+            //$user->password = password_hash($request->post('password'), PASSWORD_DEFAULT);
+
             $user->save();
 
             // fill the array
@@ -238,7 +243,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLogin(): string
+    public function actionLogin(): array
     {   
         // Checking for data availability
         $request = Yii::$app->request;

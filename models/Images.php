@@ -3,6 +3,7 @@
 namespace micro\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "images".
@@ -17,6 +18,11 @@ use Yii;
 class Images extends \yii\db\ActiveRecord
 {
     /**
+     * @var UploadedFile
+     */
+    public $file;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -30,6 +36,7 @@ class Images extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, jpeg, png'],
             [['object_id', 'position'], 'integer'],
             [['path'], 'string', 'max' => 256],
             [['object_id'], 'exist', 'skipOnError' => true, 'targetClass' => Objects::className(), 'targetAttribute' => ['object_id' => 'id']],
