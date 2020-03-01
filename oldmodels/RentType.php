@@ -5,21 +5,21 @@ namespace micro\models;
 use Yii;
 
 /**
- * This is the model class for table "building_type".
+ * This is the model class for table "rent_type".
  *
  * @property int $id
  * @property string $name
  *
- * @property Objects[] $objects
+ * @property EstateObject[] $estateObjects
  */
-class BuildingType extends \yii\db\ActiveRecord
+class RentType extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'building_type';
+        return 'rent_type';
     }
 
     /**
@@ -51,6 +51,6 @@ class BuildingType extends \yii\db\ActiveRecord
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['building_type_id' => 'id']);
+        return $this->hasMany(Objects::className(), ['rent_type' => 'id']);
     }
 }

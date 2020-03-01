@@ -28,6 +28,7 @@ class Address extends \yii\db\ActiveRecord
     public $cityName = null;
     public $cityAreaName = null;
     public $streetName = null;
+ 
 
     /**
      * {@inheritdoc}
@@ -153,7 +154,6 @@ class Address extends \yii\db\ActiveRecord
     public static function findByCoordinates($lt, $lg) {
         return static::findOne(['lt' => $lt, 'lg' => $lg]);
     }
-
 
     /**
      * Gets query for [[CityArea]].

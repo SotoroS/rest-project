@@ -43,7 +43,6 @@ class M200225195302CreateObjectsTable extends Migration
             'url' => 'TEXT',
             'user_id' => 'INT(19) DEFAULT 1', //FK
             'city_id' => 'INT(19) DEFAULT 1', //FK
-            'region_id' => 'INT(19) DEFAULT 1', //FK
             'city_area_id' => 'INT(19) DEFAULT 1', //FK
             'created_at' => 'TIMESTAMP',
             'updated_at' => 'TIMESTAMP',

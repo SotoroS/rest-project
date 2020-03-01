@@ -33,6 +33,7 @@ class M200225220353CreateMetroTable extends Migration
         $this->createTable('metro', [
             'id' => $this->primaryKey(),
             'name' => 'VARCHAR(256) NOT NULL',
+            'city_id' => 'INT(19) DEFAULT 1' //FK
         ]);
     }
 

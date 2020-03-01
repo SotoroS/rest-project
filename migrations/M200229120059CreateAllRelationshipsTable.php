@@ -137,21 +137,6 @@ class M200229120059CreateAllRelationshipsTable extends Migration
             'id'
         );
 
-        // creates index for column `region_id` in table `objects`
-        $this->createIndex(
-            'idx-objects-region_id',
-            'objects',
-            'region_id'
-        );
-        // add foreign key for table `regions`
-        $this->addForeignKey(
-            'fk-objects-region_id',
-            'objects',
-            'region_id',
-            'regions',
-            'id'
-        );
-
         // creates index for column `city_area_id` in table `objects`
         $this->createIndex(
             'idx-objects-city_area_id',
@@ -263,65 +248,20 @@ class M200229120059CreateAllRelationshipsTable extends Migration
             'id'
         );
 
-        // ---REGIONS--- //
+        //  ---CITIES--- //
 
-        // creates index for column `area_id` in table `regions`
+        // creates index for column `region_id` in table `cities`
         $this->createIndex(
-            'idx-regions-area_id',
-            'regions',
-            'area_id'
-        );
-        // add foreign key for table `country_areas`
-        $this->addForeignKey(
-            'fk-regions-area_id',
-            'regions',
-            'area_id',
-            'country_areas',
-            'id'
-        );
-
-        // creates index for column `city_id` in table `regions`
-        $this->createIndex(
-            'idx-regions-city_id',
-            'regions',
-            'city_id'
-        );
-        // add foreign key for table `cities`
-        $this->addForeignKey(
-            'fk-regions-city_id',
-            'regions',
-            'city_id',
+            'idx-cities-region_id',
             'cities',
-            'id'
+            'region_id'
         );
-
-        // creates index for column `city_area_id` in table `regions`
-        $this->createIndex(
-            'idx-regions-city_area_id',
-            'regions',
-            'city_area_id'
-        );
-        // add foreign key for table `city_areas`
+        // add foreign key for table `region`
         $this->addForeignKey(
-            'fk-regions-city_area_id',
+            'fk-cities-region_id',
+            'cities',
+            'region_id',
             'regions',
-            'city_area_id',
-            'city_areas',
-            'id'
-        );
-
-        // creates index for column `street_id` in table `regions`
-        $this->createIndex(
-            'idx-regions-street_id',
-            'regions',
-            'street_id'
-        );
-        // add foreign key for table `streets`
-        $this->addForeignKey(
-            'fk-regions-street_id',
-            'regions',
-            'street_id',
-            'streets',
             'id'
         );
 
@@ -452,6 +392,23 @@ class M200229120059CreateAllRelationshipsTable extends Migration
             'objects',
             'id'
         );
+
+        // ---METRO--- //
+
+        // creates index for column `city_id` in table `metro`
+        $this->createIndex(
+            'idx-metro-city_id',
+            'metro',
+            'city_id'
+        );
+        // add foreign key for table `cities`
+        $this->addForeignKey(
+            'fk-metro-city_id',
+            'metro',
+            'city_id',
+            'cities',
+            'id'
+        );
     }
 
     public function down()
@@ -532,17 +489,6 @@ class M200229120059CreateAllRelationshipsTable extends Migration
         // drops index for column `city_id`
         $this->dropIndex(
             'idx-objects-city_id',
-            'objects'
-        );
-
-        // drops foreign key for table `regions`
-        $this->dropForeignKey(
-            'fk-objects-region_id',
-            'objects'
-        );
-        // drops index for column `region_id`
-        $this->dropIndex(
-            'idx-objects-region_id',
             'objects'
         );
 
@@ -629,50 +575,17 @@ class M200229120059CreateAllRelationshipsTable extends Migration
             'city_areas'
         );
 
-        // ---REGIONS--- //
+        // ---CITIES--- //
 
-        // drops foreign key for table `country_areas`
+        // drops foreign key for table `region`
         $this->dropForeignKey(
-            'fk-regions-area_id',
-            'regions'
+            'fk-cities-region_id',
+            'cities'
         );
-        // drops index for column `area_id`
+        // drops index for column `region_id`
         $this->dropIndex(
-            'idx-regions-area_id',
-            'regions'
-        );
-
-        // drops foreign key for table `cities`
-        $this->dropForeignKey(
-            'fk-regions-city_id',
-            'regions'
-        );
-        // drops index for column `city_id`
-        $this->dropIndex(
-            'idx-regions-city_id',
-            'regions'
-        );
-
-        // drops foreign key for table `city_areas`
-        $this->dropForeignKey(
-            'fk-regions-city_area_id',
-            'regions'
-        );
-        // drops index for column `city_area_id`
-        $this->dropIndex(
-            'idx-regions-city_area_id',
-            'regions'
-        );
-
-        // drops foreign key for table `streets`
-        $this->dropForeignKey(
-            'fk-regions-street_id',
-            'regions'
-        );
-        // drops index for column `street_id`
-        $this->dropIndex(
-            'idx-regions-street_id',
-            'regions'
+            'idx-cities-region_id',
+            'cities'
         );
 
         // ---FILTERS--- //
@@ -769,6 +682,19 @@ class M200229120059CreateAllRelationshipsTable extends Migration
         $this->dropIndex(
             'idx-phones-object_id',
             'phones'
+        );
+
+        // ---METRO--- //
+
+        // drops foreign key for table `cities`
+        $this->dropForeignKey(
+            'fk-metro-city_id',
+            'metro'
+        );
+        // drops index for column `city_id`
+        $this->dropIndex(
+            'idx-metro-city_id',
+            'metro'
         );
     }
 }

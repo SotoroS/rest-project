@@ -5,23 +5,26 @@ namespace micro\models;
 use Yii;
 
 /**
- * This is the model class for table "metro".
+ * This is the model class for table "city_areas".
  *
  * @property int $id
  * @property string $name
  * @property int|null $city_id
  *
+ * @property Address[] $addresses
  * @property Cities $city
+ * @property Filters[] $filters
  * @property Objects[] $objects
+ * @property Streets[] $streets
  */
-class Metro extends \yii\db\ActiveRecord
+class CityArea extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'metro';
+        return 'city_areas';
     }
 
     /**
@@ -50,6 +53,27 @@ class Metro extends \yii\db\ActiveRecord
     }
 
     /**
+     * Find region by name
+     * 
+     * @param name
+     * 
+     * @return Regions|null
+     */
+    public static function findByName($name) {
+        return static::find(['name' => $name])->one();
+    }
+
+    /**
+     * Gets query for [[Addresses]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddresses()
+    {
+        return $this->hasMany(Address::className(), ['city_area_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[City]].
      *
      * @return \yii\db\ActiveQuery
@@ -60,12 +84,32 @@ class Metro extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Filters]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFilters()
+    {
+        return $this->hasMany(Filters::className(), ['city_area_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Objects]].
      *
      * @return \yii\db\ActiveQuery
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['metro_id' => 'id']);
+        return $this->hasMany(Objects::className(), ['city_area_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Streets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStreets()
+    {
+        return $this->hasMany(Streets::className(), ['city_area_id' => 'id']);
     }
 }

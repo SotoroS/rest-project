@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property string $name
  *
- * @property Objects[] $objects
+ * @property EstateObject[] $estateObjects
  */
 class BuildingType extends \yii\db\ActiveRecord
 {
