@@ -27,13 +27,13 @@ use Yii;
  * @property Images[] $images
  * @property Address $address
  * @property BuildingType $buildingType
- * @property CityAreas $cityArea
- * @property Cities $city
+ * @property CityArea $cityArea
+ * @property City $city
  * @property Metro $metro
  * @property PropertyType $propertyType
  * @property RentType $rentType
- * @property Users $user
- * @property Phones[] $phones
+ * @property User $user
+ * @property Phone[] $phones
  */
 class EstateObject extends \yii\db\ActiveRecord
 {

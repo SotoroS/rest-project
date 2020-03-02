@@ -12,7 +12,7 @@ use Yii;
  * @property int|null $object_id
  * @property int|null $position
  *
- * @property Objects $object
+ * @property Object $object
  */
 class Image extends \yii\db\ActiveRecord
 {
@@ -37,7 +37,7 @@ class Image extends \yii\db\ActiveRecord
         return [
             [['object_id', 'position'], 'integer'],
             [['path'], 'string', 'max' => 256],
-            [['object_id'], 'exist', 'skipOnError' => true, 'targetClass' => Object::className(), 'targetAttribute' => ['object_id' => 'id']],
+            [['object_id'], 'exist', 'skipOnError' => true, 'targetClass' => EstateObject::className(), 'targetAttribute' => ['object_id' => 'id']],
         ];
     }
 
@@ -61,6 +61,6 @@ class Image extends \yii\db\ActiveRecord
      */
     public function getObject()
     {
-        return $this->hasOne(Object::className(), ['id' => 'object_id']);
+        return $this->hasOne(EstateObject::className(), ['id' => 'object_id']);
     }
 }

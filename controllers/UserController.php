@@ -38,10 +38,10 @@ class UserController extends Controller
         
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['login', 'signup', 'get-areas', 'verify', 'update', 'login-facebook', 'login-google', 'get-time'],
+            'only' => ['login', 'signup-web', 'signup-mob', 'get-areas', 'verify', 'update', 'login-facebook', 'login-google', 'get-time'],
             'rules' => [
                 [
-                    'actions' => ['login', 'signup', 'working-signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+                    'actions' => ['login', 'signup-web', 'signup-mob', 'working-signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
                     'allow' => true,
                     'roles' => ['?'],
                 ],
@@ -57,7 +57,7 @@ class UserController extends Controller
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
-            'except' => ['login', 'signup', 'working-signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+            'except' => ['login', 'signup-mob', 'signup-web', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
             'class' => HttpBearerAuth::className()
         ];
 
@@ -70,15 +70,16 @@ class UserController extends Controller
     }
     
     /**
-     * Signup function
+     * Signup Mob function
      * 
      * 
-     * @param string $email - email address
-     * @param string $password - password
+     * @param int $account_id
+     * @param string $deviceType
+     * @param string $fcmToken
      * 
      * @return string|bool
      */
-    public function actionSignup()
+    public function actionSignupMob()
     {
         $request = Yii::$app->request;
 
@@ -116,15 +117,30 @@ class UserController extends Controller
             $output['error'] = $e->getMessage();
 
             Yii::$app->response->statusCode = 500;
+
+            // log
+            Yii::info("in catch (\Throwable)" ,__METHOD__);
+
             return $output;
         }
 
         Yii::$app->response->statusCode = 200;
-        return $output;
+
+        // log
+        Yii::info("SignUp old" ,__METHOD__);
         
+        return $output;
     }
 
-    public function actionWorkingSignup(): array
+    /**
+     * Signup Mob function
+     * 
+     * @param string $email - email address
+     * @param string $password - password
+     * 
+     * @return string|bool
+     */
+    public function actionSignupWeb(): array
     {
         $request = Yii::$app->request;
         $email = $request->post('email');
@@ -152,7 +168,7 @@ class UserController extends Controller
             
             if(!$model->validate() || !$model->save()) {
                 return [
-                "errors" => $model->errors
+                    "errors" => $model->errors
                 ];
             }
 
@@ -177,12 +193,18 @@ class UserController extends Controller
 
             $mail->isHTML(true);
 
+            // log
+            Yii::info("User registration" ,__METHOD__);
+
             return [
-        	"mailSend" => $mail->send()
+        	    "mailSend" => $mail->send()
     	    ];
         } else {
+            // log
+            Yii::error("User exist" ,__METHOD__);
+
             return [
-        	"error" => "User exsist."
+        	    "error" => "User exist."
     	    ];
         }
     }
@@ -205,6 +227,9 @@ class UserController extends Controller
             $output['error'] = $e->getMessage();
 
         } finally {
+            // log
+            Yii::info("Get Areas" ,__METHOD__);
+
             return $output;
         }
     }
@@ -227,15 +252,24 @@ class UserController extends Controller
             $user->verified = 1;
 
             if($user->update()) {
+                // log
+                Yii::info("User Verify Success" ,__METHOD__);
+
                 return [
             	    "result" => true,
                 ];
             } else {
+                // log
+                Yii::error("User Verify Failed (user->update())" ,__METHOD__);
+
                 return [
                     "errors" => $user->errors
                 ];
             }
         } else {
+            // log
+            Yii::error("User by signup_token Not Found" ,__METHOD__);
+
             return [
                 "result" => false
             ];
@@ -250,7 +284,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLogin(): array
+    public function actionLogin()//: array
     {   
         // Checking for data availability
         $request = Yii::$app->request;
@@ -262,7 +296,6 @@ class UserController extends Controller
 
             // Checking the presence of a user in the database
             $user = User::findOne(['email' => $email]);
-            
             if(!is_null($user)) {
                 // Password verification
                 if (password_verify($password, $user->password)) {
@@ -270,30 +303,48 @@ class UserController extends Controller
                         $user->access_token = uniqid();
                 
                         if ($user->update()) {
+                            // log
+                            Yii::info("User Login Success" ,__METHOD__);
+
                             return [
                                 "access_token" => $user->access_token
                             ];
                         } else {
+                            // log
+                            Yii::error("Cann't generate new access token" ,__METHOD__);
+
                             return [
                                 "error" => "Cann't generate new access token"
                             ];
                         }
                     } else {
+                        // log
+                        Yii::error("Confirm your account by clicking on the link in the mail" ,__METHOD__);
+
                         return [
                             "result" => "Confirm your account by clicking on the link in the mail"
                         ];
                     }
                 } else {
+                    // log
+                    Yii::error("password_verify() false" ,__METHOD__);
+
                     return [
                         "result" => false
                     ];
                 }
             } else {
+                // log
+                Yii::error("User Not Found by email" ,__METHOD__);
+
                 return [
                     "result"  => false
                 ];
             }
         } else {
+            // log
+            Yii::error("Reques is empty" ,__METHOD__);
+
             return [
                 "result" => false
             ];

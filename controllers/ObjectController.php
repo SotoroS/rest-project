@@ -1,4 +1,6 @@
 <?php
+//Строгая типизация
+declare(strict_types=1);
 
 namespace micro\controllers;
 
@@ -30,7 +32,7 @@ use PharIo\Manifest\Url;
  * @package micro\controllers
  */
 class ObjectController extends Controller
-{
+{	
 	public function behaviors()
 	{
 
@@ -39,7 +41,7 @@ class ObjectController extends Controller
         
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['get-objects'],
+            'only' => ['get-objects', 'new', 'update'],
             'rules' => [
                 [
                     'actions' => ['get-objects'],
@@ -47,14 +49,14 @@ class ObjectController extends Controller
                 	'roles' => ['?'],
                 ],
                 [
-                    'actions' => ['get-objects'],
+                    'actions' => ['get-objects', 'new', 'update', 'view'],
                     'allow' => true,
                     'roles' => ['@'],
                 ],
             ],
         ];
             
-            // Возвращает результаты экшенов в формате JSON  
+        // Возвращает результаты экшенов в формате JSON  
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
@@ -65,9 +67,17 @@ class ObjectController extends Controller
 		return $behaviors;
 	}
 
-	public function actionGetObjects()
+	/**
+	 * Get all objects
+	 * 
+	 * @return array
+	 * 
+	 */
+
+	public function actionGetObjects(): array
     {
 		$output = [];
+		$objects = [];
         try {
 			$user = User::findOne(Yii::$app->user->identity->id);
 			$lastFetchDate = $user->last_fetch;
@@ -183,54 +193,44 @@ class ObjectController extends Controller
         } finally {
             $output['data'] = $objects;
 
+			// Log
+			Yii::info("GetObjects Output" ,__METHOD__);
+
 			return $output;
-			
         }
     }
-	
 
 	/**
 	 * Create new object
 	 * 
-	 * @param int|null $address_id
-	 * @param int|null $building_type_id
-	 * @param int|null $rent_type
-	 * @param int|null $property_type
-	 * @param int|null $metro_id
 	 * @param string $name
 	 * @param string $description
 	 * @param float $price
-	 * @param string|null $url
-	 * @param int|null $user_id
-	 * @param int|null $city_id
-	 * @param int|null $region_id
-	 * @param int|null $city_area_id
-	 * @param string|null $created_at
-	 * @param string|null $updated_at
-	 * @param string|null $data
+	 * 
+	 * @param string $address
+	 * 
 	 * 
 	 * @param file|null $images[] - files of images
 	 * 
 	 * @return array|bool
 	 */
-	public function actionNew()
+	public function actionNew()//: array
 	{
-        // $model = new EstateObject();
         $model = new EstateObject();
 		$request = Yii::$app->request;
 		
         if ($model->load($request->post(), '')) {
     		$model->user_id = Yii::$app->user->identity->getId();
-		
-			// Get address info by search address
-			$infoObject = static::getAddress($model->address);
 
+			// Get address info by search address
+			$infoObject = static::getAddress($request->post('address'));
+			//return $infoObject;
 			// Find address by coordinates 
 			$address = Address::findByCoordinates(
 				$infoObject->DisplayPosition->Latitude,
 				$infoObject->DisplayPosition->Longitude
 			);
-
+			//return $address;
 			// Create images
 			$images = UploadedFile::getInstancesByName('images');
 
@@ -283,6 +283,7 @@ class ObjectController extends Controller
 				$address->cityName = $infoObject->Address->City;
 				$address->regionName = $infoObject->Address->County;
 
+				//return $address;
 				// Save address & object
 				if ($address->save()) {
 					// Get nearby station info
@@ -298,19 +299,28 @@ class ObjectController extends Controller
 						$model->metro_id = $metro->id;
 					}
 					
-					$model->ln = $address->lt;
-					$model->lt = $address->lg;
+					//$model->lt = $address->lt;
+					//$model->lg = $address->lg;
 
 					if ($model->save()) {
+						// Log
+						Yii::info("Object Save Success" ,__METHOD__);
+
 						return [
 							"id" => $model->id
 						];
 					} else {
+						// Log
+						Yii::error("Object Save Failed" ,__METHOD__);
+
 						return [
-							"errors" => $model->errors
+							"error" => $model->errors
 						];
 					}
 				} else { // Return error if not save address
+					// Log
+					Yii::error("Address Save Failed" ,__METHOD__);
+
 					return [
 						"error" => $address->errors
 					];
@@ -319,20 +329,29 @@ class ObjectController extends Controller
 				// Link address to model
 				$model->address_id = $address->id;
 				
-				$model->ln = $address->lt;
-				$model->lt = $address->lg;
+				//$model->lt = $address->lt;
+				//$model->lg = $address->lg;
 
 				if ($model->save()) {
+					// Log
+					Yii::info("Object Save Success" ,__METHOD__);
+
 					return [
 						"id" => $model->id
 					];
 				} else {
+					// Log
+					Yii::error("Object Save Failed" ,__METHOD__);
+
 					return [
 						"error" => $model->errors
 					];
 				}
 			}
         } else {
+			// Log
+			Yii::error("Request is Empty" ,__METHOD__);
+
             return [
 				'error' => 'empty request'
 			];
@@ -342,21 +361,41 @@ class ObjectController extends Controller
 	/**
 	 * Update object by id
 	 *
+	 * @param string $name
+	 * @param string $description
+	 * @param float $price
 	 * @param file $images[] 
-	 * @param string $urlsToDeleteImage[]
+	 * @param string $DeleteImagePath[]
 	 * 
 	 * @return array|bool
 	 */
-	public function actionUpdate($id)
+	public function actionUpdate($id)//: array
 	{
 	    // $model = EstateObject::findByIdentity($id);
-	    $model = EstateObject::findByIdentity($id);
-	    $request = Yii::$app->request->post();
+		$model = EstateObject::findByIdentity($id);
+		if (!$model) {
+			// Log
+			Yii::error("Object Not Found", __METHOD__);
 
-		//Images update
-		//Delete images
-		if (isset($request['urlsToDeleteImage'])) {
-			foreach ($request['urlsToDeleteImage'] as $url) {
+			return [
+				'error' => "Object Not Found"
+			];
+		}
+		$request = Yii::$app->request->post();
+
+		if (!$model->load($request, '')) {
+			// Log
+			Yii::error("Object Load from request failed", __METHOD__);
+
+			return [
+				'error' => "Object Load from request failed"
+			];
+		}
+		
+		// Images update
+		// Delete images
+		if (isset($request['DeleteImagePath'])) {
+			foreach ($request['DeleteImagePath'] as $url) {
 				$image = Image::findOne(['path'=>$url]);
 
 				FileHelper::removeDirectory($image->path);
@@ -365,49 +404,71 @@ class ObjectController extends Controller
 			}
 		}
 
+		// Load new images
 		$newImages = UploadedFile::getInstancesByName('images');
-		//Add new images
+		// Add new images
 		if (!empty($newImage)) {
-			//Директория для изображений
+			// Directory for images
 			$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $id;
 	
-			//Если добавляеться первое изображение, то создаётся директория для изображений
+			//Create Directory for images
 			if (!file_exists($dir)) {
 				FileHelper::createDirectory($dir);
 			}
 
-			//Обработка каждого изображения
+			// New images save
 			foreach ($newImages as $file) {
-				//Создание нового изображения
+				// Create new image
 				$image = new Image();
 
-				//Запись данных изображения в объект image
+				// Write data from file into $image->file
 				$image->file = $file;
 
-				//Путь к изображению
+				// Image path 
 				$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
 
 				$image->path = $path;
 				$image->object_id = $model->id;
 
-				//????position
-				//$image->position = $request->post('position');
+				return $image->object_id . "    " . $model->id;
+
 				$image->position = 0;
 
-				//Сохранение нового изображения в БД
+				// Save image
 				$image->save();
 
-				//Сохранение изображения в директроии $dir
+				// Save image to path
 				$image->file->saveAs($image->path);
 			}
 		}
+		//Sorting Images
+		$images = Image::findAll(['object_id'=>$model->id]);
 		
+		if (!empty($images)) {
+			$count = 1;
+			foreach ($images as $i) {
+				$i->position = $count;
+				$i->update();
+				$count = $count + 1;
+			}
+		}
+		
+		// Update at - time //Neet to setting TimeZone
+		$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
+        $model->updated_at = $dateTime->format('Y-m-d H:i:s');
+
 		// Object update
-		if ($model->load($request, '') && $model->update()) {
+		if ($model->update()) {
+			// Log
+			Yii::info("Object Update Success",__METHOD__);
+
 			return [
 				"result" => true
 			];
 		} else {
+			// Log
+			Yii::error("Object Update Failed",__METHOD__);
+
 			return [
 				"error" => $model->errors
 			];
@@ -419,13 +480,19 @@ class ObjectController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionView($id)
+	public function actionView($id): object
 	{
 	    $model = EstateObject::findByIdentity($id);
 		
     	    if (!is_null($model)) {
+				// Log
+				Yii::info("Object Found Success" ,__METHOD__);
+
         		return $model;
     	    } else {
+				// Log
+				Yii::error("Object Not Found" ,__METHOD__);
+
         		return [
 					"result"=>false
 				];
@@ -439,7 +506,8 @@ class ObjectController extends Controller
 	 * 
 	 * @return object
 	 */
-	private static function getAddress($searchText) {
+	private static function getAddress($searchText): object
+	{
 		// Create query params for get info from API HERE maps
 		$param = http_build_query(array(
 			'apiKey' => Yii::$app->params['here_api_key'],
@@ -449,6 +517,9 @@ class ObjectController extends Controller
 		// Get info about address
 		$searchResult = json_decode(file_get_contents("https://geocoder.ls.hereapi.com/6.2/geocode.json?$param"));
 		
+		// Log
+		Yii::info("Get Address" ,__METHOD__);
+
 		return $searchResult->Response->View[0]->Result[0]->Location;
 	}
 
@@ -460,7 +531,8 @@ class ObjectController extends Controller
 	 * 
 	 * @return object
 	 */
-	private static function getStation($lt, $lg) {
+	private static function getStation($lt, $lg): object
+	{
 		// Create query params for get nearby station from API HERE maps
 		$param = http_build_query(array(
 			'apiKey' => Yii::$app->params['here_api_key'],
@@ -472,6 +544,9 @@ class ObjectController extends Controller
 		// Get info about mentro by address
 		$searchResult = json_decode(file_get_contents("https://transit.ls.hereapi.com/v3/stations/by_geocoord.json?$param"));
 		
+		// Log
+		Yii::info("Get Station" ,__METHOD__);
+
 		return $searchResult;
 	}
 }
