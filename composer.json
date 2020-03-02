@@ -22,6 +22,7 @@
         "codeception/module-yii2": "^1.1",
         "codeception/module-asserts": "^1.1",
         "yiisoft/yii2-codeception": "^2.0",
-        "codeception/module-db": "^1.0"
+        "codeception/module-db": "^1.0",
+        "codeception/module-rest": "^1.2"
     }
 }

@@ -9,12 +9,12 @@ use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
 
 use micro\models\RequestAddress;
-use micro\models\FiltersAddress;
+use micro\models\FilterAddress;
 use micro\models\RequestObject;
 use micro\models\Address;
-use micro\models\Users;
-use micro\models\Filters;
-use micro\models\Cities;
+use micro\models\User;
+use micro\models\Filter;
+use micro\models\City;
 
 /**
  * Class SiteController
@@ -65,10 +65,10 @@ class RequestController extends Controller
 			// get current user
 			// $user = Yii::$app->user;
 			// $user = Users::findOne(Yii::$app->users->identity->id);
-			$user = Users::findOne(1);
+			$user = User::findOne(1);
 
 			// current user filter
-			$filterObject = Filters::findOne(['user_id' => $user->id]);
+			$filterObject = Filter::findOne(['user_id' => $user->id]);
 			$user->notifications = $request->post('push_enabled') ? 1 : 0;
 			
 			// if there is a fcmToken, fill in the user
@@ -78,7 +78,7 @@ class RequestController extends Controller
             $user->save();
 
             if (is_null($filterObject)) {
-                $filterObject = new Filters();
+                $filterObject = new Filter();
                 $filterObject->user_id = $user->id;
             }
 
@@ -95,7 +95,7 @@ class RequestController extends Controller
             $filterObject->substring = $requestData['substring'];
             $filterObject->save();
 			
-            $output['cities'] = Cities::find()->asArray()->all();
+            $output['cities'] = City::find()->asArray()->all();
 			return $output;
 
 		} catch (\Exception $e) {
@@ -119,7 +119,7 @@ class RequestController extends Controller
 	 */
 	public function actionNew()
 	{
-		$model = new Filters();
+		$model = new Filter();
 		$request = Yii::$app->request->post();
 		$addressIds = [];
 
@@ -165,7 +165,7 @@ class RequestController extends Controller
 				// Create rows in request_address table
 				foreach ($addressIds as $addressId) {
 					// $requestAdrress = new RequestAddress();
-					$requestAdrress = new FiltersAddress();
+					$requestAdrress = new FilterAddress();
 
 					$requestAdrress->address_id = $addressId;
 					$requestAdrress->request_object_id = $model->id;
@@ -192,7 +192,7 @@ class RequestController extends Controller
 	public function actionUpdate($id)
 	{
 		// $model = RequestObject::findByIdentity($id);
-		$model = Filters::findByIdentity($id);
+		$model = Filter::findByIdentity($id);
 		$request = Yii::$app->request->post();
 		
         if ($model->load($request, '') && $model->update()) {
@@ -210,7 +210,7 @@ class RequestController extends Controller
 	public function actionView($id)
 	{
 		// $model = RequestObject::findByIdentity($id);
-		$model = Filters::findByIdentity($id);
+		$model = Filter::findByIdentity($id);
 		
         if (!is_null($model)) {
             return $model;

@@ -18,11 +18,11 @@ use yii\helpers\FileHelper;
 use micro\models\EstateObject;
 use micro\models\Address;
 use micro\models\Metro;
-use micro\models\Users;
-use micro\models\Filters;
-use micro\models\Images;
-use micro\models\Objects;
-use micro\models\Phones;
+use micro\models\User;
+use micro\models\Filter;
+use micro\models\Image;
+//use micro\models\Object;
+use micro\models\Phone;
 use PharIo\Manifest\Url;
 
 /**
@@ -69,15 +69,15 @@ class ObjectController extends Controller
     {
 		$output = [];
         try {
-			$user = Users::findOne(Yii::$app->user->identity->id);
+			$user = User::findOne(Yii::$app->user->identity->id);
 			$lastFetchDate = $user->last_fetch;
 			// get filter current user
-            $filterObject = Filters::find()->where(['user_id' => $user->id])->one();
+            $filterObject = Filter::find()->where(['user_id' => $user->id])->one();
             if (is_null($filterObject)) {
                 throw new \Exception("filter not set");
             }
 
-			$objectsQuery = Objects::find()
+			$objectsQuery = EstateObject::find()
 				->select(['objects.id', 'objects.name',
 							'objects.description',
 							'objects.price',
@@ -141,7 +141,7 @@ class ObjectController extends Controller
 				$singleObjectId = $singleObjectArray['id'];
 				
 				// search image
-				$images = Images::find()
+				$images = Image::find()
 					->select('path')
 					->where("object_id = $singleObjectId")
 					->orderBy('position')
@@ -151,11 +151,11 @@ class ObjectController extends Controller
 				// if there is an imagery array, then replace each element with url
                 if (is_array($images)) {
                     $images = array_map(function ($i) {
-                        return ('images/' . $i);
+                        return ('image/' . $i);
                     }, $images);
 				}
 				// search phone
-				$phones = Phones::find()
+				$phones = Phone::find()
 					->select('path')
 					->where("object_id = $singleObjectId") 
 					->toArray()
@@ -216,7 +216,7 @@ class ObjectController extends Controller
 	public function actionNew()
 	{
         // $model = new EstateObject();
-        $model = new Objects();
+        $model = new EstateObject();
 		$request = Yii::$app->request;
 		
         if ($model->load($request->post(), '')) {
@@ -247,7 +247,7 @@ class ObjectController extends Controller
 				//Обработка каждого изображения
 				foreach ($images as $file) {
 					//Создание нового изображения
-					$image = new Images();
+					$image = new Image();
 	
 					//Запись данных изображения в объект image
 					$image->file = $file;
@@ -350,14 +350,14 @@ class ObjectController extends Controller
 	public function actionUpdate($id)
 	{
 	    // $model = EstateObject::findByIdentity($id);
-	    $model = Objects::findByIdentity($id);
+	    $model = EstateObject::findByIdentity($id);
 	    $request = Yii::$app->request->post();
 
 		//Images update
 		//Delete images
 		if (isset($request['urlsToDeleteImage'])) {
 			foreach ($request['urlsToDeleteImage'] as $url) {
-				$images = Images::findOne('path'=>$url);
+				$image = Image::findOne(['path'=>$url]);
 
 				FileHelper::removeDirectory($image->path);
 
@@ -379,7 +379,7 @@ class ObjectController extends Controller
 			//Обработка каждого изображения
 			foreach ($newImages as $file) {
 				//Создание нового изображения
-				$image = new Images();
+				$image = new Image();
 
 				//Запись данных изображения в объект image
 				$image->file = $file;
@@ -421,7 +421,7 @@ class ObjectController extends Controller
 	 */
 	public function actionView($id)
 	{
-	    $model = Objects::findByIdentity($id);
+	    $model = EstateObject::findByIdentity($id);
 		
     	    if (!is_null($model)) {
         		return $model;

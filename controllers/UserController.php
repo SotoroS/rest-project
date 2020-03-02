@@ -12,8 +12,8 @@ use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\AccessControl;
 
-use micro\models\Users;
-use micro\models\CityAreas;
+use micro\models\User;
+use micro\models\CityArea;
 use micro\models\RentType;
 use micro\models\PropertyType;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -22,7 +22,7 @@ use micro\models\Address;
 use Facebook;
 use Google_Client;
 use Google_Service_Oauth2;
-use micro\models\Cities;
+use micro\models\City;
 
 /**
  * Class SiteController
@@ -88,7 +88,7 @@ class UserController extends Controller
             $account_id = $request->post('account_id');
 
             // looking for a user by id, if not - create a new one
-            $user = Users::findOne($account_id) ?: new Users();
+            $user = User::findOne($account_id) ?: new User();
 
             $user->deviceType = $request->post('deviceType');
             $user->fcmToken = $request->post('fcmToken');
@@ -100,8 +100,8 @@ class UserController extends Controller
 
             // fill the array
             $output['status'] = true;
-            $output['cities'] = Cities::find()->asArray()->all();
-            $output['city_areas'] = CityAreas::find()->asArray()->all();
+            $output['cities'] = City::find()->asArray()->all();
+            $output['city_areas'] = CityArea::find()->asArray()->all();
             $output['rent_types'] = RentType::find()->asArray()->all();
             $output['property_types'] = PropertyType::find()->asArray()->all();
 
@@ -186,7 +186,7 @@ class UserController extends Controller
         try {
             $citiesArray = [];
             // print all cities and add them to the array
-            $cities = Cities::find()->all();
+            $cities = City::find()->all();
             foreach ($cities as $city) {
                 $citiesArray[] = [
                     'name' => $city->name,
@@ -214,7 +214,7 @@ class UserController extends Controller
         $request = Yii::$app->request;
 
         $verification_code = $request->get('token');
-        $user = Users::find()->where(['signup_token' => $verification_code])->one();
+        $user = User::find()->where(['signup_token' => $verification_code])->one();
         
         if (!is_null($user)) {
             $user->verified = 1;
@@ -254,7 +254,7 @@ class UserController extends Controller
             $password = $request->post('password');
 
             // Checking the presence of a user in the database
-            $user = Users::findOne(['email' => $email]);
+            $user = User::findOne(['email' => $email]);
             
             if(!is_null($user)) {
                 // Password verification
@@ -332,11 +332,11 @@ class UserController extends Controller
                 // Getting string accessToken
                 $value = $accessToken->getValue();
 
-                $user = Users::findOne(['email' => $email]);
+                $user = User::findOne(['email' => $email]);
 
                 // Check user with such email in database
                 if(is_null($user)){
-                    $model = new Users();
+                    $model = new User();
 
                     $model->email = $email;
                     $model->verified = 1;
@@ -408,12 +408,12 @@ class UserController extends Controller
             $userInfo = $oauth2->userinfo->get();
             $email = $userInfo->email;
 
-            $user = Users::findOne(['email' => $email]);
+            $user = User::findOne(['email' => $email]);
 
             // Check user with such email in database
 
             if(is_null($user)) {
-                $model = new Users();
+                $model = new User();
 
                 $model->email = $email;
                 $model->signup_token = uniqid();
@@ -461,7 +461,7 @@ class UserController extends Controller
 
         // Check authorized
         if (!Yii::$app->user->isGuest) {
-            $user = Users::find(Yii::$app->user->identity->id)->one();
+            $user = User::find(Yii::$app->user->identity->id)->one();
             if (!is_null($request->post("gender"))) {
                 $user->gender = $request->post("gender");
             }

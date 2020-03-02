@@ -1,0 +1,11 @@
+# actor: ApiTester
+# modules:
+#     enabled:
+#         - \Helper\Api
+actor: ApiTester
+modules:
+    enabled:
+        - REST:
+            url: https://nape.max.rest.fokin-team.ru/
+            depends: PhpBrowser
+            part: Json
