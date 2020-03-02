@@ -42,8 +42,8 @@ return [
 		'db' => [
 			'class' => 'yii\db\Connection',
 			'dsn' => 'mysql:host=localhost;dbname=rest',
-			'username' => 'root',
-			'password' => '',
+			'username' => 'GodOfDB',
+			'password' => 'hard_pass!',
 			
 		], 
 		'request' => [
@@ -66,7 +66,7 @@ return [
 			'class' => 'yii\swiftmailer\Mailer',
 		],
 		'user' => [
-            'identityClass' => 'micro\models\Users',
+            'identityClass' => 'micro\models\User',
             'enableSession' => false,  
 		],
 	],
