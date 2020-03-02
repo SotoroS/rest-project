@@ -64,10 +64,9 @@ class UserController extends Controller
         return $behaviors;
     }
 
-    public function actionGetTime(): string
+    public function actionGetTime()
     {
-        $dateTime = new DateTime(null, new \DateTimeZone("Europe/Kiev"));
-        return $dateTime->format('Y-m-d H:i:s');
+        return true;
     }
     
     /**
@@ -79,7 +78,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionSignup(): array
+    public function actionSignup()
     {
         $request = Yii::$app->request;
 
@@ -87,14 +86,20 @@ class UserController extends Controller
         try {
             $account_id = $request->post('account_id');
 
+            $deviceType = $request->post('deviceType');
+            $fcmToken = $request->post('fcmToken');
+
+            if (is_null($deviceType) || is_null($fcmToken)) {
+                return [
+                    'error' => 'Fields are not filled'
+                ];
+            }
+
             // looking for a user by id, if not - create a new one
             $user = User::findOne($account_id) ?: new User();
 
             $user->deviceType = $request->post('deviceType');
             $user->fcmToken = $request->post('fcmToken');
-
-            //$user->email = $request->post('email');
-            //$user->password = password_hash($request->post('password'), PASSWORD_DEFAULT);
 
             $user->save();
 
@@ -117,67 +122,6 @@ class UserController extends Controller
         Yii::$app->response->statusCode = 200;
         return $output;
         
-
-
-
-        // $email = $request->post('email');
-        // $password = $request->post('password');
-
-        // if (is_null($email) || is_null($password)) {
-        //     return [
-        //         'error' => 'Fields are not filled'
-        //     ];
-        // }
-
-        // $password = password_hash($password, PASSWORD_DEFAULT);
-        // $signup_token = uniqid();
-
-        // // Find user by email
-        // $user = User::findOne(['email' => $email]);
-
-        // // Registration user if not exist user
-        // if(!$user) {
-        //     $model = new User();
-
-        //     $model->email = $email;
-        //     $model->password = $password;
-        //     $model->signup_token = $signup_token;
-            
-        //     if(!$model->validate() || !$model->save()) {
-        //         return [
-        //         "errors" => $model->errors
-        //         ];
-        //     }
-
-        //     // Send email message for verify
-        //     $mail = new PHPMailer;
-
-        //     $mail->CharSet = "UTF-8";
-
-        //     $mail->isSMTP();
-        //     $mail->Host = 'smtp.yandex.ru';
-        //     $mail->Port = 465;
-        //     $mail->SMTPAuth = true;
-        //     $mail->SMTPSecure = 'ssl';
-
-        //     $mail->Username = 'arman.shukanov@fokin-team.ru';
-        //     $mail->Password = 'arman_shukanov';
-
-        //     $mail->setFrom('arman.shukanov@fokin-team.ru');
-        //     $mail->addAddress($email);
-        //     $mail->Subject = 'Подтверждение аккаунта';
-        //     $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
-
-        //     $mail->isHTML(true);
-
-        //     return [
-        // 	"mailSend" => $mail->send()
-    	//     ];
-        // } else {
-        //     return [
-        // 	"error" => "User exsist."
-    	//     ];
-        // }
     }
 
     public function actionWorkingSignup(): array
@@ -191,6 +135,8 @@ class UserController extends Controller
                 'error' => 'Fields are not filled'
             ];
         }
+
+        $password = password_hash($password, PASSWORD_DEFAULT);
         $signup_token = uniqid();
 
         // Find user by email
@@ -270,7 +216,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionVerify(): string
+    public function actionVerify()
     {
         $request = Yii::$app->request;
 
@@ -361,7 +307,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLoginFacebook(): string
+    public function actionLoginFacebook(): array
     {
         if(!session_id()) {
             session_start();
@@ -440,7 +386,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLoginGoogle(): string
+    public function actionLoginGoogle(): array
     {
         $request = Yii::$app->request;
 
@@ -516,10 +462,11 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionUpdate(): string
+    public function actionUpdate(): array
     {
         $request = Yii::$app->request;
 
+        return true;
         // Check authorized
         if (!Yii::$app->user->isGuest) {
             $user = User::find(Yii::$app->user->identity->id)->one();

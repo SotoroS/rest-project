@@ -51,6 +51,6 @@ class RequestType extends \yii\db\ActiveRecord
      */
     public function getFilters()
     {
-        return $this->hasMany(Filters::className(), ['request_type_id' => 'id']);
+        return $this->hasMany(Filter::className(), ['request_type_id' => 'id']);
     }
 }

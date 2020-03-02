@@ -45,10 +45,10 @@ class Address extends \yii\db\ActiveRecord
         return [
             [['lt', 'lg'], 'number'],
             [['region_id', 'city_id', 'city_area_id', 'street_id'], 'integer'],
-            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityAreas::className(), 'targetAttribute' => ['city_area_id' => 'id']],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
-            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Regions::className(), 'targetAttribute' => ['region_id' => 'id']],
-            [['street_id'], 'exist', 'skipOnError' => true, 'targetClass' => Streets::className(), 'targetAttribute' => ['street_id' => 'id']],
+            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Region::className(), 'targetAttribute' => ['region_id' => 'id']],
+            [['street_id'], 'exist', 'skipOnError' => true, 'targetClass' => Street::className(), 'targetAttribute' => ['street_id' => 'id']],
         ];
     }
 
@@ -82,10 +82,10 @@ class Address extends \yii\db\ActiveRecord
             }
 
         // Find exist Region
-        $region = Regions::findByName($this->regionName);
+        $region = Region::findByName($this->regionName);
 
         if (is_null($region)) {
-            $region = new Regions();
+            $region = new Region();
 
             $region->name = $this->regionName;
 
@@ -95,10 +95,10 @@ class Address extends \yii\db\ActiveRecord
         }
 
         // Find exist City
-        $city = Cities::findByName($this->cityName);
+        $city = City::findByName($this->cityName);
 
         if (is_null($city)) {
-            $city = new Cities();
+            $city = new City();
 
             $city->name = $this->cityName;
             $city->region_id = $region->id;
@@ -109,10 +109,10 @@ class Address extends \yii\db\ActiveRecord
         }
 
         // Find exist City Area
-        $cityArea = CityAreas::findByName($this->cityAreaName);
+        $cityArea = CityArea::findByName($this->cityAreaName);
 
         if (is_null($cityArea)) {
-            $cityArea = new CityAreas();
+            $cityArea = new CityArea();
 
             $cityArea->name = $this->cityAreaName;
             $cityArea->city_id = $city->id;
@@ -123,10 +123,10 @@ class Address extends \yii\db\ActiveRecord
         }
 
         // Find exist Street
-        $street = Streets::findByName($this->streetName);
+        $street = Street::findByName($this->streetName);
 
         if (is_null($street)) {
-            $street = new Streets();
+            $street = new Street();
 
             $street->name = $this->streetName;
             $street->city_area_id = $cityArea->id;
@@ -162,7 +162,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getCityArea()
     {
-        return $this->hasOne(CityAreas::className(), ['id' => 'city_area_id']);
+        return $this->hasOne(CityArea::className(), ['id' => 'city_area_id']);
     }
 
     /**
@@ -172,7 +172,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -182,7 +182,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getRegion()
     {
-        return $this->hasOne(Regions::className(), ['id' => 'region_id']);
+        return $this->hasOne(Region::className(), ['id' => 'region_id']);
     }
 
     /**
@@ -192,7 +192,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getStreet()
     {
-        return $this->hasOne(Streets::className(), ['id' => 'street_id']);
+        return $this->hasOne(Street::className(), ['id' => 'street_id']);
     }
 
     /**
@@ -202,7 +202,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getFiltersAddresses()
     {
-        return $this->hasMany(FiltersAddress::className(), ['address_id' => 'id']);
+        return $this->hasMany(FilterAddress::className(), ['address_id' => 'id']);
     }
 
     /**
@@ -212,6 +212,6 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['address_id' => 'id']);
+        return $this->hasMany(Object::className(), ['address_id' => 'id']);
     }
 }

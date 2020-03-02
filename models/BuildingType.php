@@ -51,6 +51,6 @@ class BuildingType extends \yii\db\ActiveRecord
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['building_type_id' => 'id']);
+        return $this->hasMany(Object::className(), ['building_type_id' => 'id']);
     }
 }

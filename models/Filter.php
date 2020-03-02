@@ -56,10 +56,10 @@ class Filter extends \yii\db\ActiveRecord
             [['pivot_lt', 'pivot_lg', 'radius'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['rent_type', 'property_type', 'substring'], 'string', 'max' => 256],
-            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityAreas::className(), 'targetAttribute' => ['city_area_id' => 'id']],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
             [['request_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestType::className(), 'targetAttribute' => ['request_type_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -110,7 +110,7 @@ class Filter extends \yii\db\ActiveRecord
      */
     public function getCityArea()
     {
-        return $this->hasOne(CityAreas::className(), ['id' => 'city_area_id']);
+        return $this->hasOne(CityArea::className(), ['id' => 'city_area_id']);
     }
 
     /**
@@ -120,7 +120,7 @@ class Filter extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -140,7 +140,7 @@ class Filter extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**
@@ -148,8 +148,8 @@ class Filter extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFiltersAddresses()
+    public function getFilterAddresses()
     {
-        return $this->hasMany(FiltersAddress::className(), ['filters_id' => 'id']);
+        return $this->hasMany(FilterAddress::className(), ['filters_id' => 'id']);
     }
 }

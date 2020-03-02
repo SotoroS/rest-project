@@ -33,7 +33,7 @@ class Street extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['city_area_id'], 'integer'],
             [['name'], 'string', 'max' => 256],
-            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityAreas::className(), 'targetAttribute' => ['city_area_id' => 'id']],
+            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
         ];
     }
 
@@ -77,6 +77,6 @@ class Street extends \yii\db\ActiveRecord
      */
     public function getCityArea()
     {
-        return $this->hasOne(CityAreas::className(), ['id' => 'city_area_id']);
+        return $this->hasOne(CityArea::className(), ['id' => 'city_area_id']);
     }
 }

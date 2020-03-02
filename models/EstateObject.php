@@ -59,12 +59,12 @@ class EstateObject extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 256],
             [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['address_id' => 'id']],
             [['building_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => BuildingType::className(), 'targetAttribute' => ['building_type_id' => 'id']],
-            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityAreas::className(), 'targetAttribute' => ['city_area_id' => 'id']],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
             [['metro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Metro::className(), 'targetAttribute' => ['metro_id' => 'id']],
             [['property_type'], 'exist', 'skipOnError' => true, 'targetClass' => PropertyType::className(), 'targetAttribute' => ['property_type' => 'id']],
             [['rent_type'], 'exist', 'skipOnError' => true, 'targetClass' => RentType::className(), 'targetAttribute' => ['rent_type' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -110,7 +110,7 @@ class EstateObject extends \yii\db\ActiveRecord
      */
     public function getImages()
     {
-        return $this->hasMany(Images::className(), ['object_id' => 'id']);
+        return $this->hasMany(Image::className(), ['object_id' => 'id']);
     }
 
     /**
@@ -140,7 +140,7 @@ class EstateObject extends \yii\db\ActiveRecord
      */
     public function getCityArea()
     {
-        return $this->hasOne(CityAreas::className(), ['id' => 'city_area_id']);
+        return $this->hasOne(CityArea::className(), ['id' => 'city_area_id']);
     }
 
     /**
@@ -150,7 +150,7 @@ class EstateObject extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -190,7 +190,7 @@ class EstateObject extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**
@@ -200,6 +200,6 @@ class EstateObject extends \yii\db\ActiveRecord
      */
     public function getPhones()
     {
-        return $this->hasMany(Phones::className(), ['object_id' => 'id']);
+        return $this->hasMany(Phone::className(), ['object_id' => 'id']);
     }
 }

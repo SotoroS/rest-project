@@ -32,7 +32,7 @@ class FilterAddress extends \yii\db\ActiveRecord
         return [
             [['address_id', 'filters_id'], 'integer'],
             [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['address_id' => 'id']],
-            [['filters_id'], 'exist', 'skipOnError' => true, 'targetClass' => Filters::className(), 'targetAttribute' => ['filters_id' => 'id']],
+            [['filters_id'], 'exist', 'skipOnError' => true, 'targetClass' => Filter::className(), 'targetAttribute' => ['filters_id' => 'id']],
         ];
     }
 
@@ -65,6 +65,6 @@ class FilterAddress extends \yii\db\ActiveRecord
      */
     public function getFilters()
     {
-        return $this->hasOne(Filters::className(), ['id' => 'filters_id']);
+        return $this->hasOne(Filter::className(), ['id' => 'filters_id']);
     }
 }

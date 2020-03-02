@@ -51,6 +51,6 @@ class RentType extends \yii\db\ActiveRecord
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['rent_type' => 'id']);
+        return $this->hasMany(Object::className(), ['rent_type' => 'id']);
     }
 }

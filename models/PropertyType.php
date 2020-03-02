@@ -51,6 +51,6 @@ class PropertyType extends \yii\db\ActiveRecord
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['property_type' => 'id']);
+        return $this->hasMany(Object::className(), ['property_type' => 'id']);
     }
 }

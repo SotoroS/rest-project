@@ -36,7 +36,7 @@ class CityArea extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['city_id'], 'integer'],
             [['name'], 'string', 'max' => 256],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
         ];
     }
 
@@ -80,7 +80,7 @@ class CityArea extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -90,7 +90,7 @@ class CityArea extends \yii\db\ActiveRecord
      */
     public function getFilters()
     {
-        return $this->hasMany(Filters::className(), ['city_area_id' => 'id']);
+        return $this->hasMany(Filter::className(), ['city_area_id' => 'id']);
     }
 
     /**
@@ -100,7 +100,7 @@ class CityArea extends \yii\db\ActiveRecord
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['city_area_id' => 'id']);
+        return $this->hasMany(Object::className(), ['city_area_id' => 'id']);
     }
 
     /**
@@ -110,6 +110,6 @@ class CityArea extends \yii\db\ActiveRecord
      */
     public function getStreets()
     {
-        return $this->hasMany(Streets::className(), ['city_area_id' => 'id']);
+        return $this->hasMany(Street::className(), ['city_area_id' => 'id']);
     }
 }

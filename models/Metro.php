@@ -33,7 +33,7 @@ class Metro extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['city_id'], 'integer'],
             [['name'], 'string', 'max' => 256],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
         ];
     }
 
@@ -56,7 +56,7 @@ class Metro extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -66,6 +66,6 @@ class Metro extends \yii\db\ActiveRecord
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['metro_id' => 'id']);
+        return $this->hasMany(Object::className(), ['metro_id' => 'id']);
     }
 }

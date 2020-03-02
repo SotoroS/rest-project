@@ -37,7 +37,7 @@ class City extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['region_id'], 'integer'],
             [['name'], 'string', 'max' => 256],
-            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Regions::className(), 'targetAttribute' => ['region_id' => 'id']],
+            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Region::className(), 'targetAttribute' => ['region_id' => 'id']],
         ];
     }
 
@@ -58,7 +58,7 @@ class City extends \yii\db\ActiveRecord
      * 
      * @param - name
      * 
-     * @return Cities|null 
+     * @return City|null 
      */
     public static function findByName($name) {
         return static::find(['name' => $name])->one();
@@ -81,7 +81,7 @@ class City extends \yii\db\ActiveRecord
      */
     public function getRegion()
     {
-        return $this->hasOne(Regions::className(), ['id' => 'region_id']);
+        return $this->hasOne(Region::className(), ['id' => 'region_id']);
     }
 
     /**
@@ -91,7 +91,7 @@ class City extends \yii\db\ActiveRecord
      */
     public function getCityAreas()
     {
-        return $this->hasMany(CityAreas::className(), ['city_id' => 'id']);
+        return $this->hasMany(CityArea::className(), ['city_id' => 'id']);
     }
 
     /**
@@ -101,7 +101,7 @@ class City extends \yii\db\ActiveRecord
      */
     public function getFilters()
     {
-        return $this->hasMany(Filters::className(), ['city_id' => 'id']);
+        return $this->hasMany(Filter::className(), ['city_id' => 'id']);
     }
 
     /**
@@ -121,6 +121,6 @@ class City extends \yii\db\ActiveRecord
      */
     public function getObjects()
     {
-        return $this->hasMany(Objects::className(), ['city_id' => 'id']);
+        return $this->hasMany(Object::className(), ['city_id' => 'id']);
     }
 }
