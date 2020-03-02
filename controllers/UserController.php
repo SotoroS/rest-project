@@ -466,7 +466,6 @@ class UserController extends Controller
     {
         $request = Yii::$app->request;
 
-        return true;
         // Check authorized
         if (!Yii::$app->user->isGuest) {
             $user = User::find(Yii::$app->user->identity->id)->one();
