@@ -41,7 +41,7 @@ class UserController extends Controller
             'only' => ['login', 'signup', 'get-areas', 'verify', 'update', 'login-facebook', 'login-google', 'get-time'],
             'rules' => [
                 [
-                    'actions' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+                    'actions' => ['login', 'signup', 'working-signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
                     'allow' => true,
                     'roles' => ['?'],
                 ],
@@ -57,7 +57,7 @@ class UserController extends Controller
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
-            'except' => ['login', 'signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+            'except' => ['login', 'signup', 'working-signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
             'class' => HttpBearerAuth::className()
         ];
 
@@ -178,6 +178,67 @@ class UserController extends Controller
         // 	"error" => "User exsist."
     	//     ];
         // }
+    }
+
+    public function actionWorkingSignup(): array
+    {
+        $request = Yii::$app->request;
+        $email = $request->post('email');
+        $password = $request->post('password');
+
+        if (is_null($email) || is_null($password)) {
+            return [
+                'error' => 'Fields are not filled'
+            ];
+        }
+        $signup_token = uniqid();
+
+        // Find user by email
+        $user = User::findOne(['email' => $email]);
+
+        // Registration user if not exist user
+        if(!$user) {
+            $model = new User();
+
+            $model->email = $email;
+            $model->password = $password;
+            $model->signup_token = $signup_token;
+            
+            if(!$model->validate() || !$model->save()) {
+                return [
+                "errors" => $model->errors
+                ];
+            }
+
+            // Send email message for verify
+            $mail = new PHPMailer;
+
+            $mail->CharSet = "UTF-8";
+
+            $mail->isSMTP();
+            $mail->Host = 'smtp.yandex.ru';
+            $mail->Port = 465;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl';
+
+            $mail->Username = 'arman.shukanov@fokin-team.ru';
+            $mail->Password = 'arman_shukanov';
+
+            $mail->setFrom('arman.shukanov@fokin-team.ru');
+            $mail->addAddress($email);
+            $mail->Subject = 'Подтверждение аккаунта';
+            $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
+
+            $mail->isHTML(true);
+
+            return [
+        	"mailSend" => $mail->send()
+    	    ];
+        } else {
+            return [
+        	"error" => "User exsist."
+    	    ];
+        }
     }
 
     public function actionGetAreas(): array
