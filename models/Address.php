@@ -3,6 +3,10 @@
 namespace micro\models;
 
 use Yii;
+use micro\models\Region;
+use micro\models\City;
+use micro\models\CityArea;
+use micro\models\Street;
 
 /**
  * This is the model class for table "address".
@@ -44,6 +48,7 @@ class Address extends \yii\db\ActiveRecord
     {
         return [
             [['lt', 'lg'], 'number'],
+            [['regionName', 'cityName', 'cityAreaName', 'streetName'], 'string'],
             [['region_id', 'city_id', 'city_area_id', 'street_id'], 'integer'],
             [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
@@ -78,7 +83,7 @@ class Address extends \yii\db\ActiveRecord
             || is_null($this->cityName)
             || is_null($this->cityAreaName)
             || is_null($this->streetName)) {
-                return false;
+                return false; 
             }
 
         // Find exist Region
@@ -90,7 +95,7 @@ class Address extends \yii\db\ActiveRecord
             $region->name = $this->regionName;
 
             if (!$region->save()) {
-                return false;
+                return ["error" => $region->errors];
             }
         }
 
@@ -104,7 +109,7 @@ class Address extends \yii\db\ActiveRecord
             $city->region_id = $region->id;
 
             if (!$city->save()) {
-                return false;
+                return ["error" => $city->errors];
             }
         }
 
@@ -118,7 +123,7 @@ class Address extends \yii\db\ActiveRecord
             $cityArea->city_id = $city->id;
 
             if (!$cityArea->save()) {
-                return false;
+                return ["error" => $cityArea->errors];
             }
         }
 
@@ -132,7 +137,7 @@ class Address extends \yii\db\ActiveRecord
             $street->city_area_id = $cityArea->id;
     
             if (!$street->save()) {
-                return false;
+                return ["error" => $street->errors];
             }
         }
 

@@ -37,6 +37,8 @@ use Yii;
  */
 class EstateObject extends \yii\db\ActiveRecord
 {
+    public $address;
+
     /**
      * {@inheritdoc}
      */
@@ -53,7 +55,7 @@ class EstateObject extends \yii\db\ActiveRecord
         return [
             [['address_id', 'building_type_id', 'rent_type', 'property_type', 'metro_id', 'user_id', 'city_id', 'city_area_id'], 'integer'],
             [['name', 'description', 'price'], 'required'],
-            [['description', 'url', 'data'], 'string'],
+            [['description', 'address', 'url', 'data'], 'string'],
             [['price'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 256],

@@ -16,7 +16,7 @@ use micro\models\User;
 use micro\models\Filter;
 use micro\models\City;
 
-/**
+/** 
  * Class SiteController
  * @package micro\controllers
  */
@@ -42,16 +42,15 @@ class RequestController extends Controller
 
 		try {
 			$fcmToken = $request->post('fcmToken');
-			$cityId = (int)$request->post('city') ?: null;
-            $cityAreaId = (int)$request->post('city_area_id') ?: null;
+
+			$cityId = (int)$request->post('city') ?: 1;
+            $cityAreaId = (int)$request->post('city_area_id') ?: 1;
+            $request_type_id = (int)$request->post('request_type_id') ?: 1;
 			$notification = (int)$request->post('push_notification') ?: null;
 			
-			$rentType = json_decode($request->post('rent_type')) ?: null;
-			$propertyType = json_decode($request->post('property_type')) ?: null;
+			$rentType = $request->post('rent_type') ?: null;
+			$propertyType = $request->post('property_type') ?: null;
 			
-			// $propertyType = implode(',', $propertyType);
-			// $rentType = implode(',', $rentType);
-
 			$requestData = [
                 'city' => $cityId,
                 'city_area_id' => $cityAreaId,
@@ -63,19 +62,17 @@ class RequestController extends Controller
             ];
 
 			// get current user
-			// $user = Yii::$app->user;
-			// $user = Users::findOne(Yii::$app->users->identity->id);
-			$user = User::findOne(1);
+			$user = User::findOne(Yii::$app->user->identity->id);
 
 			// current user filter
 			$filterObject = Filter::findOne(['user_id' => $user->id]);
 			$user->notifications = $request->post('push_enabled') ? 1 : 0;
+
 			
 			// if there is a fcmToken, fill in the user
             if ($fcmToken) {
                 $user->fcmToken = $fcmToken;
             }
-            $user->save();
 
             if (is_null($filterObject)) {
                 $filterObject = new Filter();
@@ -84,12 +81,13 @@ class RequestController extends Controller
 
             $user->notifications = $notification;
 			$user->save();
-			
+
 			// fill in the data
-			$filterObject->rent_type = $rentType ?: null;
-            $filterObject->property_type = $propertyType ?: null;
-            $filterObject->city_area_id = $cityAreaId ?: NULL;
-            $filterObject->city_id = $cityId ?: NULL;
+			$filterObject->rent_type = $rentType;
+            $filterObject->property_type = $propertyType;
+            $filterObject->request_type_id = $request_type_id;
+            $filterObject->city_area_id = $cityAreaId;
+            $filterObject->city_id = $cityId;
             $filterObject->price_from = $requestData['price_from'];
             $filterObject->price_to = $requestData['price_to'];
             $filterObject->substring = $requestData['substring'];
@@ -117,25 +115,26 @@ class RequestController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionNew()
+	public function actionFilterNew()
 	{
 		$model = new Filter();
 		$request = Yii::$app->request->post();
 		$addressIds = [];
 
-    		if ($model->load($request, '')) {
+		if ($model->load($request, '')) {
 			$model->user_id = Yii::$app->user->identity->id;
 
-			foreach ($model->addresses as $address) {
+
+			// foreach ($model->addresses as $address) {
 				// Get address info by search address
-				$infoObject = static::getAddress($address);
+
+				$infoObject = static::getAddress($model->addresses);
 
 				// Find address by coordinates
 				$address = Address::findByCoordinates(
 					$infoObject->DisplayPosition->Latitude,
 					$infoObject->DisplayPosition->Longitude
 				);
-
 				// If address no exsist create new address
 				if (!is_null($address)) {
 					$address = new Address();
@@ -148,8 +147,13 @@ class RequestController extends Controller
 					$address->cityName = $infoObject->Address->City;
 					$address->regionName = $infoObject->Address->County;
 
+					return [$address->streetName,
+					 $address->cityAreaName,
+					 $address->cityName,
+					 $address->regionName];
 					// Save address & object
 					if ($address->save()) {
+						return $address;
 						// Add id address after save in array od ids
 						array_push($addressIds, $address->id);
 					} else { // Return error if not save address
@@ -159,7 +163,8 @@ class RequestController extends Controller
 					// Add id address after save in array od ids
 					array_push($addressIds, $address->id);
 				}
-			}
+				return $address;
+			// }
 	
 			if ($model->save()) {
 				// Create rows in request_address table
@@ -168,7 +173,7 @@ class RequestController extends Controller
 					$requestAdrress = new FilterAddress();
 
 					$requestAdrress->address_id = $addressId;
-					$requestAdrress->request_object_id = $model->id;
+					$requestAdrress->filter_id = $model->id;
 
 					if (!$requestAdrress->save()) {
 						return ["errors" => $requestAdrress->errors];

@@ -37,6 +37,9 @@ use Yii;
  */
 class Filter extends \yii\db\ActiveRecord
 {
+
+    public $addresses = [];
+
     /**
      * {@inheritdoc}
      */
@@ -54,7 +57,7 @@ class Filter extends \yii\db\ActiveRecord
             [['user_id', 'num_of_people', 'family', 'pets', 'request_type_id', 'square_from', 'square_to', 'city_id', 'price_from', 'price_to', 'city_area_id'], 'integer'],
             [['description'], 'string'],
             [['pivot_lt', 'pivot_lg', 'radius'], 'number'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'addresses'], 'safe'],
             [['rent_type', 'property_type', 'substring'], 'string', 'max' => 256],
             [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
