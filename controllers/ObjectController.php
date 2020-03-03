@@ -70,6 +70,8 @@ class ObjectController extends Controller
 	/**
 	 * Get all objects
 	 * 
+	 * 
+	 *
 	 * @return array
 	 * 
 	 */
@@ -224,52 +226,21 @@ class ObjectController extends Controller
 
 			// Get address info by search address
 			$infoObject = static::getAddress($request->post('address'));
-			//return $infoObject;
+
+			// Check address
+			if ($infoObject == false) {
+				return [
+					'error' => 'Address Not Found'
+				];
+			}
+			
 			// Find address by coordinates 
 			$address = Address::findByCoordinates(
 				$infoObject->DisplayPosition->Latitude,
 				$infoObject->DisplayPosition->Longitude
 			);
-			//return $address;
-			// Create images
-			$images = UploadedFile::getInstancesByName('images');
-
-			//Add images
-			if (!empty($images)) {
-				//Директория для изображений
-				$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $model->id;
-	
-				//Если добавляеться первое изображение, то создаётся директория для изображений
-				if (!file_exists($dir)) {
-					FileHelper::createDirectory($dir);
-				}
-	
-				//Обработка каждого изображения
-				foreach ($images as $file) {
-					//Создание нового изображения
-					$image = new Image();
-	
-					//Запись данных изображения в объект image
-					$image->file = $file;
-	
-					//Путь к изображению
-					$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
-	
-					//Присвоение $path (путь к изображению) к атрибуту $image->path(string)
-					$image->path = $path;
-					$image->object_id = $model->id;
-
-					//????position
-					//$image->position = $request->post('position');
-					$image->position = 0;
-	
-					//Сохранение нового изображения в БД
-					$image->save();
-	
-					//Сохранение изображения в директроии $dir
-					$image->file->saveAs($image->path);
-				}
-			}
+			
+			
 
 			// If address no exsist create new address
 			if (is_null($address)) {
@@ -333,6 +304,51 @@ class ObjectController extends Controller
 				//$model->lg = $address->lg;
 
 				if ($model->save()) {
+					// Create images
+					$images = UploadedFile::getInstancesByName('images');
+					
+					//Add images
+					if (!empty($images)) {
+						//Директория для изображений
+						$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $model->id;
+						
+						//Если добавляеться первое изображение, то создаётся директория для изображений
+						if (!file_exists($dir)) {
+							FileHelper::createDirectory($dir);
+						}
+			
+						//Обработка каждого изображения
+						foreach ($images as $file) {
+							//Создание нового изображения
+							$image = new Image();
+			
+							//Запись данных изображения в объект image
+							$image->file = $file;
+			
+							//Путь к изображению
+							$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+			
+							//Присвоение $path (путь к изображению) к атрибуту $image->path(string)
+							$image->path = $path;
+							$image->object_id = $model->id;
+
+							$image->position = 0;
+			
+							//Сохранение нового изображения в БД
+							if (!$image->save()) {
+								// log
+								Yii::error("Image cannot save" ,__METHOD__);
+
+								return [
+									'error'=>'Image cannot save'
+								];
+							}
+			
+							//Сохранение изображения в директроии $dir
+							$image->file->saveAs($image->path);
+						}
+					}
+
 					// Log
 					Yii::info("Object Save Success" ,__METHOD__);
 
@@ -383,20 +399,13 @@ class ObjectController extends Controller
 		}
 		$request = Yii::$app->request->post();
 
-		if (!$model->load($request, '')) {
-			// Log
-			Yii::error("Object Load from request failed", __METHOD__);
-
-			return [
-				'error' => "Object Load from request failed"
-			];
-		}
+		
 		
 		// Images update
 		// Delete images
-		if (isset($request['DeleteImagePath'])) {
-			foreach ($request['DeleteImagePath'] as $url) {
-				$image = Image::findOne(['path'=>$url]);
+		if (isset($request['image_paths_to_delete'])) {
+			foreach ($request['image_paths_to_delete'] as $url) {
+				$image = Image::findOne(['path'=>$url, 'object_id'=>$model->id]);
 
 				FileHelper::removeDirectory($image->path);
 
@@ -406,8 +415,9 @@ class ObjectController extends Controller
 
 		// Load new images
 		$newImages = UploadedFile::getInstancesByName('images');
+		
 		// Add new images
-		if (!empty($newImage)) {
+		if (!empty($newImages)) {
 			// Directory for images
 			$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $id;
 	
@@ -415,7 +425,7 @@ class ObjectController extends Controller
 			if (!file_exists($dir)) {
 				FileHelper::createDirectory($dir);
 			}
-
+			
 			// New images save
 			foreach ($newImages as $file) {
 				// Create new image
@@ -430,12 +440,17 @@ class ObjectController extends Controller
 				$image->path = $path;
 				$image->object_id = $model->id;
 
-				return $image->object_id . "    " . $model->id;
-
 				$image->position = 0;
 
 				// Save image
-				$image->save();
+				if (!$image->save()) {
+					// log
+					Yii::error("Image cannot Save" ,__METHOD__);
+
+					return [
+						'error'=>'Image cannot Save'
+					];
+				}
 
 				// Save image to path
 				$image->file->saveAs($image->path);
@@ -458,6 +473,15 @@ class ObjectController extends Controller
         $model->updated_at = $dateTime->format('Y-m-d H:i:s');
 
 		// Object update
+		if (!$model->load($request, '')) {
+			// Log
+			Yii::error("Object Load from request failed", __METHOD__);
+
+			return [
+				'error' => "Object Load from request failed"
+			];
+		}
+
 		if ($model->update()) {
 			// Log
 			Yii::info("Object Update Success",__METHOD__);
@@ -517,10 +541,17 @@ class ObjectController extends Controller
 		// Get info about address
 		$searchResult = json_decode(file_get_contents("https://geocoder.ls.hereapi.com/6.2/geocode.json?$param"));
 		
-		// Log
-		Yii::info("Get Address" ,__METHOD__);
+		if (is_null($searchResult)) {
+			// Log
+			Yii::error("Get Address Failed" ,__METHOD__);
 
-		return $searchResult->Response->View[0]->Result[0]->Location;
+			return false;
+		} else {
+			// Log
+			Yii::info("Get Address Success" ,__METHOD__);
+
+			return $searchResult->Response->View[0]->Result[0]->Location;
+		}
 	}
 
 	/**
