@@ -55,16 +55,17 @@ class ObjectController extends Controller
                     'roles' => ['@'],
                 ],
 			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'get-objects'  => ['get'],
-					'new'   => ['post'],
-					'update' => ['post'],
-					'view' => ['get'],
-				],
+			
+		];
+		$behaviors['verbs'] = [
+			'class' => VerbFilter::className(),
+			'actions' => [
+				'get-objects'  => ['get'],
+				'new'   => ['post'],
+				'update' => ['post'],
+				'view' => ['get'],
 			],
-        ];
+		];
             
         // Возвращает результаты экшенов в формате JSON  
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
@@ -389,11 +390,11 @@ class ObjectController extends Controller
 	 * @param string $description
 	 * @param float $price
 	 * @param file $images[] 
-	 * @param string $DeleteImagePath[]
+	 * @param string $image_paths_to_delete[]
 	 * 
 	 * @return array|bool
 	 */
-	public function actionUpdate($id): array
+	public function actionUpdate($id)//: array
 	{
 	    // $model = EstateObject::findByIdentity($id);
 		$model = EstateObject::findByIdentity($id);
@@ -415,9 +416,11 @@ class ObjectController extends Controller
 			foreach ($request['image_paths_to_delete'] as $url) {
 				$image = Image::findOne(['path'=>$url, 'object_id'=>$model->id]);
 
-				FileHelper::removeDirectory($image->path);
+				if (!is_null($image)) {
+					FileHelper::removeDirectory($image->path);
 
-				$image->delete();
+					$image->delete();
+				}
 			}
 		}
 
@@ -478,16 +481,18 @@ class ObjectController extends Controller
 		
 		// Update at - time //Neet to setting TimeZone
 		$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
-        $model->updated_at = $dateTime->format('Y-m-d H:i:s');
+		$model->updated_at = $dateTime->format('Y-m-d H:i:s');
 
 		// Object update
 		if (!$model->load($request, '')) {
-			// Log
-			Yii::error("Object Load from request failed", __METHOD__);
+			if (!empty($newImages) && !isset($request['image_paths_to_delete'])) {
+				// Log
+				Yii::error("Object Load from request failed", __METHOD__);
 
-			return [
-				'error' => "Object Load from request failed"
-			];
+				return [
+					'error' => "Nothing Update"
+				];
+			}
 		}
 
 		if ($model->update()) {
