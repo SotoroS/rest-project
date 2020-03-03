@@ -9,6 +9,7 @@
 return [
 	'id' => 'donate',
 	'basePath' => __DIR__,
+	'runtimePath' => __DIR__ . '/runtime',
 	'controllerNamespace' => 'micro\controllers',
 	'aliases' => [
 		'@micro' => __DIR__,
@@ -28,6 +29,7 @@ return [
 		'facebook_client_uri' => 'https://rest.fokin-team.ru/user/login-facebook',
 	],
 	'defaultRoute' => 'site/index',
+	'bootstrap' => ['log'],
 	'components' => [
 		'urlManager' => [
 			'class' => 'yii\web\UrlManager',
@@ -68,6 +70,15 @@ return [
 		'user' => [
             'identityClass' => 'micro\models\User',
             'enableSession' => false,  
+		],
+		'log' => [
+			'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+					'levels' => ['info', 'error', 'warning'],
+				],
+			],
 		],
 	],
 

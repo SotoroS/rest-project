@@ -11,6 +11,7 @@ use yii\rest\Controller;
 use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 
 use micro\models\User;
 use micro\models\CityArea;
@@ -38,35 +39,43 @@ class UserController extends Controller
         
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['login', 'signup-web', 'signup-mob', 'get-areas', 'verify', 'update', 'login-facebook', 'login-google', 'get-time'],
+            'only' => ['login', 'signup-web', 'signup-mob', 'get-areas', 'verify', 'update', 'login-facebook', 'login-google'],
             'rules' => [
                 [
-                    'actions' => ['login', 'signup-web', 'signup-mob', 'working-signup', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+                    'actions' => ['login', 'signup-web', 'signup-mob', 'get-areas', 'verify', 'login-facebook', 'login-google'],
                     'allow' => true,
                     'roles' => ['?'],
                 ],
                 [
-                    'actions' => ['update', 'get-areas', 'get-time'],
+                    'actions' => ['update', 'get-areas'],
                     'allow' => true,
                     'roles' => ['@'],
                 ],
             ],
+            'verbs' => [
+				'class' => VerbFilter::className(),
+				'actions' => [
+					'login' => ['get'],
+					'signup-web' => ['post'],
+					'signup-mob' => ['post'],
+                    'get-areas' => ['get'],
+                    'verify' => ['get'],
+                    'update' => ['post'],
+                    'login-facebook' => ['get'],
+                    'login-google' => ['get'],
+				],
+			],
         ];
             
             // Возвращает результаты экшенов в формате JSON  
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
-            'except' => ['login', 'signup-mob', 'signup-web', 'get-areas', 'verify', 'login-facebook', 'login-google', 'get-time'],
+            'except' => ['login', 'signup-mob', 'signup-web', 'get-areas', 'verify', 'login-facebook', 'login-google'],
             'class' => HttpBearerAuth::className()
         ];
 
         return $behaviors;
-    }
-
-    public function actionGetTime()
-    {
-        return true;
     }
     
     /**
@@ -79,7 +88,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionSignupMob()
+    public function actionSignupMob(): array
     {
         $request = Yii::$app->request;
 
@@ -127,7 +136,7 @@ class UserController extends Controller
         Yii::$app->response->statusCode = 200;
 
         // log
-        Yii::info("SignUp old" ,__METHOD__);
+        Yii::info("SignUp Mob" ,__METHOD__);
         
         return $output;
     }
@@ -241,7 +250,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionVerify()
+    public function actionVerify(): 
     {
         $request = Yii::$app->request;
 
@@ -284,7 +293,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLogin()//: array
+    public function actionLogin(): array
     {   
         // Checking for data availability
         $request = Yii::$app->request;

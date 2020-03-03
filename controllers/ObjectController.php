@@ -14,6 +14,7 @@ use yii\web\Response;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
+use yii\filters\VerbFilter;
 
 use yii\helpers\FileHelper;
 
@@ -41,7 +42,7 @@ class ObjectController extends Controller
         
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['get-objects', 'new', 'update'],
+            'only' => ['get-objects', 'new', 'update', 'view'],
             'rules' => [
                 [
                     'actions' => ['get-objects'],
@@ -53,7 +54,16 @@ class ObjectController extends Controller
                     'allow' => true,
                     'roles' => ['@'],
                 ],
-            ],
+			],
+			'verbs' => [
+				'class' => VerbFilter::className(),
+				'actions' => [
+					'get-objects'  => ['get'],
+					'new'   => ['post'],
+					'update' => ['post'],
+					'view' => ['get'],
+				],
+			],
         ];
             
         // Возвращает результаты экшенов в формате JSON  
@@ -79,7 +89,6 @@ class ObjectController extends Controller
 	public function actionGetObjects(): array
     {
 		$output = [];
-		$objects = [];
         try {
 			$user = User::findOne(Yii::$app->user->identity->id);
 			$lastFetchDate = $user->last_fetch;
@@ -216,7 +225,7 @@ class ObjectController extends Controller
 	 * 
 	 * @return array|bool
 	 */
-	public function actionNew()//: array
+	public function actionNew(): array
 	{
         $model = new EstateObject();
 		$request = Yii::$app->request;
@@ -254,7 +263,6 @@ class ObjectController extends Controller
 				$address->cityName = $infoObject->Address->City;
 				$address->regionName = $infoObject->Address->County;
 
-				//return $address;
 				// Save address & object
 				if ($address->save()) {
 					// Get nearby station info
@@ -385,7 +393,7 @@ class ObjectController extends Controller
 	 * 
 	 * @return array|bool
 	 */
-	public function actionUpdate($id)//: array
+	public function actionUpdate($id): array
 	{
 	    // $model = EstateObject::findByIdentity($id);
 		$model = EstateObject::findByIdentity($id);

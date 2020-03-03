@@ -1,4 +1,6 @@
 <?php
+//Строгая типизация
+declare(strict_types=1);
 
 namespace micro\controllers;
 
@@ -7,6 +9,8 @@ use Yii;
 use yii\rest\Controller;
 use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 
 use micro\models\RequestAddress;
 use micro\models\FilterAddress;
@@ -27,15 +31,43 @@ class RequestController extends Controller
 		// удаляем rateLimiter, требуется для аутентификации пользователя
 		$behaviors = parent::behaviors();
 
+		$behaviors['access'] = [
+            'class' => AccessControl::className(),
+            'only' => ['set-filter', 'filter-new', 'update', 'view'],
+            'rules' => [
+                [
+                    'actions' => ['set-filter'],
+                	'allow' => true,
+                	'roles' => ['?'],
+                ],
+                [
+                    'actions' => ['set-filter', 'filter-new', 'update', 'view'],
+                    'allow' => true,
+                    'roles' => ['@'],
+                ],
+			],
+			'verbs' => [
+				'class' => VerbFilter::className(),
+				'actions' => [
+					'set-filter'  => ['post'],
+					'filter-new'   => ['post'],
+					'update' => ['post'],
+					'view' => ['get'],
+				],
+			],
+        ];
+
 		// Возвращает результаты экшенов в формате JSON  
 		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
 		// OAuth 2.0
-		$behaviors['authenticator'] = ['class' => HttpBearerAuth::className()];
+		$behaviors['authenticator'] = [
+			'class' => HttpBearerAuth::className()
+		];
 
 		return $behaviors;
 	}
 
-	public function actionSetFilter()
+	public function actionSetFilter(): array
 	{
 		$request = Yii::$app->request;
 		$output = [];
@@ -105,7 +137,11 @@ class RequestController extends Controller
 			$output['error'] = $e->getMessage();
 			
         } finally {
-            $output['status'] = true;
+			$output['status'] = true;
+			
+			// log
+			Yii::info(__METHOD__);
+
             return $output;
         }
 	}
@@ -176,17 +212,25 @@ class RequestController extends Controller
 					$requestAdrress->filter_id = $model->id;
 
 					if (!$requestAdrress->save()) {
-						return ["errors" => $requestAdrress->errors];
+						return [
+							"errors" => $requestAdrress->errors
+						];
 					}
 				}
 
-				return ["result" => true];
+				return [
+					"result" => true
+				];
 			} else {
-				return ["errors" => $model->errors];
+				return [
+					"errors" => $model->errors
+				];
 			}
         } else {
-            return ['error' => 'empty request'];
-    	    }
+            return [
+				'error' => 'empty request'
+			];
+    	}
 	}
 
 	/**
@@ -194,16 +238,20 @@ class RequestController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionUpdate($id)
+	public function actionUpdate($id): array
 	{
 		// $model = RequestObject::findByIdentity($id);
 		$model = Filter::findByIdentity($id);
 		$request = Yii::$app->request->post();
 		
         if ($model->load($request, '') && $model->update()) {
-            return ["result" => true];
+            return [
+				"result" => true
+			];
         } else {
-            return ["errors" => $model->errors];
+            return [
+				"errors" => $model->errors
+			];
         }
 	}
 
@@ -212,7 +260,7 @@ class RequestController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionView($id)
+	public function actionView($id): array
 	{
 		// $model = RequestObject::findByIdentity($id);
 		$model = Filter::findByIdentity($id);
@@ -220,7 +268,9 @@ class RequestController extends Controller
         if (!is_null($model)) {
             return $model;
         } else {
-            return ["result"=>false];
+            return [
+				"result"=>false
+			];
         }
 	}
 
@@ -231,7 +281,7 @@ class RequestController extends Controller
 	 * 
 	 * @return object
 	 */
-	private static function getAddress($searchText) {
+	private static function getAddress($searchText): object {
 		// Create query params for get info from API HERE maps
 		$param = http_build_query(array(
 			'apiKey' => Yii::$app->params['here_api_key'],

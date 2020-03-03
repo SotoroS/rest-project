@@ -15609,3 +15609,181 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1583185935.785
     'REQUEST_TIME' => 1583185935
 ]
+2020-03-03 18:00:05 [188.233.100.2][-][-][error][Error] Error: Class 'micro\controllers\AccessControl' not found in /www/iskakov.rest/htdocs/controllers/RequestController.php:33
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(733): micro\controllers\RequestController->behaviors()
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(603): yii\base\Component->ensureBehaviors()
+#2 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(276): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#3 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Controller.php(185): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#4 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#5 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('set-filter', Array)
+#6 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('request/set-fil...', Array)
+#7 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#8 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#9 {main}
+2020-03-03 18:00:05 [188.233.100.2][-][-][info][application] $_GET = []
+
+$_POST = [
+    'name' => 'kjdshgfds'
+    'description' => 'sdjfgjsd'
+    'price' => '467734'
+    'address' => 'Volgograd,st. 50-letya VLKSM, d.2'
+]
+
+$_FILES = [
+    'images' => [
+        'name' => [
+            0 => 'cakeislie.png'
+            1 => 'I0034.png'
+        ]
+        'type' => [
+            0 => 'image/png'
+            1 => 'image/png'
+        ]
+        'tmp_name' => [
+            0 => '/tmp/phpJs1zFx'
+            1 => '/tmp/phpiSAdiI'
+        ]
+        'error' => [
+            0 => 0
+            1 => 0
+        ]
+        'size' => [
+            0 => 76229
+            1 => 17810
+        ]
+    ]
+]
+
+$_COOKIE = [
+    '_csrf' => 'FsA6hNh9Vp77enwyqsra9DlWL8mBul2S'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '94886'
+    'HTTP_COOKIE' => '_csrf=FsA6hNh9Vp77enwyqsra9DlWL8mBul2S'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------041755925201223466408703'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '0ee8ea82-3203-4c10-a037-23c8269c22ff'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '2278'
+    'REMOTE_ADDR' => '188.233.100.2'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/request/set-filter'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '94886'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------041755925201223466408703'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583258405.7681
+    'REQUEST_TIME' => 1583258405
+]
+2020-03-03 18:00:41 [188.233.100.2][-][-][error][Error] Error: Class 'micro\controllers\VerbFilter' not found in /www/iskakov.rest/htdocs/controllers/RequestController.php:49
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(733): micro\controllers\RequestController->behaviors()
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(603): yii\base\Component->ensureBehaviors()
+#2 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(276): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#3 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Controller.php(185): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#4 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#5 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('set-filter', Array)
+#6 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('request/set-fil...', Array)
+#7 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#8 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#9 {main}
+2020-03-03 18:00:41 [188.233.100.2][-][-][info][application] $_GET = []
+
+$_POST = [
+    'name' => 'kjdshgfds'
+    'description' => 'sdjfgjsd'
+    'price' => '467734'
+    'address' => 'Volgograd,st. 50-letya VLKSM, d.2'
+]
+
+$_FILES = [
+    'images' => [
+        'name' => [
+            0 => 'cakeislie.png'
+            1 => 'I0034.png'
+        ]
+        'type' => [
+            0 => 'image/png'
+            1 => 'image/png'
+        ]
+        'tmp_name' => [
+            0 => '/tmp/phpj1P4Qf'
+            1 => '/tmp/phpqOhNn7'
+        ]
+        'error' => [
+            0 => 0
+            1 => 0
+        ]
+        'size' => [
+            0 => 76229
+            1 => 17810
+        ]
+    ]
+]
+
+$_COOKIE = [
+    '_csrf' => 'FsA6hNh9Vp77enwyqsra9DlWL8mBul2S'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '94886'
+    'HTTP_COOKIE' => '_csrf=FsA6hNh9Vp77enwyqsra9DlWL8mBul2S'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------211789670915228609654114'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => 'a96697fe-d273-492f-a20e-271c413825fb'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '2278'
+    'REMOTE_ADDR' => '188.233.100.2'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/request/set-filter'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '94886'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------211789670915228609654114'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583258441.4491
+    'REQUEST_TIME' => 1583258441
+]
