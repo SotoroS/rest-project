@@ -9,3 +9,5 @@ modules:
             url: https://nape.max.rest.fokin-team.ru/
             depends: PhpBrowser
             part: Json
+        - Yii2:
+            configFile: 'config.php'
