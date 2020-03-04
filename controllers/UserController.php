@@ -15,7 +15,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
-//use micro\models\User;
+use micro\models\User;
 use micro\models\CityArea;
 use micro\models\RentType;
 use micro\models\PropertyType;
@@ -26,7 +26,7 @@ use Facebook;
 use Google_Client;
 use Google_Service_Oauth2;
 use micro\models\City;
-
+ 
 /**
  * Class SiteController
  * @package micro\controllers
@@ -393,10 +393,6 @@ class UserController extends Controller
      */
     public function actionLoginFacebook(): array
     {
-        if(!session_id()) {
-            session_start();
-        }
- 
         $fb = new Facebook\Facebook([
             'app_id' => Yii::$app->params['facebook_client_id'],
             'app_secret' => Yii::$app->params['facebook_client_secret'],
@@ -460,11 +456,8 @@ class UserController extends Controller
                     'error' => $e->getMessage()
                 ];
             }
-        } else {
-            return [
-                "redirect_uri " => $loginUrl
-            ];
-        }
+        } 
+        return ["redirect_uri" => $loginUrl];
     }
     
     /**

@@ -57,7 +57,7 @@ class Region extends \yii\db\ActiveRecord
      * @return Region|null
      */
     public static function findByName($name) {
-        return static::find(['name' => $name])->one();
+        return static::findOne(['name' => $name]);
     }
 
     /**

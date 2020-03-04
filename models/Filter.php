@@ -39,7 +39,7 @@ class Filter extends \yii\db\ActiveRecord
 {
 
     public $addresses = [];
-
+    public $requestName;
     /**
      * {@inheritdoc}
      */
@@ -58,7 +58,7 @@ class Filter extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['pivot_lt', 'pivot_lg', 'radius'], 'number'],
             [['created_at', 'updated_at', 'addresses'], 'safe'],
-            [['rent_type', 'property_type', 'substring'], 'string', 'max' => 256],
+            [['rent_type', 'property_type', 'substring', 'requestName'], 'string', 'max' => 256],
             [['city_area_id'], 'exist', 'skipOnError' => true, 'targetClass' => CityArea::className(), 'targetAttribute' => ['city_area_id' => 'id']],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
             [['request_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestType::className(), 'targetAttribute' => ['request_type_id' => 'id']],

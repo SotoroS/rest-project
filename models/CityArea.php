@@ -57,10 +57,10 @@ class CityArea extends \yii\db\ActiveRecord
      * 
      * @param name
      * 
-     * @return Regions|null
+     * @return CityAreas|null
      */
     public static function findByName($name) {
-        return static::find(['name' => $name])->one();
+        return static::findOne(['name' => $name]);
     }
 
     /**
