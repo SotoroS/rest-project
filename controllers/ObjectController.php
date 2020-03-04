@@ -231,9 +231,9 @@ class ObjectController extends Controller
 	{
         $model = new EstateObject();
 		$request = Yii::$app->request;
-		
+
 		try {
-			if ($model->load($request->post(), '') && isset($request->post('address')) && isset($request->post('name')) && isset($request->post('description')) && isset($request->post('price'))) {
+			if ($model->load($request->post(), '') && !is_null($request->post('address')) && !is_null($request->post('name')) && !is_null($request->post('description')) && !is_null($request->post('price'))) {
 				$model->user_id = Yii::$app->user->identity->getId();
 
 				// Get address info by search address
