@@ -7,6 +7,8 @@ namespace micro\controllers;
 use Yii;
 use \Datetime;
 
+use yii\base\Exception;
+
 use yii\rest\Controller;
 use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
@@ -52,19 +54,19 @@ class UserController extends Controller
                     'roles' => ['@'],
                 ],
             ],
-            'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'login' => ['get'],
-					'signup-web' => ['post'],
-					'signup-mob' => ['post'],
-                    'get-areas' => ['get'],
-                    'verify' => ['get'],
-                    'update' => ['post'],
-                    'login-facebook' => ['get'],
-                    'login-google' => ['get'],
-				],
-			],
+        ];
+        $behaviors['verbs'] = [
+            'class' => VerbFilter::className(),
+			'actions' => [
+                'login' => ['post'],
+                'signup-web' => ['post'],
+                'signup-mob' => ['post'],
+                'get-areas' => ['get'],
+                'verify' => ['get'],
+                'update' => ['post'],
+                'login-facebook' => ['get'],
+                'login-google' => ['get'],
+            ],
         ];
             
             // Возвращает результаты экшенов в формате JSON  
@@ -100,9 +102,7 @@ class UserController extends Controller
             $fcmToken = $request->post('fcmToken');
 
             if (is_null($deviceType) || is_null($fcmToken)) {
-                return [
-                    'error' => 'Fields are not filled'
-                ];
+                throw new Exception('Fields are not filled');
             }
 
             // looking for a user by id, if not - create a new one
@@ -120,7 +120,7 @@ class UserController extends Controller
             $output['rent_types'] = RentType::find()->asArray()->all();
             $output['property_types'] = PropertyType::find()->asArray()->all();
 
-        } catch (\Throwable $e) {
+        } catch (Exception $e) {
 
             $output['status'] = false;
             $output['error'] = $e->getMessage();
@@ -128,7 +128,7 @@ class UserController extends Controller
             Yii::$app->response->statusCode = 500;
 
             // log
-            Yii::info("in catch (\Throwable)" ,__METHOD__);
+            Yii::info("in catch Exception" ,__METHOD__);
 
             return $output;
         }
@@ -149,97 +149,101 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionSignupWeb(): array
+    public function actionSignupWeb()//: array
     {
         $request = Yii::$app->request;
         $email = $request->post('email');
         $password = $request->post('password');
 
-        if (is_null($email) || is_null($password)) {
-            return [
-                'error' => 'Fields are not filled'
-            ];
-        }
-
-        $password = password_hash($password, PASSWORD_DEFAULT);
-        $signup_token = uniqid();
-
-        // Find user by email
-        $user = User::findOne(['email' => $email]);
-
-        // Registration user if not exist user
-        if(!$user) {
-            $model = new User();
-
-            $model->email = $email;
-            $model->password = $password;
-            $model->signup_token = $signup_token;
-            
-            if(!$model->validate() || !$model->save()) {
-                return [
-                    "errors" => $model->errors
-                ];
+        try {
+            if (is_null($email) || is_null($password)) {
+                throw new Exception('Fields are not filled');
             }
 
-            // Send email message for verify
-            $mail = new PHPMailer;
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            $signup_token = uniqid();
 
-            $mail->CharSet = "UTF-8";
+            // Find user by email
+            $user = User::findOne(['email' => $email]);
 
-            $mail->isSMTP();
-            $mail->Host = 'smtp.yandex.ru';
-            $mail->Port = 465;
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'ssl';
+            // Registration user if not exist user
+            if(!$user) {
+                $model = new User();
 
-            $mail->Username = 'arman.shukanov@fokin-team.ru';
-            $mail->Password = 'arman_shukanov';
+                $model->email = $email;
+                $model->password = $password;
+                $model->signup_token = $signup_token;
+                
+                if(!$model->validate() || !$model->save()) {
+                    throw new Exception($model->errors);
+                }
 
-            $mail->setFrom('arman.shukanov@fokin-team.ru');
-            $mail->addAddress($email);
-            $mail->Subject = 'Подтверждение аккаунта';
-            $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
+                // Send email message for verify
+                $mail = new PHPMailer;
 
-            $mail->isHTML(true);
+                $mail->CharSet = "UTF-8";
 
-            // log
-            Yii::info("User registration" ,__METHOD__);
+                $mail->isSMTP();
+                $mail->Host = 'smtp.yandex.ru';
+                $mail->Port = 465;
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'ssl';
 
+                $mail->Username = 'arman.shukanov@fokin-team.ru';
+                $mail->Password = 'arman_shukanov';
+
+                $mail->setFrom('arman.shukanov@fokin-team.ru');
+                $mail->addAddress($email);
+                $mail->Subject = 'Подтверждение аккаунта';
+                $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
+
+                $mail->isHTML(true);
+
+                // log
+                Yii::info("User registration" ,__METHOD__);
+
+                return [
+                    "mailSend" => $mail->send()
+                ];
+            } else {
+                // log
+                Yii::error("User exist" ,__METHOD__);
+
+                throw new Exception("User exist.");
+            }
+        } catch (Exception $e) {
             return [
-        	    "mailSend" => $mail->send()
-    	    ];
-        } else {
-            // log
-            Yii::error("User exist" ,__METHOD__);
-
-            return [
-        	    "error" => "User exist."
-    	    ];
+                'error' => $e->getMessage()
+            ];
         }
     }
 
     public function actionGetAreas(): array
     {
-        $output = [];
         try {
             $citiesArray = [];
             // print all cities and add them to the array
             $cities = City::find()->all();
+
+            if (is_null($cities)) {
+                throw new Exception('Cities Not Found');
+            }
+
             foreach ($cities as $city) {
                 $citiesArray[] = [
                     'name' => $city->name,
                     'id' => $city->id,
                 ];
             }
-            $output['data'] = $citiesArray;
-        } catch (\Exception $e) {
-            $output['error'] = $e->getMessage();
-
-        } finally {
             // log
             Yii::info("Get Areas" ,__METHOD__);
 
-            return $output;
+            return $citiesArray;
+        } catch (Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+
         }
     }
 
@@ -250,39 +254,45 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionVerify(): 
+    public function actionVerify(): array
     {
         $request = Yii::$app->request;
 
         $verification_code = $request->get('token');
-        $user = User::find()->where(['signup_token' => $verification_code])->one();
-        
-        if (!is_null($user)) {
-            $user->verified = 1;
 
-            if($user->update()) {
-                // log
-                Yii::info("User Verify Success" ,__METHOD__);
+        try {
+            if (is_null($verification_code)) {
+                throw new Exception('Request token not found');
+            }
+            $user = User::find()->where(['signup_token' => $verification_code])->one();
+            
+            if (!is_null($user)) {
+                $user->verified = 1;
 
-                return [
-            	    "result" => true,
-                ];
+                if($user->update()) {
+                    // log
+                    Yii::info("User Verify Success" ,__METHOD__);
+
+                    return [
+                        "result" => true,
+                    ];
+                } else {
+                    // log
+                    Yii::error("User Verify Failed (user->update())" ,__METHOD__);
+
+                    throw new Exception($user->errors);
+                }
             } else {
                 // log
-                Yii::error("User Verify Failed (user->update())" ,__METHOD__);
+                Yii::error("User by signup_token Not Found" ,__METHOD__);
 
-                return [
-                    "errors" => $user->errors
-                ];
+                throw new Exception("User by signup_token Not Found");
             }
-        } else {
-            // log
-            Yii::error("User by signup_token Not Found" ,__METHOD__);
-
+        } catch (Exception $e) {
             return [
-                "result" => false
+                'error' => $e->getMessage()
             ];
-    	}
+        }
     }
 
     /**
@@ -298,64 +308,61 @@ class UserController extends Controller
         // Checking for data availability
         $request = Yii::$app->request;
 
-        // Checking for email in the received data
-        if($request->post('email')) {
-            $email = $request->post('email');
-            $password = $request->post('password');
+        $email = $request->post('email');
+        $password = $request->post('password');
 
-            // Checking the presence of a user in the database
-            $user = User::findOne(['email' => $email]);
-            if(!is_null($user)) {
-                // Password verification
-                if (password_verify($password, $user->password)) {
-            	    if ($user->verified == 1) {
-                        $user->access_token = uniqid();
-                
-                        if ($user->update()) {
-                            // log
-                            Yii::info("User Login Success" ,__METHOD__);
+        $output = [];
+        try {
+            // Checking for email in the received data
+            if(!is_null($email) && !is_null($password)) {
+                // Checking the presence of a user in the database
+                $user = User::findOne(['email' => $email]);
+                if(!is_null($user)) {
+                    // Password verification
+                    if (password_verify($password, $user->password)) {
+                        if ($user->verified == 1) {
+                            $user->access_token = uniqid();
+                    
+                            if ($user->update()) {
+                                // log
+                                Yii::info("User Login Success" ,__METHOD__);
 
-                            return [
-                                "access_token" => $user->access_token
-                            ];
+                                return [
+                                    "access_token" => $user->access_token
+                                ];
+                            } else {
+                                // log
+                                Yii::error("Cann't generate new access token" ,__METHOD__);
+
+                                throw new Exception("Cann't generate new access token");
+                            }
                         } else {
                             // log
-                            Yii::error("Cann't generate new access token" ,__METHOD__);
+                            Yii::error("Confirm your account by clicking on the link in the mail" ,__METHOD__);
 
-                            return [
-                                "error" => "Cann't generate new access token"
-                            ];
+                            throw new Exception("Confirm your account by clicking on the link in the mail");
                         }
                     } else {
                         // log
-                        Yii::error("Confirm your account by clicking on the link in the mail" ,__METHOD__);
+                        Yii::error("password_verify() false" ,__METHOD__);
 
-                        return [
-                            "result" => "Confirm your account by clicking on the link in the mail"
-                        ];
+                        throw new Exception("password_verify() false");
                     }
                 } else {
                     // log
-                    Yii::error("password_verify() false" ,__METHOD__);
+                    Yii::error("User Not Found by email" ,__METHOD__);
 
-                    return [
-                        "result" => false
-                    ];
+                    throw new Exception("User Not Found by email");
                 }
             } else {
                 // log
-                Yii::error("User Not Found by email" ,__METHOD__);
+                Yii::error("Request is empty" ,__METHOD__);
 
-                return [
-                    "result"  => false
-                ];
+                throw new Exception("Request is empty Email or Password not found");
             }
-        } else {
-            // log
-            Yii::error("Reques is empty" ,__METHOD__);
-
+        } catch (Exception $e) {
             return [
-                "result" => false
+                'error'=>$e->getMessage()
             ];
         }
     }
@@ -388,7 +395,8 @@ class UserController extends Controller
         // Getting the authorization  code
         $code = Yii::$app->request->get('code');
 
-        if(!is_null($code)){        
+        if(!is_null($code)){   
+            // Try-catch error check  
             try {
                 // Getting array accessToken
                 $accessToken = $helper->getAccessToken();
@@ -414,9 +422,7 @@ class UserController extends Controller
                 	        "access_token" => $value
                         ];
                     } else {
-                        return [
-                            "result" => false
-                        ];
+                        throw new Exception($model->errors);
                     }
                 } else {
             	    $user->access_token = uniqid();
@@ -425,18 +431,23 @@ class UserController extends Controller
             		        "access_token" => $user->access_token
             		    ];
             	    } else {
-                        return [
-                            "errors" => $user->errors
-                        ];
+                        throw new Exception($user->errors);
             	    }
                 }
             } catch(Facebook\Exceptions\FacebookResponseException $e){
                 echo 'Graph returned an error: ' . $e->getMessage();
             } catch(Facebook\Exceptions\FacebookSDKException $e){
                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            }    
+            } catch(Exception $e) {
+                return [
+                    'error' => $e->getMessage()
+                ];
+            }
+        } else {
+            return [
+                "redirect_uri " => $loginUrl
+            ];
         }
-        return ["redirect_uri " => $loginUrl];
     }
     
     /**
@@ -465,48 +476,51 @@ class UserController extends Controller
         $code = $request->get('code');
         
         if(isset($code)) {
-            // Getting the token
-            $token = $g_client->fetchAccessTokenWithAuthCode($code);
-            $g_client->setAccessToken($token);
+            // Try-catch error check 
+            try {
+                // Getting the token
+                $token = $g_client->fetchAccessTokenWithAuthCode($code);
+                $g_client->setAccessToken($token);
 
-            // Getting user information
-            $oauth2 = new Google_Service_Oauth2($g_client);
+                // Getting user information
+                $oauth2 = new Google_Service_Oauth2($g_client);
 
-            $userInfo = $oauth2->userinfo->get();
-            $email = $userInfo->email;
+                $userInfo = $oauth2->userinfo->get();
+                $email = $userInfo->email;
 
-            $user = User::findOne(['email' => $email]);
+                $user = User::findOne(['email' => $email]);
 
-            // Check user with such email in database
+                // Check user with such email in database
 
-            if(is_null($user)) {
-                $model = new User();
+                if(is_null($user)) {
+                    $model = new User();
 
-                $model->email = $email;
-                $model->signup_token = uniqid();
-                $model->verified = 1;
-                $model->access_token = $token['access_token'];
-                
-                if ($model->save()) {
-                    return [
-                        "access_token" => $token['access_token']
-                    ];
+                    $model->email = $email;
+                    $model->signup_token = uniqid();
+                    $model->verified = 1;
+                    $model->access_token = $token['access_token'];
+                    
+                    if ($model->save()) {
+                        return [
+                            "access_token" => $token['access_token']
+                        ];
+                    } else {
+                        throw new Exception($model->errors);
+                    }
                 } else {
-                    return [
-                        "result" => false
-                    ];
+                    $user->access_token = uniqid();
+                    if ($user->update()) {
+                        return [
+                            "access_token" => $user->access_token
+                        ];
+                    } else {
+                        throw new Exception($user->errors);
+                    }
                 }
-            } else {
-                $user->access_token = uniqid();
-                if ($user->update()) {
-                    return [
-                        "access_token" => $user->access_token
-                    ];
-                } else {
-                    return [
-                        "errors" => $user->errors
-                    ];
-                }
+            } catch(Exception $e) {
+                return [
+                    'error' => $e->getMessage()
+                ];
             }
         } else {
             return [
@@ -529,29 +543,34 @@ class UserController extends Controller
         // Check authorized
         if (!Yii::$app->user->isGuest) {
             $user = User::find(Yii::$app->user->identity->id)->one();
-            if (!is_null($request->post("gender"))) {
-                $user->gender = $request->post("gender");
-            }
 
-            if (!is_null($request->post("phone"))) {
-                $user->phone = $request->post("phone");
-            }
+            try {
+                if (!is_null($request->post("gender"))) {
+                    $user->gender = $request->post("gender");
+                }
 
-            if (!is_null($request->post("email"))) {
-                $user->email = $request->post("email");
-            }
+                if (!is_null($request->post("phone"))) {
+                    $user->phone = $request->post("phone");
+                }
 
-            if (!is_null($request->post("age"))) {
-                $user->age = $request->post("age");
-            }
+                if (!is_null($request->post("email"))) {
+                    $user->email = $request->post("email");
+                }
 
-            if ($user->update()) {
+                if (!is_null($request->post("age"))) {
+                    $user->age = $request->post("age");
+                }
+
+                if ($user->update()) {
+                    return [
+                        "return" => true
+                    ];
+                } else {
+                    throw new Exception('Nothing to change');
+                }
+            } catch(Exception $e) {
                 return [
-            	    "return" => true
-            	];
-            } else {
-                return [
-                    "error" => 'Nothing to change'
+                    'error' => $e->getMessage()
                 ];
             }
         } else {

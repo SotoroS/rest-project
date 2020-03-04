@@ -6,6 +6,7 @@ namespace micro\controllers;
 
 use Yii;
 
+use yii\base\Exception;
 use yii\rest\Controller;
 use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
@@ -46,21 +47,22 @@ class RequestController extends Controller
                     'roles' => ['@'],
                 ],
 			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'set-filter'  => ['post'],
-					'filter-new'   => ['post'],
-					'update' => ['post'],
-					'view' => ['get'],
-				],
+		];
+		$behaviors['verbs'] = [
+			'class' => VerbFilter::className(),
+			'actions' => [
+				'set-filter'  => ['post'],
+				'filter-new'   => ['post'],
+				'update' => ['post'],
+				'view' => ['get'],
 			],
-        ];
+		];
 
 		// Возвращает результаты экшенов в формате JSON  
 		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
 		// OAuth 2.0
 		$behaviors['authenticator'] = [
+			'except' => ['set-filter'],
 			'class' => HttpBearerAuth::className()
 		];
 
@@ -157,80 +159,80 @@ class RequestController extends Controller
 		$request = Yii::$app->request->post();
 		$addressIds = [];
 
-		if ($model->load($request, '')) {
-			$model->user_id = Yii::$app->user->identity->id;
+		try {
+			if ($model->load($request, '')) {
+				$model->user_id = Yii::$app->user->identity->id;
 
 
-			// foreach ($model->addresses as $address) {
-				// Get address info by search address
+				// foreach ($model->addresses as $address) {
+					// Get address info by search address
 
-				$infoObject = static::getAddress($model->addresses);
+					$infoObject = static::getAddress($model->addresses);
 
-				// Find address by coordinates
-				$address = Address::findByCoordinates(
-					$infoObject->DisplayPosition->Latitude,
-					$infoObject->DisplayPosition->Longitude
-				);
-				// If address no exsist create new address
-				if (!is_null($address)) {
-					$address = new Address();
+					// Find address by coordinates
+					$address = Address::findByCoordinates(
+						$infoObject->DisplayPosition->Latitude,
+						$infoObject->DisplayPosition->Longitude
+					);
+					// If address no exsist create new address
+					if (!is_null($address)) {
+						$address = new Address();
 
-					$address->lt = $infoObject->DisplayPosition->Latitude;
-					$address->lg = $infoObject->DisplayPosition->Longitude;
+						$address->lt = $infoObject->DisplayPosition->Latitude;
+						$address->lg = $infoObject->DisplayPosition->Longitude;
 
-					$address->streetName = $infoObject->Address->Street;
-					$address->cityAreaName = $infoObject->Address->District;
-					$address->cityName = $infoObject->Address->City;
-					$address->regionName = $infoObject->Address->County;
+						$address->streetName = $infoObject->Address->Street;
+						$address->cityAreaName = $infoObject->Address->District;
+						$address->cityName = $infoObject->Address->City;
+						$address->regionName = $infoObject->Address->County;
 
-					return [$address->streetName,
-					 $address->cityAreaName,
-					 $address->cityName,
-					 $address->regionName];
-					// Save address & object
-					if ($address->save()) {
-						return $address;
+						return [$address->streetName,
+						$address->cityAreaName,
+						$address->cityName,
+						$address->regionName];
+						// Save address & object
+						if ($address->save()) {
+							return $address;
+							// Add id address after save in array od ids
+							array_push($addressIds, $address->id);
+						} else { // Return error if not save address
+							throw new Exception($address->errors);
+						}
+					} else { // if exist address model
 						// Add id address after save in array od ids
 						array_push($addressIds, $address->id);
-					} else { // Return error if not save address
-						return ["error" => $address->errors];
 					}
-				} else { // if exist address model
-					// Add id address after save in array od ids
-					array_push($addressIds, $address->id);
-				}
-				return $address;
-			// }
-	
-			if ($model->save()) {
-				// Create rows in request_address table
-				foreach ($addressIds as $addressId) {
-					// $requestAdrress = new RequestAddress();
-					$requestAdrress = new FilterAddress();
+					return $address;
+				// }
+		
+				if ($model->save()) {
+					// Create rows in request_address table
+					foreach ($addressIds as $addressId) {
+						// $requestAdrress = new RequestAddress();
+						$requestAdrress = new FilterAddress();
 
-					$requestAdrress->address_id = $addressId;
-					$requestAdrress->filter_id = $model->id;
+						$requestAdrress->address_id = $addressId;
+						$requestAdrress->filter_id = $model->id;
 
-					if (!$requestAdrress->save()) {
-						return [
-							"errors" => $requestAdrress->errors
-						];
+						if (!$requestAdrress->save()) {
+							throw new Exception($requestAdrress->errors);
+						}
 					}
-				}
 
-				return [
-					"result" => true
-				];
+					return [
+						"result" => true
+					];
+				} else {
+					throw new Exception($model->errors);
+				}
 			} else {
-				return [
-					"errors" => $model->errors
-				];
+				throw new Exception('empty request');
 			}
-        } else {
-            return [
-				'error' => 'empty request'
+		} catch(Exception $e) {
+			return [
+				'error' => $e->getMessage()
 			];
-    	}
+		}
 	}
 
 	/**
@@ -244,15 +246,19 @@ class RequestController extends Controller
 		$model = Filter::findByIdentity($id);
 		$request = Yii::$app->request->post();
 		
-        if ($model->load($request, '') && $model->update()) {
-            return [
-				"result" => true
+		try {
+			if ($model->load($request, '') && $model->update()) {
+				return [
+					"result" => true
+				];
+			} else {
+				throw new Exception($model->errors);
+			}
+		} catch(Exception $e) {
+			return [
+				'error' => $e->getMessage()
 			];
-        } else {
-            return [
-				"errors" => $model->errors
-			];
-        }
+		}
 	}
 
 	/**
@@ -265,13 +271,17 @@ class RequestController extends Controller
 		// $model = RequestObject::findByIdentity($id);
 		$model = Filter::findByIdentity($id);
 		
-        if (!is_null($model)) {
-            return $model;
-        } else {
-            return [
-				"result"=>false
+		try {
+			if (!is_null($model)) {
+				return $model;
+			} else {
+				throw new Exception("Filter Not Found");
+			}
+		} catch(Exception $e) {
+			return [
+				'error' => $e->getMessage()
 			];
-        }
+		}
 	}
 
 	/**
@@ -291,7 +301,17 @@ class RequestController extends Controller
 		// Get info about address
 		$searchResult = json_decode(file_get_contents("https://geocoder.ls.hereapi.com/6.2/geocode.json?$param"));
 		
-		return $searchResult->Response->View[0]->Result[0]->Location;
+		if (is_null($searchResult)) {
+			// Log
+			Yii::error("Get Address Failed" ,__METHOD__);
+
+			return false;
+		} else {
+			// Log
+			Yii::info("Get Address Success" ,__METHOD__);
+
+			return $searchResult->Response->View[0]->Result[0]->Location;
+		}
 	}
 
 	/**

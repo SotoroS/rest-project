@@ -9,6 +9,7 @@ use \Datetime;
 use Yii\db\Query;
 use Yii\web\UrlManager;
 
+use yii\base\Exception;
 use yii\rest\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -71,7 +72,7 @@ class ObjectController extends Controller
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
-            'except' => ['login'],
+            'except' => ['get-objects'],
             'class' => HttpBearerAuth::className()
         ];
 
@@ -231,156 +232,140 @@ class ObjectController extends Controller
         $model = new EstateObject();
 		$request = Yii::$app->request;
 		
-        if ($model->load($request->post(), '')) {
-    		$model->user_id = Yii::$app->user->identity->getId();
+		try {
+			if ($model->load($request->post(), '')) {
+				$model->user_id = Yii::$app->user->identity->getId();
 
-			// Get address info by search address
-			$infoObject = static::getAddress($request->post('address'));
+				// Get address info by search address
+				$infoObject = static::getAddress($request->post('address'));
 
-			// Check address
-			if ($infoObject == false) {
-				return [
-					'error' => 'Address Not Found'
-				];
-			}
-			
-			// Find address by coordinates 
-			$address = Address::findByCoordinates(
-				$infoObject->DisplayPosition->Latitude,
-				$infoObject->DisplayPosition->Longitude
-			);
-			
-			
+				// Check address
+				if ($infoObject == false) {
+					throw new Exception('Address Not Found');
+				}
+				
+				// Find address by coordinates 
+				$address = Address::findByCoordinates(
+					$infoObject->DisplayPosition->Latitude,
+					$infoObject->DisplayPosition->Longitude
+				);
+				
+				
 
-			// If address no exsist create new address
-			if (is_null($address)) {
-				$address = new Address();
+				// If address no exsist create new address
+				if (is_null($address)) {
+					$address = new Address();
 
-				$address->lt = $infoObject->DisplayPosition->Latitude;
-				$address->lg = $infoObject->DisplayPosition->Longitude;
+					$address->lt = $infoObject->DisplayPosition->Latitude;
+					$address->lg = $infoObject->DisplayPosition->Longitude;
 
-				$address->streetName = $infoObject->Address->Street;
-				$address->cityAreaName = $infoObject->Address->District;
-				$address->cityName = $infoObject->Address->City;
-				$address->regionName = $infoObject->Address->County;
+					$address->streetName = $infoObject->Address->Street;
+					$address->cityAreaName = $infoObject->Address->District;
+					$address->cityName = $infoObject->Address->City;
+					$address->regionName = $infoObject->Address->County;
 
-				// Save address & object
-				if ($address->save()) {
-					// Get nearby station info
-					$metroInfo = static::getStation($address->lt, $address->lg);
-					
-					// Create metro station
-					$metro = new Metro();
+					// Save address & object
+					if ($address->save()) {
+						// Get nearby station info
+						$metroInfo = static::getStation($address->lt, $address->lg);
+						
+						// Create metro station
+						$metro = new Metro();
 
-					$metro->name = $metroInfo->Res->Stations->Stn[0]->name;
+						$metro->name = $metroInfo->Res->Stations->Stn[0]->name;
 
-					// Save and link metro with object if no problem with save
-					if ($metro->save()) {
-						$model->metro_id = $metro->id;
+						// Save and link metro with object if no problem with save
+						if ($metro->save()) {
+							$model->metro_id = $metro->id;
+						}
+						
+						//$model->lt = $address->lt;
+						//$model->lg = $address->lg;
+
+						if (!$model->save()) {
+							// Log
+							Yii::error("Object Save Failed" ,__METHOD__);
+
+						 	throw new Exception($model->errors);
+						}
+					} else { // Return error if not save address
+						// Log
+						Yii::error("Address Save Failed" ,__METHOD__);
+
+						throw new Exception($address->errors);
 					}
+				} else { // if exist address model
+					// Link address to model
+					$model->address_id = $address->id;
 					
 					//$model->lt = $address->lt;
 					//$model->lg = $address->lg;
 
-					if ($model->save()) {
-						// Log
-						Yii::info("Object Save Success" ,__METHOD__);
-
-						return [
-							"id" => $model->id
-						];
-					} else {
+					if (!$model->save()) {
 						// Log
 						Yii::error("Object Save Failed" ,__METHOD__);
 
-						return [
-							"error" => $model->errors
-						];
+						throw new Exception($model->errors);
 					}
-				} else { // Return error if not save address
-					// Log
-					Yii::error("Address Save Failed" ,__METHOD__);
-
-					return [
-						"error" => $address->errors
-					];
 				}
-			} else { // if exist address model
-				// Link address to model
-				$model->address_id = $address->id;
-				
-				//$model->lt = $address->lt;
-				//$model->lg = $address->lg;
-
-				if ($model->save()) {
-					// Create images
-					$images = UploadedFile::getInstancesByName('images');
-					
-					//Add images
-					if (!empty($images)) {
-						//Директория для изображений
-						$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $model->id;
+				// Create images
+				$images = UploadedFile::getInstancesByName('images');
 						
-						//Если добавляеться первое изображение, то создаётся директория для изображений
-						if (!file_exists($dir)) {
-							FileHelper::createDirectory($dir);
-						}
-			
-						//Обработка каждого изображения
-						foreach ($images as $file) {
-							//Создание нового изображения
-							$image = new Image();
-			
-							//Запись данных изображения в объект image
-							$image->file = $file;
-			
-							//Путь к изображению
-							$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
-			
-							//Присвоение $path (путь к изображению) к атрибуту $image->path(string)
-							$image->path = $path;
-							$image->object_id = $model->id;
-
-							$image->position = 0;
-			
-							//Сохранение нового изображения в БД
-							if (!$image->save()) {
-								// log
-								Yii::error("Image cannot save" ,__METHOD__);
-
-								return [
-									'error'=>'Image cannot save'
-								];
-							}
-			
-							//Сохранение изображения в директроии $dir
-							$image->file->saveAs($image->path);
-						}
+				//Add images
+				if (!empty($images)) {
+					//Директория для изображений
+					$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $model->id;
+					
+					//Если добавляеться первое изображение, то создаётся директория для изображений
+					if (!file_exists($dir)) {
+						FileHelper::createDirectory($dir);
 					}
+		
+					//Обработка каждого изображения
+					foreach ($images as $file) {
+						//Создание нового изображения
+						$image = new Image();
+		
+						//Запись данных изображения в объект image
+						$image->file = $file;
+		
+						//Путь к изображению
+						$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+		
+						//Присвоение $path (путь к изображению) к атрибуту $image->path(string)
+						$image->path = $path;
+						$image->object_id = $model->id;
 
-					// Log
-					Yii::info("Object Save Success" ,__METHOD__);
+						$image->position = 0;
+		
+						//Сохранение нового изображения в БД
+						if (!$image->save()) {
+							// log
+							Yii::error("Image cannot save" ,__METHOD__);
 
-					return [
-						"id" => $model->id
-					];
-				} else {
-					// Log
-					Yii::error("Object Save Failed" ,__METHOD__);
-
-					return [
-						"error" => $model->errors
-					];
+							throw new Exception('Image cannot save');
+						}
+						//Сохранение изображения в директроии $dir
+						$image->file->saveAs($image->path);
+					}
 				}
-			}
-        } else {
-			// Log
-			Yii::error("Request is Empty" ,__METHOD__);
+				// Log
+				Yii::info("Object Save Success" ,__METHOD__);
 
-            return [
-				'error' => 'empty request'
+				return [
+					"id" => $model->id
+				];
+			} else {
+				// Log
+				Yii::error("Request is Empty" ,__METHOD__);
+
+				throw new Exception('empty request');
+			}
+		} catch(Exception $e) {
+			return [
+				'error' => $e->getMessage()
 			];
-        }
+		}
 	}
 
 	/**
@@ -394,120 +379,118 @@ class ObjectController extends Controller
 	 * 
 	 * @return array|bool
 	 */
-	public function actionUpdate($id)//: array
+	public function actionUpdate($id): array
 	{
 	    // $model = EstateObject::findByIdentity($id);
 		$model = EstateObject::findByIdentity($id);
-		if (!$model) {
-			// Log
-			Yii::error("Object Not Found", __METHOD__);
 
-			return [
-				'error' => "Object Not Found"
-			];
-		}
-		$request = Yii::$app->request->post();
+		try {
+			if (!$model) {
+				// Log
+				Yii::error("Object Not Found", __METHOD__);
 
-		
-		
-		// Images update
-		// Delete images
-		if (isset($request['image_paths_to_delete'])) {
-			foreach ($request['image_paths_to_delete'] as $url) {
-				$image = Image::findOne(['path'=>$url, 'object_id'=>$model->id]);
+				throw new Exception("Object Not Found");
+			}
 
-				if (!is_null($image)) {
-					FileHelper::removeDirectory($image->path);
+			$request = Yii::$app->request->post();
 
-					$image->delete();
+			// Images update
+			// Delete images
+			if (isset($request['image_paths_to_delete'])) {
+				foreach ($request['image_paths_to_delete'] as $url) {
+					$image = Image::findOne(['path'=>$url, 'object_id'=>$model->id]);
+
+					if (!is_null($image)) {
+						FileHelper::removeDirectory($image->path);
+
+						$image->delete();
+					}
 				}
 			}
-		}
 
-		// Load new images
-		$newImages = UploadedFile::getInstancesByName('images');
+			// Load new images
+			$newImages = UploadedFile::getInstancesByName('images');
+			
+			// Add new images
+			if (!empty($newImages)) {
+				// Directory for images
+				$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $id;
 		
-		// Add new images
-		if (!empty($newImages)) {
-			// Directory for images
-			$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $id;
-	
-			//Create Directory for images
-			if (!file_exists($dir)) {
-				FileHelper::createDirectory($dir);
+				//Create Directory for images
+				if (!file_exists($dir)) {
+					FileHelper::createDirectory($dir);
+				}
+				
+				// New images save
+				foreach ($newImages as $file) {
+					// Create new image
+					$image = new Image();
+
+					// Write data from file into $image->file
+					$image->file = $file;
+
+					// Image path 
+					$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+
+					$image->path = $path;
+					$image->object_id = $model->id;
+
+					$image->position = 0;
+
+					// Save image
+					if (!$image->save()) {
+						// log
+						Yii::error("Image cannot Save" ,__METHOD__);
+
+						throw new Exception($image->errors);
+					}
+
+					// Save image to path
+					$image->file->saveAs($image->path);
+				}
+			}
+			//Sorting Images
+			$images = Image::findAll(['object_id'=>$model->id]);
+			
+			if (!empty($images)) {
+				$count = 1;
+				foreach ($images as $i) {
+					$i->position = $count;
+					$i->update();
+					$count = $count + 1;
+				}
 			}
 			
-			// New images save
-			foreach ($newImages as $file) {
-				// Create new image
-				$image = new Image();
+			// Update at - time //Neet to setting TimeZone
+			$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
+			$model->updated_at = $dateTime->format('Y-m-d H:i:s');
 
-				// Write data from file into $image->file
-				$image->file = $file;
+			// Object update
+			if (!$model->load($request, '')) {
+				if (empty($newImages) && !isset($request['image_paths_to_delete'])) {
+					// Log
+					Yii::error("Object Load from request failed", __METHOD__);
 
-				// Image path 
-				$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
-
-				$image->path = $path;
-				$image->object_id = $model->id;
-
-				$image->position = 0;
-
-				// Save image
-				if (!$image->save()) {
-					// log
-					Yii::error("Image cannot Save" ,__METHOD__);
-
-					return [
-						'error'=>'Image cannot Save'
-					];
+					throw new Exception("Nothing Update");
 				}
-
-				// Save image to path
-				$image->file->saveAs($image->path);
 			}
-		}
-		//Sorting Images
-		$images = Image::findAll(['object_id'=>$model->id]);
-		
-		if (!empty($images)) {
-			$count = 1;
-			foreach ($images as $i) {
-				$i->position = $count;
-				$i->update();
-				$count = $count + 1;
-			}
-		}
-		
-		// Update at - time //Neet to setting TimeZone
-		$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
-		$model->updated_at = $dateTime->format('Y-m-d H:i:s');
 
-		// Object update
-		if (!$model->load($request, '')) {
-			if (!empty($newImages) && !isset($request['image_paths_to_delete'])) {
+			if ($model->update()) {
 				// Log
-				Yii::error("Object Load from request failed", __METHOD__);
+				Yii::info("Object Update Success",__METHOD__);
 
 				return [
-					'error' => "Nothing Update"
+					"result" => true
 				];
+			} else {
+				// Log
+				Yii::error("Object Update Failed",__METHOD__);
+
+				throw new Exception($model->errors);
 			}
-		}
-
-		if ($model->update()) {
-			// Log
-			Yii::info("Object Update Success",__METHOD__);
-
+		} catch(Exception $e) {
 			return [
-				"result" => true
-			];
-		} else {
-			// Log
-			Yii::error("Object Update Failed",__METHOD__);
-
-			return [
-				"error" => $model->errors
+				'error' => $e->getMessage()
 			];
 		}
 	}
@@ -517,7 +500,7 @@ class ObjectController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionView($id): object
+	public function actionView($id): object//ARRAY
 	{
 	    $model = EstateObject::findByIdentity($id);
 		
