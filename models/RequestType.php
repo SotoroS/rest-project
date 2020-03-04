@@ -14,6 +14,7 @@ use Yii;
  */
 class RequestType extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
@@ -27,7 +28,7 @@ class RequestType extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
+        return [ 
             [['name'], 'required'],
             [['name'], 'string', 'max' => 256],
         ];
@@ -42,6 +43,17 @@ class RequestType extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
         ];
+    }
+
+    /**
+     * Find region by name
+     * 
+     * @param name
+     * 
+     * @return RequestType|null
+     */
+    public static function findByName($name) {
+        return static::findOne(['name' => $name]);
     }
 
     /**

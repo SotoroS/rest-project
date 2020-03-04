@@ -78,6 +78,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function beforeValidate() 
     {
+        
         // Check exist needed variable value
         if (is_null($this->regionName) 
             || is_null($this->cityName)
@@ -98,7 +99,7 @@ class Address extends \yii\db\ActiveRecord
                 return ["error" => $region->errors];
             }
         }
-
+ 
         // Find exist City
         $city = City::findByName($this->cityName);
 
@@ -112,9 +113,11 @@ class Address extends \yii\db\ActiveRecord
                 return ["error" => $city->errors];
             }
         }
-
+        
         // Find exist City Area
         $cityArea = CityArea::findByName($this->cityAreaName);
+
+        
 
         if (is_null($cityArea)) {
             $cityArea = new CityArea();
