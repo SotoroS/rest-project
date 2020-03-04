@@ -4,6 +4,9 @@ class ObjectControllerCest
 {
     public function getObjectsViaApi(\ApiTester $I)
     {
+        // СНАЧАЛА НУЖНО СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ
+        // И ПОТОМ ИСПОЛЬЗОВАТЬ ЕГО ДАННЫЕ ДЛЯ ВХОДА
+
         //Вход, получение access_token и авторизация
         $I->amHttpAuthenticated('service_user', 'test1234');
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -24,6 +27,9 @@ class ObjectControllerCest
 
     public function newObjectViaApi(\ApiTester $I)
     {
+        // СНАЧАЛА НУЖНО СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ
+        // И ПОТОМ ИСПОЛЬЗОВАТЬ ЕГО ДАННЫЕ ДЛЯ ВХОДА
+
         $I->amHttpAuthenticated('service_user', 'test1234');
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -40,7 +46,7 @@ class ObjectControllerCest
         $I->amBearerAuthenticated($token);
         //
 
-        $I->sendPOST('/object/get-objects',[
+        $I->sendPOST('/object/new',[
         'address' => 'г.Волгоград, ул.50-летия ВЛКСМ',
         'name' => 'test',
         'description' => 'test',
@@ -48,12 +54,15 @@ class ObjectControllerCest
         ]);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType([
-        'data' => 'array',
+        'id' => 'integer',
         ]);
     }
 
     public function updateObjectViaApi(\ApiTester $I)
     {
+        // СНАЧАЛА НУЖНО СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ
+        // И ПОТОМ ИСПОЛЬЗОВАТЬ ЕГО ДАННЫЕ ДЛЯ ВХОДА
+
         $I->amHttpAuthenticated('service_user', 'test1234');
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -81,6 +90,9 @@ class ObjectControllerCest
 
     public function viewObjectViaApi(\ApiTester $I)
     {
+        // СНАЧАЛА НУЖНО СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ
+        // И ПОТОМ ИСПОЛЬЗОВАТЬ ЕГО ДАННЫЕ ДЛЯ ВХОДА
+
         $I->amHttpAuthenticated('service_user', 'test1234');
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -97,12 +109,12 @@ class ObjectControllerCest
         $I->amBearerAuthenticated($token);
         //
 
-        $I->sendGET('/object/view/5'); //ТУТ ДОЛЖЕН БЫТЬ ID КАКОГО-ТО ОБЪЕКТА, ЖЕЛАТЕЛЬНО НОВОСОЗДАННОГО
+        $I->sendGET('/object/view/2'); //ТУТ ДОЛЖЕН БЫТЬ ID КАКОГО-ТО ОБЪЕКТА, ЖЕЛАТЕЛЬНО НОВОСОЗДАННОГО
         $I->seeResponseIsJson();
 
         //Фильтр для даты в формате "гггг-мм-дд чч:мм:cc"
         Codeception\Util\JsonType::addCustomFilter('datetime', function($value) {
-            return preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/',$value,$matches);;
+            return preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/',$value,$matches);
         });
         //
 

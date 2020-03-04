@@ -27,43 +27,53 @@ class UserControllerCest
     {
         // $I->amHttpAuthenticated('service_user', 'test1234');
         // $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-        // $I->sendPOST('/user/signup-web',[
-        //     'email' => 'test11@gmail.com',
-        //     'password' => 'testpass111',
-        // ]);
-        // $mailer = $I->grabComponent('mailer');
-        // echo print_r($mailer,true);
-        // // $token = strstr($I->grabLastSentEmail(),'?token=');
-        // // $token = strstr($token,'">по ссылке</a>',true);
+        
+        //Работает
+        // //Получение токена с помощью регулярного выражения из текста письма.
+        // $mail = 'ASfasfasfz \\n?token=4573452341fgjs';
+        // preg_match('/token=[a-z0-9]{13}/',$mail,$matches);
+        // preg_match('/[a-z0-9]{13}/',$matches[0],$match);
+        // $token = $match[0];
+        //
 
-        // // $I->sendPOST('/user/verify',[
-        // //     'token' => $token,
-        // // ]);
-        // // $I->seeResponseIsJson();
-        // // $I->seeResponseContains('{"error":"User exist"}');
+        // $I->sendGET('/user/verify',[
+        //     'token' => $token,
+        // ]);
+        // //
+        // \Codeception\Util\Debug::debug($token);die();
+        // $token = strstr($I->grabLastSentEmail(),'?token=');
+        // $token = strstr($token,'">по ссылке</a>',true);
+
+        // $I->sendPOST('/user/verify',[
+        //     'token' => $token,
+        // ]);
+        // $I->seeResponseIsJson();
+        // $I->seeResponseContains('{"error":"User exist"}');
     }
     //
 
     public function getAreasViaApi(\ApiTester $I)
     {
-        $I->amHttpAuthenticated('service_user', 'test1234');
-        $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-        $I->sendGET('/user/get-areas',[
-          'token' => 'token'
-        ]);
+        $I->sendGET('/user/get-areas');
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType([
-            'data' => 'array',
+            'name' => 'string',
+            'id' => 'integer'
         ]);
     }
 
     public function verifyViaApi(\ApiTester $I)
     {
         // ПУСТО
+        // Чтобы покрыть этот Action тестами, нужно получить текст письма, отправляемого пользователю
+        // Жду пока перепишут на Yii2\Mailer.
     }
 
     public function loginViaApi(\ApiTester $I)
     {
+        // СНАЧАЛА НУЖНО СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ
+        // И ПОТОМ ИСПОЛЬЗОВАТЬ ЕГО ДАННЫЕ ДЛЯ ВХОДА
+
         $I->amHttpAuthenticated('service_user', 'test1234');
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
         $I->sendPOST('/user/login',[
@@ -80,40 +90,50 @@ class UserControllerCest
     //Необходимо подождать пока исправят пробел в ключе JSON, возвращаемом user/login-facebook
     public function loginFacebookViaApi(\ApiTester $I)
     {
-        //!!!Узнать как работает L O G I N через F A C E B O O K!!!
-
-        // $I->amHttpAuthenticated('service_user', 'test1234');
-        // $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-        // $I->sendPOST('/user/login-facebook',[
-        //
-        // ]);
-        // $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-        // $I->seeResponseIsJson();
-        // $I->seeResponseMatchesJsonType([
-        //
-        // ]);
+        $I->sendGET('/user/login-facebook');
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'redirect_uri' => 'string:url'
+        ]);
     }
     //
 
     public function loginGoogleViaApi(\ApiTester $I)
     {
-        //!!!Узнать как работает L O G I N через G O O G L E!!!
-
-        // $I->amHttpAuthenticated('service_user', 'test1234');
-        // $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-        // $I->sendPOST('/user/login-google',[
-        //
-        // ]);
-        // $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-        // $I->seeResponseIsJson();
-        // $I->seeResponseMatchesJsonType([
-        //  
-        // ]);
+        $I->sendGET('/user/login-google');
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'redirect_uri' => 'string:url'
+        ]);
     }
 
     //Нужно дописать
-    public function updateViaApi(\ApiTester $I)
-    {
-        // ПУСТО
-    }
+    // public function updateViaApi(\ApiTester $I)
+    // {
+    //     // СНАЧАЛА НУЖНО СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ
+    //     // И ПОТОМ ИСПОЛЬЗОВАТЬ ЕГО ДАННЫЕ ДЛЯ ВХОДА
+
+    //     $I->amHttpAuthenticated('service_user', 'test1234');
+    //     $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
+    //     //Вход, получение access_token и авторизация
+    //     $I->sendPOST('/user/login',[
+    //         'email' => 'nape.maxim@gmail.com',
+    //         'password' => '45678',
+    //     ]);
+    //     $response=$I->grabResponse();
+    //     $response=json_decode($response);
+    //     $token = $response->access_token;
+    //     $I->amBearerAuthenticated($token);
+    //     //
+    //     $I->sendPOST('/user/login',[
+    //         'gender' => 'F',
+    //         'phone' => '+79999999999',
+    //         'email' => 'nape.maxim@gmail.com',
+    //         'age' => '22'
+    //     ]);
+    //     $I->seeResponseIsJson();
+    //     $I->seeResponseMatchesJsonType([
+    //         'return' => 'boolean',
+    //     ]);
+    // }
 }
