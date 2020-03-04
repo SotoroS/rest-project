@@ -227,7 +227,7 @@ class ObjectController extends Controller
 	 * 
 	 * @return array|bool
 	 */
-	public function actionNew()//: array
+	public function actionNew(): array
 	{
         $model = new EstateObject();
 		$request = Yii::$app->request;
