@@ -15,7 +15,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
-//use micro\models\User;
+use micro\models\User;
 use micro\models\CityArea;
 use micro\models\RentType;
 use micro\models\PropertyType;

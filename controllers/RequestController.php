@@ -248,16 +248,22 @@ class RequestController extends Controller
 		$request = Yii::$app->request->post();
 		
 		try {
-			if ($model->load($request, '') && $model->update()) {
-				return [
-					"result" => true
-				];
-			} elseif (empty($request)) {
-				return [
-					'error'=>'Not all data entered'
-				];
+			if (!is_null($model)) {
+				if ($model->load($request, '') && $model->update()) {
+					return [
+						"result" => true
+					];
+				} elseif (empty($request)) {
+					return [
+						'error'=>'Not all data entered'
+					];
+				} else {
+					throw new Exception('Filter Update Failed');
+				}
 			} else {
-				throw new Exception('Filter Update Failed');
+				return [
+					'error'=>'Filter Not Found'
+				];
 			}
 		} catch(Exception $e) {
 			return [
