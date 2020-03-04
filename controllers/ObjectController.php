@@ -97,7 +97,7 @@ class ObjectController extends Controller
 			// get filter current user
             $filterObject = Filter::find()->where(['user_id' => $user->id])->one();
             if (is_null($filterObject)) {
-                throw new \Exception("filter not set");
+                throw new Exception("filter not set");
             }
 
 			$objectsQuery = EstateObject::find()
@@ -200,7 +200,7 @@ class ObjectController extends Controller
                 $user->save();
             }
 
-        } catch (\Throwable $e) {
+        } catch (Exception $e) {
             $this->_writeLog($e);
             $output['error'] = $e->getMessage();
         } finally {
@@ -233,7 +233,7 @@ class ObjectController extends Controller
 		$request = Yii::$app->request;
 		
 		try {
-			if ($model->load($request->post(), '')) {
+			if ($model->load($request->post(), '') && isset($request->post('address')) && isset($request->post('name')) && isset($request->post('description')) && isset($request->post('price'))) {
 				$model->user_id = Yii::$app->user->identity->getId();
 
 				// Get address info by search address
@@ -241,7 +241,9 @@ class ObjectController extends Controller
 
 				// Check address
 				if ($infoObject == false) {
-					throw new Exception('Address Not Found');
+					return [
+						'error'=>'Address Not Found'
+					];
 				}
 				
 				// Find address by coordinates 
@@ -284,15 +286,15 @@ class ObjectController extends Controller
 
 						if (!$model->save()) {
 							// Log
-							Yii::error("Object Save Failed" ,__METHOD__);
+							Yii::error("Object Save False" ,__METHOD__);
 
-						 	throw new Exception($model->errors);
+						 	throw new Exception('Object Save False');
 						}
 					} else { // Return error if not save address
 						// Log
 						Yii::error("Address Save Failed" ,__METHOD__);
 
-						throw new Exception($address->errors);
+						throw new Exception("Address Save False");
 					}
 				} else { // if exist address model
 					// Link address to model
@@ -303,9 +305,9 @@ class ObjectController extends Controller
 
 					if (!$model->save()) {
 						// Log
-						Yii::error("Object Save Failed" ,__METHOD__);
+						Yii::error("Object Save False" ,__METHOD__);
 
-						throw new Exception($model->errors);
+						throw new Exception("Object Save False");
 					}
 				}
 				// Create images
@@ -341,9 +343,9 @@ class ObjectController extends Controller
 						//Сохранение нового изображения в БД
 						if (!$image->save()) {
 							// log
-							Yii::error("Image cannot save" ,__METHOD__);
+							Yii::error("Image Save False" ,__METHOD__);
 
-							throw new Exception('Image cannot save');
+							throw new Exception('Image Save False');
 						}
 						//Сохранение изображения в директроии $dir
 						$image->file->saveAs($image->path);
@@ -357,9 +359,11 @@ class ObjectController extends Controller
 				];
 			} else {
 				// Log
-				Yii::error("Request is Empty" ,__METHOD__);
+				Yii::error("Not all data entered" ,__METHOD__);
 
-				throw new Exception('empty request');
+				return [
+					'error'=>'Not all data entered'
+				];
 			}
 		} catch(Exception $e) {
 			return [
@@ -389,7 +393,9 @@ class ObjectController extends Controller
 				// Log
 				Yii::error("Object Not Found", __METHOD__);
 
-				throw new Exception("Object Not Found");
+				return [
+					'error'=>"Object:$id Not Found"
+				];
 			}
 
 			$request = Yii::$app->request->post();
@@ -403,7 +409,9 @@ class ObjectController extends Controller
 					if (!is_null($image)) {
 						FileHelper::removeDirectory($image->path);
 
-						$image->delete();
+						if(!$image->delete()) {
+							throw new Exception("Image Delete Failed");
+						}
 					}
 				}
 			}
@@ -442,7 +450,7 @@ class ObjectController extends Controller
 						// log
 						Yii::error("Image cannot Save" ,__METHOD__);
 
-						throw new Exception($image->errors);
+						throw new Exception('Image Save Failed');
 					}
 
 					// Save image to path
@@ -471,7 +479,9 @@ class ObjectController extends Controller
 					// Log
 					Yii::error("Object Load from request failed", __METHOD__);
 
-					throw new Exception("Nothing Update");
+					return [
+						'error'=>"Nothing Update"
+					];
 				}
 			}
 
@@ -486,7 +496,7 @@ class ObjectController extends Controller
 				// Log
 				Yii::error("Object Update Failed",__METHOD__);
 
-				throw new Exception($model->errors);
+				throw new Exception('Object Update Failed');
 			}
 		} catch(Exception $e) {
 			return [
@@ -514,7 +524,7 @@ class ObjectController extends Controller
 				Yii::error("Object Not Found" ,__METHOD__);
 
         		return [
-					"result"=>false
+					"error"=>"Object:$id Not Found"
 				];
     	    }
 	}

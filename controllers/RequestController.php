@@ -196,7 +196,7 @@ class RequestController extends Controller
 							// Add id address after save in array od ids
 							array_push($addressIds, $address->id);
 						} else { // Return error if not save address
-							throw new Exception($address->errors);
+							throw new Exception('Address Save Failed');
 						}
 					} else { // if exist address model
 						// Add id address after save in array od ids
@@ -215,18 +215,19 @@ class RequestController extends Controller
 						$requestAdrress->filter_id = $model->id;
 
 						if (!$requestAdrress->save()) {
-							throw new Exception($requestAdrress->errors);
+							throw new Exception('FilterAddress Save Failed');
 						}
 					}
-
 					return [
 						"result" => true
 					];
 				} else {
-					throw new Exception($model->errors);
+					throw new Exception('Filter Save Failed');
 				}
 			} else {
-				throw new Exception('empty request');
+				return [
+					'error'=>'Not all data entered'
+				];
 			}
 		} catch(Exception $e) {
 			return [
@@ -251,8 +252,12 @@ class RequestController extends Controller
 				return [
 					"result" => true
 				];
+			} elseif (empty($request)) {
+				return [
+					'error'=>'Not all data entered'
+				];
 			} else {
-				throw new Exception($model->errors);
+				throw new Exception('Filter Update Failed');
 			}
 		} catch(Exception $e) {
 			return [
@@ -275,7 +280,9 @@ class RequestController extends Controller
 			if (!is_null($model)) {
 				return $model;
 			} else {
-				throw new Exception("Filter Not Found");
+				return [
+					'error'=>"Filter Not Found"
+				];
 			}
 		} catch(Exception $e) {
 			return [

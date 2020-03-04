@@ -15,7 +15,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
-use micro\models\User;
+//use micro\models\User;
 use micro\models\CityArea;
 use micro\models\RentType;
 use micro\models\PropertyType;
@@ -102,7 +102,9 @@ class UserController extends Controller
             $fcmToken = $request->post('fcmToken');
 
             if (is_null($deviceType) || is_null($fcmToken)) {
-                throw new Exception('Fields are not filled');
+                return [
+                    'error'=>'Fields are not filled'
+                ];
             }
 
             // looking for a user by id, if not - create a new one
@@ -128,7 +130,7 @@ class UserController extends Controller
             Yii::$app->response->statusCode = 500;
 
             // log
-            Yii::info("in catch Exception" ,__METHOD__);
+            Yii::info("Exception" ,__METHOD__);
 
             return $output;
         }
@@ -157,7 +159,9 @@ class UserController extends Controller
 
         try {
             if (is_null($email) || is_null($password)) {
-                throw new Exception('Fields are not filled');
+                return [
+                    'error'=>'Fields are not filled'
+                ];
             }
 
             $password = password_hash($password, PASSWORD_DEFAULT);
@@ -175,7 +179,7 @@ class UserController extends Controller
                 $model->signup_token = $signup_token;
                 
                 if(!$model->validate() || !$model->save()) {
-                    throw new Exception($model->errors);
+                    throw new Exception('User Save False');
                 }
 
                 // Send email message for verify
@@ -209,7 +213,9 @@ class UserController extends Controller
                 // log
                 Yii::error("User exist" ,__METHOD__);
 
-                throw new Exception("User exist.");
+                return [
+                    'error'=>"User exist."
+                ];
             }
         } catch (Exception $e) {
             return [
@@ -226,7 +232,9 @@ class UserController extends Controller
             $cities = City::find()->all();
 
             if (is_null($cities)) {
-                throw new Exception('Cities Not Found');
+                return [
+                    'error'=>'Cities Not Found'
+                ];
             }
 
             foreach ($cities as $city) {
@@ -262,7 +270,9 @@ class UserController extends Controller
 
         try {
             if (is_null($verification_code)) {
-                throw new Exception('Request token not found');
+                return [
+                    'error'=>'Request token not found'
+                ];
             }
             $user = User::find()->where(['signup_token' => $verification_code])->one();
             
@@ -278,9 +288,9 @@ class UserController extends Controller
                     ];
                 } else {
                     // log
-                    Yii::error("User Verify Failed (user->update())" ,__METHOD__);
+                    Yii::error("User Update Failed" ,__METHOD__);
 
-                    throw new Exception($user->errors);
+                    throw new Exception("User Update Failed");
                 }
             } else {
                 // log
@@ -311,7 +321,6 @@ class UserController extends Controller
         $email = $request->post('email');
         $password = $request->post('password');
 
-        $output = [];
         try {
             // Checking for email in the received data
             if(!is_null($email) && !is_null($password)) {
@@ -322,7 +331,7 @@ class UserController extends Controller
                     if (password_verify($password, $user->password)) {
                         if ($user->verified == 1) {
                             $user->access_token = uniqid();
-                    
+                            
                             if ($user->update()) {
                                 // log
                                 Yii::info("User Login Success" ,__METHOD__);
@@ -340,25 +349,33 @@ class UserController extends Controller
                             // log
                             Yii::error("Confirm your account by clicking on the link in the mail" ,__METHOD__);
 
-                            throw new Exception("Confirm your account by clicking on the link in the mail");
+                            return [
+                                'error'=>"Confirm your account by clicking on the link in the mail"
+                            ];
                         }
                     } else {
                         // log
                         Yii::error("password_verify() false" ,__METHOD__);
 
-                        throw new Exception("password_verify() false");
+                        return [
+                            'error'=>"Wrong Password"
+                        ];
                     }
                 } else {
                     // log
                     Yii::error("User Not Found by email" ,__METHOD__);
 
-                    throw new Exception("User Not Found by email");
+                    return [
+                        'error'=>"User Not Found by email"
+                    ];
                 }
             } else {
                 // log
                 Yii::error("Request is empty" ,__METHOD__);
 
-                throw new Exception("Request is empty Email or Password not found");
+                return [
+                    'error'=>"Request is empty Email or Password not found"
+                ];
             }
         } catch (Exception $e) {
             return [
@@ -505,7 +522,7 @@ class UserController extends Controller
                             "access_token" => $token['access_token']
                         ];
                     } else {
-                        throw new Exception($model->errors);
+                        throw new Exception('User Save Failed');
                     }
                 } else {
                     $user->access_token = uniqid();
@@ -514,7 +531,7 @@ class UserController extends Controller
                             "access_token" => $user->access_token
                         ];
                     } else {
-                        throw new Exception($user->errors);
+                        throw new Exception('User Update Failed');
                     }
                 }
             } catch(Exception $e) {
@@ -545,6 +562,7 @@ class UserController extends Controller
             $user = User::find(Yii::$app->user->identity->id)->one();
 
             try {
+                
                 if (!is_null($request->post("gender"))) {
                     $user->gender = $request->post("gender");
                 }
@@ -560,13 +578,17 @@ class UserController extends Controller
                 if (!is_null($request->post("age"))) {
                     $user->age = $request->post("age");
                 }
-
+                
                 if ($user->update()) {
                     return [
-                        "return" => true
+                        "result" => true
+                    ];
+                } elseif (is_null($request->post("age")) && is_null($request->post("email")) && is_null($request->post("phone")) && is_null($request->post("gender"))) {
+                    return [
+                        'error' => 'Nothing to Change'
                     ];
                 } else {
-                    throw new Exception('Nothing to change');
+                    throw new Exception('User Update False');
                 }
             } catch(Exception $e) {
                 return [
