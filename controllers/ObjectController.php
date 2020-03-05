@@ -186,7 +186,7 @@ class ObjectController extends Controller
 				}
 				// search phone
 				$phones = Phone::find()
-					->select('path')
+					->select('path') 
 					->where("object_id = $singleObjectId") 
 					->toArray()
 					->all();
@@ -208,7 +208,7 @@ class ObjectController extends Controller
             }
 
 
-        } catch (Exception $e) {
+        } catch (Exception $e) { 
 			$output['error'] = $e->getMessage();
         } finally {
             $output['data'] = $objects;

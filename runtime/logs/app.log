@@ -15787,3 +15787,3516 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1583258441.4491
     'REQUEST_TIME' => 1583258441
 ]
+2020-03-04 22:17:38 [93.74.103.218][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/auth/AuthMethod.php:93
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/auth/AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/ActionFilter.php(77): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#3 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#4 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(276): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#5 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Controller.php(185): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#6 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('new', Array)
+#8 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('object/new', Array)
+#9 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#10 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#11 {main}
+2020-03-04 22:17:38 [93.74.103.218][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_ym_uid' => '1580987887717702604'
+    '_ym_d' => '1580987887'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_COOKIE' => '_ym_uid=1580987887717702604; _ym_d=1580987887'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,uk;q=0.6'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_SEC_FETCH_MODE' => 'navigate'
+    'HTTP_SEC_FETCH_SITE' => 'none'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+    'HTTP_SEC_FETCH_DEST' => 'document'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '49830'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583360258.3966
+    'REQUEST_TIME' => 1583360258
+]
+2020-03-04 22:17:39 [93.74.103.218][-][-][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "favicon.ico". in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php:537
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('favicon.ico', Array)
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php:115
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2020-03-04 22:17:39 [93.74.103.218][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_ym_uid' => '1580987887717702604'
+    '_ym_d' => '1580987887'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_COOKIE' => '_ym_uid=1580987887717702604; _ym_d=1580987887'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,uk;q=0.6'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_REFERER' => 'https://iskakov.rest.fokin-team.ru/object/new'
+    'HTTP_SEC_FETCH_MODE' => 'no-cors'
+    'HTTP_SEC_FETCH_SITE' => 'same-origin'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_SEC_FETCH_DEST' => 'image'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '49830'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/favicon.ico'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583360259.0498
+    'REQUEST_TIME' => 1583360259
+]
+2020-03-04 22:17:48 [93.74.103.218][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/auth/AuthMethod.php:93
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/auth/AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/ActionFilter.php(77): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#3 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#4 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(276): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#5 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Controller.php(185): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#6 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('update', Array)
+#8 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('object/update', Array)
+#9 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#10 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#11 {main}
+2020-03-04 22:17:48 [93.74.103.218][-][-][info][application] $_GET = [
+    'id' => '1'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_ym_uid' => '1580987887717702604'
+    '_ym_d' => '1580987887'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_COOKIE' => '_ym_uid=1580987887717702604; _ym_d=1580987887'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,uk;q=0.6'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_SEC_FETCH_MODE' => 'navigate'
+    'HTTP_SEC_FETCH_SITE' => 'none'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+    'HTTP_SEC_FETCH_DEST' => 'document'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '49830'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/update/1'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583360268.2351
+    'REQUEST_TIME' => 1583360268
+]
+2020-03-05 04:55:05 [18.202.167.220][-][-][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "". in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php:537
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('', Array)
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php:115
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2020-03-05 04:55:05 [18.202.167.220][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'close'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko; compatible; BuiltWith/1.0; +http://builtwith.com/biup) Chrome/74.0.3729.131 Safari/537.36'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '57666'
+    'REMOTE_ADDR' => '18.202.167.220'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583384105.4364
+    'REQUEST_TIME' => 1583384105
+]
+2020-03-05 10:36:28 [93.74.103.218][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:36:28 [93.74.103.218][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:36:28 [93.74.103.218][-][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:36:28 [93.74.103.218][-][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e4a6f4466bd9'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:36:28 [93.74.103.218][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/auth/AuthMethod.php:93
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/auth/HttpHeaderAuth.php(65): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/auth/AuthMethod.php(59): yii\filters\auth\HttpHeaderAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#2 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/ActionFilter.php(77): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(276): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Controller.php(185): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('new', Array)
+#9 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('object/new', Array)
+#10 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#12 {main}
+2020-03-05 10:36:28 [93.74.103.218][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '456'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '7b185804-a425-4103-a356-4ca999bc1912'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50959'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '456'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404588.8014
+    'REQUEST_TIME' => 1583404588
+]
+2020-03-05 10:38:30 [93.74.103.218][-][-][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: user/create in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php:128
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('create', Array)
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('user/create', Array)
+#2 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php:115
+Stack trace:
+#0 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2020-03-05 10:38:30 [93.74.103.218][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '67'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '9cdf54c4-cee9-4fb6-b70b-056c9d80fe7b'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50972'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/user/create'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '67'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404710.4435
+    'REQUEST_TIME' => 1583404710
+]
+2020-03-05 10:38:47 [93.74.103.218][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2020-03-05 10:38:47 [93.74.103.218][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:171
+2020-03-05 10:38:47 [93.74.103.218][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:171
+2020-03-05 10:38:47 [93.74.103.218][-][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:171
+2020-03-05 10:38:47 [93.74.103.218][-][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `email`='illia.pushnov@gmail.com'
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:171
+2020-03-05 10:38:47 [93.74.103.218][-][-][info][yii\db\Command::execute] INSERT INTO `users` (`email`, `password`, `signup_token`) VALUES ('illia.pushnov@gmail.com', '$2y$10$s5yP/mmt.idICz65Ajqhy.mInOUniM6elDNCkQ9TSB37trP59Jf0q', '5e60d6b77a685')
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:181
+2020-03-05 10:38:47 [93.74.103.218][-][-][info][micro\controllers\UserController::actionSignupWeb] User registration
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:207
+2020-03-05 10:38:47 [93.74.103.218][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '67'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '70c405c8-98a7-41b8-b218-7f8c96d520bd'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50972'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/user/signup-web'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '67'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404727.4039
+    'REQUEST_TIME' => 1583404727
+]
+2020-03-05 10:39:06 [93.74.103.218][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2020-03-05 10:39:06 [93.74.103.218][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:277
+2020-03-05 10:39:06 [93.74.103.218][-][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `signup_token`='5e60d6b77a685'
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:277
+2020-03-05 10:39:06 [93.74.103.218][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:277
+2020-03-05 10:39:06 [93.74.103.218][-][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:277
+2020-03-05 10:39:06 [93.74.103.218][-][-][info][yii\db\Command::execute] UPDATE `users` SET `verified`=1 WHERE `id`=16
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:282
+2020-03-05 10:39:06 [93.74.103.218][-][-][info][micro\controllers\UserController::actionVerify] User Verify Success
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:284
+2020-03-05 10:39:06 [93.74.103.218][-][-][info][application] $_GET = [
+    'token' => '5e60d6b77a685'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_ym_uid' => '1580987887717702604'
+    '_ym_d' => '1580987887'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_COOKIE' => '_ym_uid=1580987887717702604; _ym_d=1580987887'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,uk;q=0.6'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_SEC_FETCH_USER' => '?1'
+    'HTTP_SEC_FETCH_MODE' => 'navigate'
+    'HTTP_SEC_FETCH_SITE' => 'none'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50988'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/user/verify?token=5e60d6b77a685'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'token=5e60d6b77a685'
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404746.8432
+    'REQUEST_TIME' => 1583404746
+]
+2020-03-05 10:39:27 [93.74.103.218][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2020-03-05 10:39:27 [93.74.103.218][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:328
+2020-03-05 10:39:27 [93.74.103.218][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:328
+2020-03-05 10:39:27 [93.74.103.218][-][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:328
+2020-03-05 10:39:27 [93.74.103.218][-][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `email`='illia.pushnov@gmail.com'
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:328
+2020-03-05 10:39:27 [93.74.103.218][-][-][info][yii\db\Command::execute] UPDATE `users` SET `access_token`='5e60d6df5de1d' WHERE `id`=16
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:335
+2020-03-05 10:39:27 [93.74.103.218][-][-][info][micro\controllers\UserController::actionLogin] User Login Success
+    in /www/iskakov.rest/htdocs/controllers/UserController.php:337
+2020-03-05 10:39:27 [93.74.103.218][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '67'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '8c219624-00bd-40a1-b424-cd2bb15071ae'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50972'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/user/login'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '67'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404767.2749
+    'REQUEST_TIME' => 1583404767
+]
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:557
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:240
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.71315) AND (`lg`=44.49136)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `regions`
+    in /www/iskakov.rest/htdocs/models/Region.php:60
+    in /www/iskakov.rest/htdocs/models/Address.php:91
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'regions' AND kcu.table_name = 'regions'
+    in /www/iskakov.rest/htdocs/models/Region.php:60
+    in /www/iskakov.rest/htdocs/models/Address.php:91
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `regions` WHERE `name`='Волгоградская область'
+    in /www/iskakov.rest/htdocs/models/Region.php:60
+    in /www/iskakov.rest/htdocs/models/Address.php:91
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `cities`
+    in /www/iskakov.rest/htdocs/models/City.php:64
+    in /www/iskakov.rest/htdocs/models/Address.php:104
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'cities' AND kcu.table_name = 'cities'
+    in /www/iskakov.rest/htdocs/models/City.php:64
+    in /www/iskakov.rest/htdocs/models/Address.php:104
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `cities` WHERE `name`='Волгоград'
+    in /www/iskakov.rest/htdocs/models/City.php:64
+    in /www/iskakov.rest/htdocs/models/Address.php:104
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `city_areas`
+    in /www/iskakov.rest/htdocs/models/CityArea.php:63
+    in /www/iskakov.rest/htdocs/models/Address.php:118
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'city_areas' AND kcu.table_name = 'city_areas'
+    in /www/iskakov.rest/htdocs/models/CityArea.php:63
+    in /www/iskakov.rest/htdocs/models/Address.php:118
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `city_areas` WHERE `name`='Дзержинский район'
+    in /www/iskakov.rest/htdocs/models/CityArea.php:63
+    in /www/iskakov.rest/htdocs/models/Address.php:118
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `cities` WHERE `cities`.`id`=1)
+    in /www/iskakov.rest/htdocs/models/Address.php:128
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `city_areas` (`name`, `city_id`) VALUES ('Дзержинский район', 1)
+    in /www/iskakov.rest/htdocs/models/Address.php:128
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `streets`
+    in /www/iskakov.rest/htdocs/models/Street.php:60
+    in /www/iskakov.rest/htdocs/models/Address.php:134
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'streets' AND kcu.table_name = 'streets'
+    in /www/iskakov.rest/htdocs/models/Street.php:60
+    in /www/iskakov.rest/htdocs/models/Address.php:134
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `streets` WHERE `name`='Ангарская улица'
+    in /www/iskakov.rest/htdocs/models/Street.php:60
+    in /www/iskakov.rest/htdocs/models/Address.php:134
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `city_areas` WHERE `city_areas`.`id`=5)
+    in /www/iskakov.rest/htdocs/models/Address.php:142
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `streets` (`name`, `city_area_id`) VALUES ('Ангарская улица', 5)
+    in /www/iskakov.rest/htdocs/models/Address.php:142
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `city_areas` WHERE `city_areas`.`id`=5)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `cities` WHERE `cities`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `regions` WHERE `regions`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `streets` WHERE `streets`.`id`=5)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:55 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `address` (`lt`, `lg`, `region_id`, `city_id`, `city_area_id`, `street_id`) VALUES ('48.71315', '44.49136', 1, 1, 5, 5)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:270
+2020-03-05 10:39:56 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getStation] Get Station
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:585
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:272
+2020-03-05 10:39:56 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `metro`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:277
+2020-03-05 10:39:56 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'metro' AND kcu.table_name = 'metro'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:277
+2020-03-05 10:39:56 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `metro` (`name`) VALUES ('Областная больница')
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:280
+2020-03-05 10:39:56 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `building_type` WHERE `building_type`.`id`=3)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:287
+2020-03-05 10:39:56 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `metro` WHERE `metro`.`id`=3)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:287
+2020-03-05 10:39:56 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:287
+2020-03-05 10:39:56 [93.74.103.218][16][-][info][yii\db\ActiveRecord::insert] Model not inserted due to validation error.
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:287
+2020-03-05 10:39:56 [93.74.103.218][16][-][error][micro\controllers\ObjectController::actionNew] Object Save False
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:289
+2020-03-05 10:39:54 [93.74.103.218][16][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '454'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '6c80781e-7f31-4883-b3ee-df19d2b655dd'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50972'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '454'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404794.4527
+    'REQUEST_TIME' => 1583404794
+]
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:557
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:240
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.71315) AND (`lg`=44.49136)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `building_type` WHERE `building_type`.`id`=3)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `rent_type` WHERE `rent_type`.`id`=3)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][yii\db\ActiveRecord::insert] Model not inserted due to validation error.
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:11 [93.74.103.218][16][-][error][micro\controllers\ObjectController::actionNew] Object Save False
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:308
+2020-03-05 10:41:11 [93.74.103.218][16][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'DZWFCWiiYoTnv3493WTVu6B0oW7oLGVj'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => '_csrf=DZWFCWiiYoTnv3493WTVu6B0oW7oLGVj'
+    'HTTP_CONTENT_LENGTH' => '484'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => 'ca3c9b87-beb9-44da-adaa-64d5e45e6ed9'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50990'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '484'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404871.2282
+    'REQUEST_TIME' => 1583404871
+]
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:557
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:240
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.71315) AND (`lg`=44.49136)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `building_type` WHERE `building_type`.`id`=3)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `property_type` WHERE `property_type`.`id`=3)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `rent_type` WHERE `rent_type`.`id`=3)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][yii\db\ActiveRecord::insert] Model not inserted due to validation error.
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:23 [93.74.103.218][16][-][error][micro\controllers\ObjectController::actionNew] Object Save False
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:308
+2020-03-05 10:41:23 [93.74.103.218][16][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'LCsd8i4fzwYMXQNbFq7xyxT1vIvQKoR-'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => '_csrf=LCsd8i4fzwYMXQNbFq7xyxT1vIvQKoR-'
+    'HTTP_CONTENT_LENGTH' => '481'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '4610cbce-9395-45d8-b9ba-968167430d62'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50990'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '481'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404883.2658
+    'REQUEST_TIME' => 1583404883
+]
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:557
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:240
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.71315) AND (`lg`=44.49136)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `building_type` WHERE `building_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `property_type` WHERE `property_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `rent_type` WHERE `rent_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `objects` (`name`, `description`, `price`, `building_type_id`, `rent_type`, `property_type`, `url`, `user_id`, `address_id`) VALUES ('testor3', 'testor3', '1000', 1, 1, 1, 'http://google.com', 16, 12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionNew] Object Save Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 10:41:28 [93.74.103.218][16][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => '-N8jAUBqftZj8iMFhbXPzLn-k5q3i5Rj'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => '_csrf=-N8jAUBqftZj8iMFhbXPzLn-k5q3i5Rj'
+    'HTTP_CONTENT_LENGTH' => '481'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '633ada04-e738-458c-9b55-99d62bc80235'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '50990'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '481'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404888.5061
+    'REQUEST_TIME' => 1583404888
+]
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:557
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:240
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.71315) AND (`lg`=44.49136)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `building_type` WHERE `building_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `property_type` WHERE `property_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `rent_type` WHERE `rent_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `objects` (`name`, `description`, `price`, `building_type_id`, `rent_type`, `property_type`, `url`, `data`, `user_id`, `address_id`) VALUES ('testor3', 'testor3', '1000', 1, 1, 1, 'http://google.com', 'test', 16, 12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:41 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionNew] Object Save Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 10:42:40 [93.74.103.218][16][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'Pl3EyKzp55dMC0rJNanhGyMe0gUN8Yik'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => '_csrf=Pl3EyKzp55dMC0rJNanhGyMe0gUN8Yik'
+    'HTTP_CONTENT_LENGTH' => '467'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => 'a76a4436-400f-4d5f-8864-46afb023ed41'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51000'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '467'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404960.493
+    'REQUEST_TIME' => 1583404960
+]
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:557
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:240
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.71315) AND (`lg`=44.49136)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `building_type` WHERE `building_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `property_type` WHERE `property_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `rent_type` WHERE `rent_type`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `objects` (`name`, `description`, `price`, `building_type_id`, `rent_type`, `property_type`, `url`, `data`, `user_id`, `address_id`) VALUES ('testor3', 'testor3', '1000', 1, 1, 1, 'http://google.com', 'test', 16, 12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:42:44 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionNew] Object Save Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 10:42:43 [93.74.103.218][16][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'FXdS7WH19k0qAukkbOmSsHy2TDg8Qxnu'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => '_csrf=FXdS7WH19k0qAukkbOmSsHy2TDg8Qxnu'
+    'HTTP_CONTENT_LENGTH' => '484'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '4a814f34-f5d9-43b0-84bf-4edff73c5c05'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'application/json'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51000'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '484'
+    'CONTENT_TYPE' => 'application/json'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583404963.7288
+    'REQUEST_TIME' => 1583404963
+]
+2020-03-05 10:46:32 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:46:32 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:46:32 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:46:32 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:46:32 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:46:32 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:46:32 [93.74.103.218][16][-][error][micro\controllers\ObjectController::actionNew] Not all data entered
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:362
+2020-03-05 10:46:32 [93.74.103.218][16][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = [
+    'images' => [
+        'name' => 'test.jpg'
+        'type' => 'image/jpeg'
+        'tmp_name' => '/tmp/phpAZud3Z'
+        'error' => 0
+        'size' => 100086
+    ]
+]
+
+$_COOKIE = [
+    '_csrf' => 'dMQHJUWVv0q-uQ1P38KQWEmgAVPBnkl3'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '100294'
+    'HTTP_COOKIE' => '_csrf=dMQHJUWVv0q-uQ1P38KQWEmgAVPBnkl3'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '7e573e5c-b61e-4df0-887b-1bc171e2cafd'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------315580987237858747731800'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51247'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '100294'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------315580987237858747731800'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405192.932
+    'REQUEST_TIME' => 1583405192
+]
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:557
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:240
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.71315) AND (`lg`=44.49136)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `property_type` WHERE `property_type`.`id`='1')
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `rent_type` WHERE `rent_type`.`id`='1')
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `objects` (`name`, `description`, `price`, `building_type_id`, `rent_type`, `property_type`, `url`, `data`, `user_id`, `address_id`) VALUES ('testor5', 'testor5', '100000', NULL, 1, 1, 'http://google.com', 'test', 16, 12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `images`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:338
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'images' AND kcu.table_name = 'images'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:338
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=37)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:344
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `images` (`path`, `object_id`, `position`) VALUES ('/www/iskakov.rest/htdocs/web/uploads/37/5e60d9642fdd2.jpg', 37, 0)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:344
+2020-03-05 10:50:12 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionNew] Object Save Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 10:50:11 [93.74.103.218][16][-][info][application] $_GET = [
+    'images' => ''
+]
+
+$_POST = [
+    'name' => 'testor5'
+    'description' => 'testor5'
+    'price' => '100000'
+    'address' => '400081, Россия, Волгоградская область, г. Волгоград, Дзержинский район,ул. Ангарская, 11'
+    'building_type_id' => ''
+    'rent_type' => '1'
+    'property_type' => '1'
+    'internal' => '1'
+    'url' => 'http://google.com'
+    'level' => '1'
+    'rooms' => '1'
+    'square' => '20'
+    'kitchen_square' => '5'
+    'agent' => '1'
+    'data' => 'test'
+]
+
+$_FILES = [
+    'images' => [
+        'name' => 'test2.jpg'
+        'type' => 'image/jpeg'
+        'tmp_name' => '/tmp/phpOx9M86'
+        'error' => 0
+        'size' => 34783
+    ]
+]
+
+$_COOKIE = [
+    '_csrf' => 'sG4MaYhf-CZLSzVxREC7T6piI1r406jl'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '137031'
+    'HTTP_COOKIE' => '_csrf=sG4MaYhf-CZLSzVxREC7T6piI1r406jl'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '7af4d62b-c8cf-4962-a1b2-7bd4ce430134'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------357223579286983945797753'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new?images=&images='
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '137031'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------357223579286983945797753'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'images=&images='
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405411.5994
+    'REQUEST_TIME' => 1583405411
+]
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:236
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:557
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:240
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.71315) AND (`lg`=44.49136)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:252
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `property_type` WHERE `property_type`.`id`='1')
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `rent_type` WHERE `rent_type`.`id`='1')
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `objects` (`name`, `description`, `price`, `building_type_id`, `rent_type`, `property_type`, `url`, `data`, `user_id`, `address_id`) VALUES ('testor5', 'testor5', '100000', NULL, 1, 1, 'http://google.com', 'test', 16, 12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:306
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `images`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:338
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'images' AND kcu.table_name = 'images'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:338
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=38)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:344
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `images` (`path`, `object_id`, `position`) VALUES ('/www/iskakov.rest/htdocs/web/uploads/38/5e60d96980d2f.jpg', 38, 0)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:344
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionNew] Object Save Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 10:50:17 [93.74.103.218][16][-][info][application] $_GET = []
+
+$_POST = [
+    'name' => 'testor5'
+    'description' => 'testor5'
+    'price' => '100000'
+    'address' => '400081, Россия, Волгоградская область, г. Волгоград, Дзержинский район,ул. Ангарская, 11'
+    'building_type_id' => ''
+    'rent_type' => '1'
+    'property_type' => '1'
+    'internal' => '1'
+    'url' => 'http://google.com'
+    'level' => '1'
+    'rooms' => '1'
+    'square' => '20'
+    'kitchen_square' => '5'
+    'agent' => '1'
+    'data' => 'test'
+]
+
+$_FILES = [
+    'images' => [
+        'name' => 'test2.jpg'
+        'type' => 'image/jpeg'
+        'tmp_name' => '/tmp/phpgy89A1'
+        'error' => 0
+        'size' => 34783
+    ]
+]
+
+$_COOKIE = [
+    '_csrf' => 'oRldIzyjIHnLIR7lqa9VqlZm3I1pIU8q'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '137031'
+    'HTTP_COOKIE' => '_csrf=oRldIzyjIHnLIR7lqa9VqlZm3I1pIU8q'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '51f89c95-df90-41a1-a38f-6aaea58d1ab3'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------985556875897063669365286'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '137031'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------985556875897063669365286'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405417.0787
+    'REQUEST_TIME' => 1583405417
+]
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='37'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionView] Object Found Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:519
+2020-03-05 10:50:51 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '37'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => '1bRX10A1LmDvfgoy8iBpHE8uPrQyDQ6X'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '137031'
+    'HTTP_COOKIE' => '_csrf=1bRX10A1LmDvfgoy8iBpHE8uPrQyDQ6X'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '58dada64-34f6-4d5f-8978-4974935484d9'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------429743342668741118425233'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/37'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '137031'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------429743342668741118425233'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405451.1323
+    'REQUEST_TIME' => 1583405451
+]
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='37'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionView] Object Found Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:519
+2020-03-05 10:50:58 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '37'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'ihDCzUyVQo9XG2UoW8Q7g-Lzlop5vZ0t'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2093'
+    'HTTP_COOKIE' => '_csrf=ihDCzUyVQo9XG2UoW8Q7g-Lzlop5vZ0t'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '4aa3dc1c-8a7b-413e-8dd4-6e4eab212a67'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------880155659653143733902070'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/37'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2093'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------880155659653143733902070'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405458.4013
+    'REQUEST_TIME' => 1583405458
+]
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='37'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionView] Object Found Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:519
+2020-03-05 10:51:09 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '37'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'lod0Dmylwfaw2H_aFqRyK6CGZPN9DNxz'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2093'
+    'HTTP_COOKIE' => '_csrf=lod0Dmylwfaw2H_aFqRyK6CGZPN9DNxz'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '9211a09c-93a5-4e7f-8b6c-3068f9e1b483'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------983498605959407849456359'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/37'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2093'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------983498605959407849456359'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405469.4696
+    'REQUEST_TIME' => 1583405469
+]
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='37'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionView] Object Found Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:519
+2020-03-05 10:51:18 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '37'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'Wm88eCjYrs1liGooxjICZ4d1EbN8nH5j'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2093'
+    'HTTP_COOKIE' => '_csrf=Wm88eCjYrs1liGooxjICZ4d1EbN8nH5j'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '2a0ae19e-0beb-4274-a9af-62b7f3a0ab72'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------957192707820533699932999'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/37'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2093'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------957192707820533699932999'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405478.4291
+    'REQUEST_TIME' => 1583405478
+]
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='38'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionView] Object Found Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:519
+2020-03-05 10:51:34 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '38'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'ntr8uNWagVTuzbg74YYHM6yT4uNWnpAP'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2093'
+    'HTTP_COOKIE' => '_csrf=ntr8uNWagVTuzbg74YYHM6yT4uNWnpAP'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => 'a2fc85dc-eb73-427c-96ce-043259c9fe6f'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------694704190744794071884097'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/38'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2093'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------694704190744794071884097'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405494.1789
+    'REQUEST_TIME' => 1583405494
+]
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='38'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionView] Object Found Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:519
+2020-03-05 10:51:39 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '38'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'FpN1IzpVkbQyEmMPT0nGYfWYWzb2hdFd'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2093'
+    'HTTP_COOKIE' => '_csrf=FpN1IzpVkbQyEmMPT0nGYfWYWzb2hdFd'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '76a33add-e957-4ad4-baaf-bbe262ce492a'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------137264027525006429079447'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/38'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2093'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------137264027525006429079447'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405499.1609
+    'REQUEST_TIME' => 1583405499
+]
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:389
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:389
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='38'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:389
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `images`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:443
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'images' AND kcu.table_name = 'images'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:443
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=38)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:449
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::execute] INSERT INTO `images` (`path`, `object_id`, `position`) VALUES ('/www/iskakov.rest/htdocs/web/uploads/38/5e60d9f27edbd.jpg', 38, 0)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:449
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `images` WHERE `object_id`=38
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:461
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=38)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:467
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::execute] UPDATE `images` SET `position`=1 WHERE `id`=12
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:467
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=38)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:467
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::execute] UPDATE `images` SET `position`=2 WHERE `id`=13
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:467
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=12)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:488
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `city_areas` WHERE `city_areas`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:488
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `cities` WHERE `cities`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:488
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `metro` WHERE `metro`.`id`=1)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:488
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `property_type` WHERE `property_type`.`id`='1')
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:488
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `rent_type` WHERE `rent_type`.`id`='1')
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:488
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=16)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:488
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][yii\db\Command::execute] UPDATE `objects` SET `building_type_id`=NULL, `rent_type`=1, `property_type`=1, `name`='testor57', `description`='testor57', `price`='100000', `url`='http://google.com/sdfsdf', `updated_at`='2020-03-05 12:52:34' WHERE `id`=38
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:488
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionUpdate] Object Update Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:490
+2020-03-05 10:52:34 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '38'
+]
+
+$_POST = [
+    'name' => 'testor57'
+    'description' => 'testor57'
+    'price' => '100000'
+    'address' => '400081, Россия, Волгоградская область, г. Волгоград, Дзержинский район,ул. Ангарская, 10'
+    'building_type_id' => ''
+    'rent_type' => '1'
+    'property_type' => '1'
+    'internal' => '1'
+    'url' => 'http://google.com/sdfsdf'
+    'level' => '2'
+    'rooms' => '2'
+    'square' => '2025'
+    'kitchen_square' => '51'
+    'agent' => '0'
+    'data' => 'test'
+]
+
+$_FILES = [
+    'images' => [
+        'name' => 'test2.jpg'
+        'type' => 'image/jpeg'
+        'tmp_name' => '/tmp/phpMiM83t'
+        'error' => 0
+        'size' => 34783
+    ]
+]
+
+$_COOKIE = [
+    '_csrf' => '7vjAjDtJnM2iq2wxj_SesVHIJQQzEl7N'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '137043'
+    'HTTP_COOKIE' => '_csrf=7vjAjDtJnM2iq2wxj_SesVHIJQQzEl7N'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '1533ea48-81bb-4a43-8607-3e7da6d2680a'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------529778414944394990471920'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/update/38'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '137043'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------529778414944394990471920'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405554.4772
+    'REQUEST_TIME' => 1583405554
+]
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='38'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionView] Object Found Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:519
+2020-03-05 10:52:40 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '38'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => '5W-YiSEAc4JNWV8Y3AybF4piRxOiGTFo'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2093'
+    'HTTP_COOKIE' => '_csrf=5W-YiSEAc4JNWV8Y3AybF4piRxOiGTFo'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '36c66d34-29bc-41f1-8182-0721c83a6f2a'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------444235365874403656099078'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/38'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2093'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------444235365874403656099078'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405560.9503
+    'REQUEST_TIME' => 1583405560
+]
+2020-03-05 10:53:14 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:14 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:14 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:14 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:14 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:53:14 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:53:14 [93.74.103.218][16][-][error][yii\web\HttpException:405] yii\web\MethodNotAllowedHttpException: Method Not Allowed. This URL can only handle the following request methods: GET. in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/VerbFilter.php:105
+Stack trace:
+#0 [internal function]: yii\filters\VerbFilter->beforeAction(Object(yii\base\ActionEvent))
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#2 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(276): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#3 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Controller.php(185): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#4 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#5 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('view', Array)
+#6 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('object/view', Array)
+#7 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#8 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#9 {main}
+2020-03-05 10:53:14 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '38'
+]
+
+$_POST = [
+    'name' => 'testor5'
+    'description' => 'testor5'
+    'price' => '100000'
+    'address' => '400081, Россия, Волгоградская область, г. Волгоград, Дзержинский район,ул. Ангарская, 11'
+    'building_type_id' => ''
+    'rent_type' => '1'
+    'property_type' => '1'
+    'internal' => '1'
+    'url' => 'http://google.com'
+    'level' => '1'
+    'rooms' => '1'
+    'square' => '20'
+    'kitchen_square' => '5'
+    'agent' => '1'
+    'data' => 'test'
+]
+
+$_FILES = [
+    'images' => [
+        'name' => ''
+        'type' => ''
+        'tmp_name' => ''
+        'error' => 4
+        'size' => 0
+    ]
+]
+
+$_COOKIE = [
+    '_csrf' => '9AwLzCKzFb8U5JXbsM7GefaSc3eBYiZY'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2093'
+    'HTTP_COOKIE' => '_csrf=9AwLzCKzFb8U5JXbsM7GefaSc3eBYiZY'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '21eeb2ad-03c9-4098-86ac-e0a20f81e70f'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------724298666399891752344788'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/38'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2093'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------724298666399891752344788'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405594.8806
+    'REQUEST_TIME' => 1583405594
+]
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `objects` WHERE `id`='38'
+    in /www/iskakov.rest/htdocs/models/EstateObject.php:105
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:515
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][micro\controllers\ObjectController::actionView] Object Found Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:519
+2020-03-05 10:53:18 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '38'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => 'X_tFAKslmh9OSyvXRFbqbalq394YJvtr'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2093'
+    'HTTP_COOKIE' => '_csrf=X_tFAKslmh9OSyvXRFbqbalq394YJvtr'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => 'e57b307e-a1ea-4c0e-9b67-74aa20e6c840'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------360651319958923477043584'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/view/38'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2093'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------360651319958923477043584'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405598.4276
+    'REQUEST_TIME' => 1583405598
+]
+2020-03-05 10:53:27 [93.74.103.218][16][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:27 [93.74.103.218][16][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:27 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:27 [93.74.103.218][16][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e60d6df5de1d'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 10:53:27 [93.74.103.218][16][-][info][yii\web\User::login] User '16' logged in from 93.74.103.218. Session not enabled.
+2020-03-05 10:53:27 [93.74.103.218][16][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 10:53:27 [93.74.103.218][16][-][error][yii\web\HttpException:405] yii\web\MethodNotAllowedHttpException: Method Not Allowed. This URL can only handle the following request methods: POST. in /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/filters/VerbFilter.php:105
+Stack trace:
+#0 [internal function]: yii\filters\VerbFilter->beforeAction(Object(yii\base\ActionEvent))
+#1 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#2 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(276): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#3 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Controller.php(185): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#4 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#5 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('update', Array)
+#6 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('object/update', Array)
+#7 /www/iskakov.rest/htdocs/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#8 /www/iskakov.rest/htdocs/web/index.php(17): yii\base\Application->run()
+#9 {main}
+2020-03-05 10:53:27 [93.74.103.218][16][-][info][application] $_GET = [
+    'id' => '38'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_csrf' => '6pUHdGkPrGcvwDKisSu6L31HiytA4xJS'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '2105'
+    'HTTP_COOKIE' => '_csrf=6pUHdGkPrGcvwDKisSu6L31HiytA4xJS'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '3d880f75-629c-40d5-9430-00aaa5c8bc22'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------592454454461247265676780'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '51366'
+    'REMOTE_ADDR' => '93.74.103.218'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/update/38'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '2105'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------592454454461247265676780'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583405607.0457
+    'REQUEST_TIME' => 1583405607
+]
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e5f93e771f1e'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\web\User::login] User '7' logged in from 188.233.116.94. Session not enabled.
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:233
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:233
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:554
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:237
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:249
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:249
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.70579) AND (`lg`=44.51025)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:249
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=15)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:303
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=7)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:303
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::execute] INSERT INTO `objects` (`name`, `description`, `price`, `user_id`, `address_id`) VALUES ('name', 'description', '45000', 7, 15)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:303
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `images`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:335
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'images' AND kcu.table_name = 'images'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:335
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=41)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:341
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::execute] INSERT INTO `images` (`path`, `object_id`, `position`) VALUES ('/uploads/41/5e61073a9bb2d.png', 41, 0)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:341
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=41)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:341
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][yii\db\Command::execute] INSERT INTO `images` (`path`, `object_id`, `position`) VALUES ('/uploads/41/5e61073a9c973.png', 41, 0)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:341
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][micro\controllers\ObjectController::actionNew] Object Save Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:352
+2020-03-05 14:05:46 [188.233.116.94][7][-][info][application] $_GET = []
+
+$_POST = [
+    'name' => 'name'
+    'description' => 'description'
+    'price' => '45000'
+    'address' => 'Volgograd st. mira 2'
+]
+
+$_FILES = [
+    'images' => [
+        'name' => [
+            0 => 'cakeislie.png'
+            1 => 'I0034.png'
+        ]
+        'type' => [
+            0 => 'image/png'
+            1 => 'image/png'
+        ]
+        'tmp_name' => [
+            0 => '/tmp/phpR8DI3b'
+            1 => '/tmp/phpJeCoA4'
+        ]
+        'error' => [
+            0 => 0
+            1 => 0
+        ]
+        'size' => [
+            0 => 76229
+            1 => 17810
+        ]
+    ]
+]
+
+$_COOKIE = []
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '94870'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------732095848656614066781198'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => '2e91cd07-c3fd-4f2a-818c-848e48557daa'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '23899'
+    'REMOTE_ADDR' => '188.233.116.94'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '94870'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------732095848656614066781198'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583417146.1068
+    'REQUEST_TIME' => 1583417146
+]
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `users`
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=rest
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'users' AND kcu.table_name = 'users'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT * FROM `users` WHERE `access_token`='5e5f93e771f1e'
+    in /www/iskakov.rest/htdocs/models/User.php:92
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][yii\web\User::login] User '7' logged in from 188.233.116.94. Session not enabled.
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: "user" does not implement RateLimitInterface.
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `objects`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:233
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'objects' AND kcu.table_name = 'objects'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:233
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][micro\controllers\ObjectController::getAddress] Get Address Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:567
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:237
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `address`
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:249
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'address' AND kcu.table_name = 'address'
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:249
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT * FROM `address` WHERE (`lt`=48.70579) AND (`lg`=44.51025)
+    in /www/iskakov.rest/htdocs/models/Address.php:162
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:249
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `address` WHERE `address`.`id`=15)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:303
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `users` WHERE `users`.`id`=7)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:303
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::execute] INSERT INTO `objects` (`name`, `description`, `price`, `user_id`, `address_id`) VALUES ('name', 'description', '45000', 7, 15)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:303
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `images`
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:335
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'images' AND kcu.table_name = 'images'
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:335
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=42)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:341
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::execute] INSERT INTO `images` (`path`, `object_id`, `position`) VALUES ('/uploads/42/5e6108206026f.png', 42, 0)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:341
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT * FROM `images` WHERE `object_id`=42
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:349
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=42)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::execute] UPDATE `images` SET `position`=1 WHERE `id`=16
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=42)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:341
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::execute] INSERT INTO `images` (`path`, `object_id`, `position`) VALUES ('/uploads/42/5e61082061af8.png', 42, 0)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:341
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT * FROM `images` WHERE `object_id`=42
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:349
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=42)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::query] SELECT EXISTS(SELECT * FROM `objects` WHERE `objects`.`id`=42)
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][yii\db\Command::execute] UPDATE `images` SET `position`=2 WHERE `id`=17
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:355
+2020-03-05 14:09:36 [188.233.116.94][7][-][info][micro\controllers\ObjectController::actionNew] Object Save Success
+    in /www/iskakov.rest/htdocs/controllers/ObjectController.php:365
+2020-03-05 14:09:35 [188.233.116.94][7][-][info][application] $_GET = []
+
+$_POST = [
+    'name' => 'name'
+    'description' => 'description'
+    'price' => '45000'
+    'address' => 'Volgograd st. mira 2'
+]
+
+$_FILES = [
+    'images' => [
+        'name' => [
+            0 => 'cakeislie.png'
+            1 => 'I0034.png'
+        ]
+        'type' => [
+            0 => 'image/png'
+            1 => 'image/png'
+        ]
+        'tmp_name' => [
+            0 => '/tmp/phpRUh86H'
+            1 => '/tmp/php1cBkxt'
+        ]
+        'error' => [
+            0 => 0
+            1 => 0
+        ]
+        'size' => [
+            0 => 76229
+            1 => 17810
+        ]
+    ]
+]
+
+$_COOKIE = [
+    '_csrf' => '7ujRaN0HzAKDWmTFmNd8zW7XZcql-k8x'
+]
+
+$_SERVER = [
+    'USER' => 'nginx'
+    'HOME' => '/var/lib/nginx'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '94870'
+    'HTTP_COOKIE' => '_csrf=7ujRaN0HzAKDWmTFmNd8zW7XZcql-k8x'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------359426559825915864797538'
+    'HTTP_HOST' => 'iskakov.rest.fokin-team.ru'
+    'HTTP_POSTMAN_TOKEN' => 'fbf367f5-c6fb-408b-9251-7f430b5650f4'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_USER_AGENT' => 'PostmanRuntime/7.22.0'
+    'HTTP_AUTHORIZATION' => '***'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'iskakov.rest.fokin-team.ru'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '45.86.180.151'
+    'REMOTE_PORT' => '23427'
+    'REMOTE_ADDR' => '188.233.116.94'
+    'SERVER_SOFTWARE' => 'nginx/1.16.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/www/iskakov.rest/htdocs/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/object/new'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => '94870'
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=--------------------------359426559825915864797538'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => '/www/iskakov.rest/htdocs/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1583417375.6563
+    'REQUEST_TIME' => 1583417375
+]
