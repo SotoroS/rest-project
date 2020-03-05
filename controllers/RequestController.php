@@ -6,6 +6,7 @@ namespace micro\controllers;
 
 use Yii;
 
+use yii\base\Exception;
 use yii\rest\Controller;
 use yii\web\Response;
 use yii\filters\auth\HttpBearerAuth;
