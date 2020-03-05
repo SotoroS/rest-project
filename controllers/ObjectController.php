@@ -530,14 +530,20 @@ class ObjectController extends Controller
 		
     	    if (!is_null($model)) {
 				$images = Image::find()
-					->select('path')
 					->where(['object_id'=>$id])
+					->orderBy('position')
 					->all();
-
+				
+				$paths = [];
+				foreach ($images as $image) {
+					$paths[] = $image->path;
+				}
+				
 				$output = [
 					'object'=>$model,
-					'images'=>$images,
+					'images'=>$paths,
 				];
+				
 				// Log
 				Yii::info("Object Found Success" ,__METHOD__);
 
