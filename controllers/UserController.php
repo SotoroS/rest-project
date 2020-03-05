@@ -182,12 +182,12 @@ class UserController extends Controller
                     throw new Exception('User Save False');
                 }
 
-                $message = Yii::$app->mailer->compose();
+                $message = Yii::$app->mailer->compose(); 
 
                 $message->setFrom('arman.shukanov@fokin-team.ru')
                 ->setTo($email)
                 ->setSubject('Подтверждение аккаунта')
-                ->setHtmlBody('Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>');
+                ->setHtmlBody('Для подтверждения перейдите   <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token.'">по ссылке</a>');
 
                 return [
                     "mailSend" => $message->send()

@@ -65,8 +65,16 @@ return [
 			],
 		],
 		'mailer' => [
-			'class' => 'yii\swiftmailer\Mailer',
-		],
+		    'class' => 'yii\swiftmailer\Mailer',
+		      'transport' => [
+		           'class' => 'Swift_SmtpTransport',
+		            'host' => 'smtp.yandex.ru',
+			    'username' => 'arman.shukanov@fokin-team.ru',
+                           'password' => 'arman_shukanov',
+                           'port' => '465',
+                            'encryption' => 'ssl',
+                    ],
+                ],
 		'address' => [
 			'class' => 'micro\components\AddressComponent',
 		],
