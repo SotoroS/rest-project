@@ -87,8 +87,7 @@ class ObjectController extends Controller
 	 * @return array
 	 * 
 	 */
-
-	public function actionGetObjects()//: array
+	public function actionGetObjects(): array
     {
 		$output = [];
 		$objects = [];
@@ -211,8 +210,6 @@ class ObjectController extends Controller
         } catch (Exception $e) {
 			$output['error'] = $e->getMessage();
         } finally {
-            $output['data'] = $objects;
-
 			// Log
 			Yii::info("GetObjects Output" ,__METHOD__);
 
@@ -340,7 +337,7 @@ class ObjectController extends Controller
 						$image->file = $file;
 		
 						//Путь к изображению
-						$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+						$path = '/' .'uploads/' . $model->id . '/' . uniqid() . '.' . $image->file->extension;
 		
 						//Присвоение $path (путь к изображению) к атрибуту $image->path(string)
 						$image->path = $path;
@@ -355,8 +352,21 @@ class ObjectController extends Controller
 
 							throw new Exception('Image Save False');
 						}
+
+						//Sorting
+						$images = Image::findAll(['object_id'=>$model->id]);
+			
+						if (!empty($images)) {
+							$count = 1;
+							foreach ($images as $i) {
+								$i->position = $count;
+								$i->update();
+								$count = $count + 1;
+							}
+						}
+
 						//Сохранение изображения в директроии $dir
-						$image->file->saveAs($image->path);
+						$image->file->saveAs(Yii::getAlias('@webroot') . $image->path);
 					}
 				}
 				// Log
@@ -446,7 +456,7 @@ class ObjectController extends Controller
 					$image->file = $file;
 
 					// Image path 
-					$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+					$path = '/' .'uploads/' . $id . '/' . uniqid() . '.' . $image->file->extension;
 
 					$image->path = $path;
 					$image->object_id = $model->id;
@@ -462,7 +472,7 @@ class ObjectController extends Controller
 					}
 
 					// Save image to path
-					$image->file->saveAs($image->path);
+					$image->file->saveAs(Yii::getAlias('@webroot') . $image->path);
 				}
 			}
 			//Sorting Images
