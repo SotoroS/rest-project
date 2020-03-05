@@ -67,7 +67,7 @@ class RequestController extends Controller
 
 		return $behaviors;
 	}
-
+ 
 	public function actionSetFilter(): array
 	{
 		$request = Yii::$app->request;
@@ -169,7 +169,7 @@ class RequestController extends Controller
 				foreach ($model->addresses as $address) {
 
 					// Get address info by search address
-					$infoObject = static::getAddress($address);
+					$infoObject = Yii::$app->address->getAddress($address);
 
 					// Find address by coordinates
 					$address = Address::findByCoordinates(
@@ -333,27 +333,4 @@ class RequestController extends Controller
 		}
 	}
 
-	/**
-	 * Get address from HERE API by search text
-	 * 
-	 * @param $searchText - text search address
-	 * 
-	 * @return object
-	 */
-	private static function getAddress($searchText): object 
-	{
-		// Create query params for get info from API HERE maps
-		$param = http_build_query(array(
-			'apiKey' => Yii::$app->params['here_api_key'],
-			'searchtext' => $searchText,
-		));
-
-		// Get info about address
-		$searchResult = json_decode(file_get_contents("https://geocoder.ls.hereapi.com/6.2/geocode.json?$param"));
-		
-		// Log
-		Yii::info("Get Address Success" ,__METHOD__);
-
-		return $searchResult->Response->View[0]->Result[0]->Location;
-	}
 } 

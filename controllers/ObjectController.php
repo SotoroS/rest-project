@@ -244,10 +244,10 @@ class ObjectController extends Controller
 				$model->user_id = Yii::$app->user->identity->getId();
 
 				// Get address info by search address
-				$infoObject = static::getAddress($request->post('address'));
+				$infoObject = Yii::$app->address->getAddress($request->post('address'));
 
 				// Check address
-				if ($infoObject == false) {
+				if ($infoObject == false) {  
 					// Log
 					Yii::error("Address Not Found" ,__METHOD__);
 
@@ -277,7 +277,7 @@ class ObjectController extends Controller
 					// Save address & object
 					if ($address->save()) {
 						// Get nearby station info
-						$metroInfo = static::getStation($address->lt, $address->lg);
+						$metroInfo = Yii::$app->address->getStation($address->lt, $address->lg);
 						
 						// Create metro station
 						$metro = new Metro();
@@ -560,54 +560,4 @@ class ObjectController extends Controller
 		}
 	}
 
-	/**
-	 * Get address from HERE API by search text
-	 * 
-	 * @param $searchText - text search address
-	 * 
-	 * @return object
-	 */
-	private static function getAddress($searchText): object
-	{
-		// Create query params for get info from API HERE maps
-		$param = http_build_query(array(
-			'apiKey' => Yii::$app->params['here_api_key'],
-			'searchtext' => $searchText,
-		));
-
-		// Get info about address
-		$searchResult = json_decode(file_get_contents("https://geocoder.ls.hereapi.com/6.2/geocode.json?$param"));
-		
-		// Log
-		Yii::info("Get Address" ,__METHOD__);
-
-		return $searchResult->Response->View[0]->Result[0]->Location;
-	}
-
-	/**
-	 * Get nearby station from HERE API by langitude & lantitude
-	 * 
-	 * @param $lt - lantitude
-	 * @param $lg - langitude
-	 * 
-	 * @return object
-	 */
-	private static function getStation($lt, $lg): object
-	{
-		// Create query params for get nearby station from API HERE maps
-		$param = http_build_query(array(
-			'apiKey' => Yii::$app->params['here_api_key'],
-			'center' => $lt . ',' . $lg,
-			'radius' => 500,
-			'max' => 1,
-		));
-
-		// Get info about mentro by address
-		$searchResult = json_decode(file_get_contents("https://transit.ls.hereapi.com/v3/stations/by_geocoord.json?$param"));
-		
-		// Log
-		Yii::info("Get Station" ,__METHOD__);
-
-		return $searchResult;
-	}
 }
