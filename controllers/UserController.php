@@ -189,7 +189,7 @@ class UserController extends Controller
 
                 $message = Yii::$app->mailer->compose(); 
 
-                $message->setFrom('arman.shukanov@fokin-team.ru')
+                $message->setFrom('1volsuvolsu1@gmail.com') 
                 ->setTo($email)
                 ->setSubject('Подтверждение аккаунта')
                 ->setHtmlBody('Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>');
@@ -316,14 +316,69 @@ class UserController extends Controller
      */
     public function actionLogin(): array
     {   
+        // Checking for data availability
+        $request = Yii::$app->request;
+
+        $email = $request->post('email');
+        $password = $request->post('password');
+
         try {
-            $client = \Asana\Client::accessToken('0/0b003e3cf4c01f416402843c9c5eedbe');
-            
-            $client->workspaces->findAll();
-            $client->users->findByWorkspace(1164122211457555); 
-            $client->users->findById(1164121978692892);
-            return $client->user_task_lists->findByUser(1164121978692892, 1164122211457555);
-        } catch(Exception $e) {
+            // Checking for email in the received data
+            if(!is_null($email) && !is_null($password)) {
+                // Checking the presence of a user in the database
+                $user = User::findOne(['email' => $email]);
+                if(!is_null($user)) {
+                    // Password verification
+                    if (password_verify($password, $user->password)) {
+                        if ($user->verified == 1) {
+                            $user->access_token = uniqid();
+
+                            if ($user->update()) {
+                                // log
+                                Yii::info("User Login Success" ,__METHOD__);
+
+                                return [
+                                    "access_token" => $user->access_token
+                                ];
+                            } else {
+                                // log
+                                Yii::error("Cann't generate new access token" ,__METHOD__);
+
+                                throw new Exception("Cann't generate new access token");
+                            }
+                        } else {
+                            // log
+                            Yii::error("Confirm your account by clicking on the link in the mail" ,__METHOD__);
+
+                            return [
+                                'error'=>"Confirm your account by clicking on the link in the mail"
+                            ];
+                        }
+                    } else {
+                        // log
+                        Yii::error("password_verify() false" ,__METHOD__);
+
+                        return [
+                            'error'=>"Wrong Password"
+                        ];
+                    }
+                } else {
+                    // log
+                    Yii::error("User Not Found by email" ,__METHOD__);
+
+                    return [
+                        'error'=>"User Not Found by email"
+                    ];
+                }
+            } else {
+                // log
+                Yii::error("Request is empty" ,__METHOD__);
+
+                return [
+                    'error'=>"Request is empty Email or Password not found"
+                ];
+            } 
+        } catch (Exception $e) {
             // log
             Yii::error($e->getMessage() ,__METHOD__);
 
