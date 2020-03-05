@@ -383,7 +383,7 @@ class UserController extends Controller
             Yii::error($e->getMessage() ,__METHOD__);
 
             return [
-                'error'=>$e->getMessage()
+                'error'=>$e->getMessage() 
             ];
         }
     }
@@ -399,7 +399,7 @@ class UserController extends Controller
     {
         $fb = new Facebook\Facebook([
             'app_id' => Yii::$app->params['facebook_client_id'],
-            'app_secret' => Yii::$app->params['facebook_client_secret'],
+            'app_secret' => Yii::$app->params['facebook_client_secret'], 
             'default_graph_version' => 'v3.2',
         ]);
         

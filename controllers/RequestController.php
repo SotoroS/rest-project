@@ -257,8 +257,8 @@ class RequestController extends Controller
 			Yii::error($e->getMessage() ,__METHOD__);
 
 			return [
-				'error' => $e->getMessage();
-			]
+				'error' => $e->getMessage()
+			];
 		}
 	}
 
