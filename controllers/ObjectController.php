@@ -425,7 +425,7 @@ class ObjectController extends Controller
 					$image = Image::findOne(['path'=>$url, 'object_id'=>$model->id]);
 
 					if (!is_null($image)) {
-						FileHelper::removeDirectory($image->path);
+						FileHelper::removeDirectory(Yii::getAlias('@webroot') . $image->path);
 
 						if(!$image->delete()) {
 							throw new Exception("Image Delete Failed");
@@ -465,9 +465,6 @@ class ObjectController extends Controller
 
 					// Save image
 					if (!$image->save()) {
-						// log
-						Yii::error("Image cannot Save" ,__METHOD__);
-
 						throw new Exception('Image Save Failed');
 					}
 
@@ -511,12 +508,12 @@ class ObjectController extends Controller
 					"result" => true
 				];
 			} else {
-				// Log
-				Yii::error("Object Update Failed",__METHOD__);
-
 				throw new Exception('Object Update Failed');
 			}
 		} catch(Exception $e) {
+			// Log
+			Yii::error($e->getMessage ,__METHOD__);
+
 			return [
 				'error' => $e->getMessage()
 			];
@@ -528,15 +525,16 @@ class ObjectController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionView($id): object//ARRAY
+	public function actionView($id): array
 	{
-	    $model = EstateObject::findByIdentity($id);
+		try {
+	    	$model = EstateObject::findByIdentity($id);
 		
     	    if (!is_null($model)) {
 				// Log
 				Yii::info("Object Found Success" ,__METHOD__);
 
-        		return $model;
+        		return $model->asArray();
     	    } else {
 				// Log
 				Yii::error("Object Not Found" ,__METHOD__);
@@ -544,7 +542,15 @@ class ObjectController extends Controller
         		return [
 					"error"=>"Object:$id Not Found"
 				];
-    	    }
+			}
+		} catch(Exception $e) {
+			// Log
+			Yii::error($e->getMessage() ,__METHOD__);
+
+			return [
+				'error'=>$e->getMessage()
+			];
+		}
 	}
 
 	/**

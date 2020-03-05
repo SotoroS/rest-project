@@ -26,7 +26,7 @@ use Facebook;
 use Google_Client;
 use Google_Service_Oauth2;
 use micro\models\City;
- 
+
 /**
  * Class SiteController
  * @package micro\controllers
@@ -101,7 +101,10 @@ class UserController extends Controller
             $deviceType = $request->post('deviceType');
             $fcmToken = $request->post('fcmToken');
 
-            if (is_null($deviceType) || is_null($fcmToken)) {
+            if (is_null($deviceType) || is_null($fcmToken)) {\
+                // log
+                Yii::error("Fields are not filled" ,__METHOD__);
+
                 return [
                     'error'=>'Fields are not filled'
                 ];
@@ -130,7 +133,7 @@ class UserController extends Controller
             Yii::$app->response->statusCode = 500;
 
             // log
-            Yii::info("Exception" ,__METHOD__);
+            Yii::error($e->getMessage() ,__METHOD__);
 
             return $output;
         }
@@ -159,6 +162,9 @@ class UserController extends Controller
 
         try {
             if (is_null($email) || is_null($password)) {
+                // log
+                Yii::error("Fields are not filled" ,__METHOD__);
+
                 return [
                     'error'=>'Fields are not filled'
                 ];
@@ -182,17 +188,33 @@ class UserController extends Controller
                     throw new Exception('User Save False');
                 }
 
-                $message = Yii::$app->mailer->compose();
+                // Send email message for verify
+                $mail = new PHPMailer;
 
-                $message->setFrom('arman.shukanov@fokin-team.ru')
-                ->setTo($email)
-                ->setSubject('Подтверждение аккаунта')
-                ->setHtmlBody('Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>');
+                $mail->CharSet = "UTF-8";
+
+                $mail->isSMTP();
+                $mail->Host = 'smtp.yandex.ru';
+                $mail->Port = 465;
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'ssl';
+
+                $mail->Username = 'arman.shukanov@fokin-team.ru';
+                $mail->Password = 'arman_shukanov';
+
+                $mail->setFrom('arman.shukanov@fokin-team.ru');
+                $mail->addAddress($email);
+                $mail->Subject = 'Подтверждение аккаунта';
+                $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
+
+                $mail->isHTML(true);
+
+                // log
+                Yii::info("User registration" ,__METHOD__);
 
                 return [
-                    "mailSend" => $message->send()
+                    "mailSend" => $mail->send()
                 ];
-                
             } else {
                 // log
                 Yii::error("User exist" ,__METHOD__);
@@ -202,6 +224,9 @@ class UserController extends Controller
                 ];
             }
         } catch (Exception $e) {
+            // log
+            Yii::error($e->getMessage() ,__METHOD__);
+
             return [
                 'error' => $e->getMessage()
             ];
@@ -216,6 +241,9 @@ class UserController extends Controller
             $cities = City::find()->all();
 
             if (is_null($cities)) {
+                // log
+                Yii::error("Cities Not Found" ,__METHOD__);
+
                 return [
                     'error'=>'Cities Not Found'
                 ];
@@ -232,6 +260,9 @@ class UserController extends Controller
 
             return $citiesArray;
         } catch (Exception $e) {
+            // log
+            Yii::error($e->getMessage() ,__METHOD__);
+
             return [
                 'error' => $e->getMessage()
             ];
@@ -254,6 +285,9 @@ class UserController extends Controller
 
         try {
             if (is_null($verification_code)) {
+                // log
+                Yii::error("Request token not found" ,__METHOD__);
+
                 return [
                     'error'=>'Request token not found'
                 ];
@@ -271,18 +305,16 @@ class UserController extends Controller
                         "result" => true,
                     ];
                 } else {
-                    // log
-                    Yii::error("User Update Failed" ,__METHOD__);
-
                     throw new Exception("User Update Failed");
                 }
             } else {
-                // log
-                Yii::error("User by signup_token Not Found" ,__METHOD__);
 
                 throw new Exception("User by signup_token Not Found");
             }
         } catch (Exception $e) {
+            // log
+            Yii::error($e->getMessage() ,__METHOD__);
+
             return [
                 'error' => $e->getMessage()
             ];
@@ -324,9 +356,6 @@ class UserController extends Controller
                                     "access_token" => $user->access_token
                                 ];
                             } else {
-                                // log
-                                Yii::error("Cann't generate new access token" ,__METHOD__);
-
                                 throw new Exception("Cann't generate new access token");
                             }
                         } else {
@@ -362,6 +391,9 @@ class UserController extends Controller
                 ];
             }
         } catch (Exception $e) {
+            // log
+            Yii::error($e->getMessage() ,__METHOD__);
+
             return [
                 'error'=>$e->getMessage()
             ];
@@ -377,6 +409,10 @@ class UserController extends Controller
      */
     public function actionLoginFacebook(): array
     {
+        if(!session_id()) {
+            session_start();
+        }
+ 
         $fb = new Facebook\Facebook([
             'app_id' => Yii::$app->params['facebook_client_id'],
             'app_secret' => Yii::$app->params['facebook_client_secret'],
@@ -432,16 +468,28 @@ class UserController extends Controller
             	    }
                 }
             } catch(Facebook\Exceptions\FacebookResponseException $e){
+                // log
+                Yii::error("FacebookResponseException" ,__METHOD__);
                 echo 'Graph returned an error: ' . $e->getMessage();
             } catch(Facebook\Exceptions\FacebookSDKException $e){
+                // log
+                Yii::error("FacebookResponseException" ,__METHOD__);
                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
             } catch(Exception $e) {
+                // log
+                Yii::error($e->getMessage() ,__METHOD__);
+
                 return [
                     'error' => $e->getMessage()
                 ];
             }
-        } 
-        return ["redirect_uri" => $loginUrl];
+        } else {
+            // log
+            Yii::info("Redirect_uri" ,__METHOD__);
+            return [
+                "redirect_uri " => $loginUrl
+            ];
+        }
     }
     
     /**
@@ -512,11 +560,15 @@ class UserController extends Controller
                     }
                 }
             } catch(Exception $e) {
+                // log
+                Yii::error($e->getMessage() ,__METHOD__);
                 return [
                     'error' => $e->getMessage()
                 ];
             }
         } else {
+            // log
+            Yii::info("Redirect_uri" ,__METHOD__);
             return [
                 "redirect_uri" => $auth_url
             ];
@@ -557,10 +609,16 @@ class UserController extends Controller
                 }
                 
                 if ($user->update()) {
+                    // log
+                    Yii::info("User Update true" ,__METHOD__);
+
                     return [
                         "result" => true
                     ];
                 } elseif (is_null($request->post("age")) && is_null($request->post("email")) && is_null($request->post("phone")) && is_null($request->post("gender"))) {
+                    // log
+                    Yii::error("Nothing to Change" ,__METHOD__);
+
                     return [
                         'error' => 'Nothing to Change'
                     ];
@@ -568,11 +626,17 @@ class UserController extends Controller
                     throw new Exception('User Update False');
                 }
             } catch(Exception $e) {
+                // log
+                Yii::error($e->getMessage() ,__METHOD__);
+
                 return [
                     'error' => $e->getMessage()
                 ];
             }
         } else {
+            // log
+            Yii::error("UnauthorizedHttpException" ,__METHOD__);
+
             throw new \yii\web\UnauthorizedHttpException();
         }
     }
