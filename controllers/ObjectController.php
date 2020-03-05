@@ -552,10 +552,10 @@ class ObjectController extends Controller
 			}
 		} catch(Exception $e) {
 			// Log
-			Yii::error($e->getMessgae() ,__METHOD__);
+			Yii::error($e->getMessage() ,__METHOD__);
 
 			return [
-				'error'=>$e->getMessgae()
+				'error'=>$e->getMessage()
 			];
 		}
 	}
