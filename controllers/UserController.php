@@ -182,33 +182,17 @@ class UserController extends Controller
                     throw new Exception('User Save False');
                 }
 
-                // Send email message for verify
-                $mail = new PHPMailer;
+                $message = Yii::$app->mailer->compose();
 
-                $mail->CharSet = "UTF-8";
-
-                $mail->isSMTP();
-                $mail->Host = 'smtp.yandex.ru';
-                $mail->Port = 465;
-                $mail->SMTPAuth = true;
-                $mail->SMTPSecure = 'ssl';
-
-                $mail->Username = 'arman.shukanov@fokin-team.ru';
-                $mail->Password = 'arman_shukanov';
-
-                $mail->setFrom('arman.shukanov@fokin-team.ru');
-                $mail->addAddress($email);
-                $mail->Subject = 'Подтверждение аккаунта';
-                $mail->Body = 'Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>';
-
-                $mail->isHTML(true);
-
-                // log
-                Yii::info("User registration" ,__METHOD__);
+                $message->setFrom('arman.shukanov@fokin-team.ru')
+                ->setTo($email)
+                ->setSubject('Подтверждение аккаунта')
+                ->setHtmlBody('Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>');
 
                 return [
-                    "mailSend" => $mail->send()
+                    "mailSend" => $message->send()
                 ];
+                
             } else {
                 // log
                 Yii::error("User exist" ,__METHOD__);

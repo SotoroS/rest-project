@@ -61,7 +61,7 @@ class ObjectController extends Controller
 		$behaviors['verbs'] = [
 			'class' => VerbFilter::className(),
 			'actions' => [
-				'get-objects'  => ['get'],
+				// 'get-objects'  => ['get'],
 				'new'   => ['post'],
 				'update' => ['post'],
 				'view' => ['get'],
@@ -72,7 +72,7 @@ class ObjectController extends Controller
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
             
         $behaviors['authenticator'] = [
-            'except' => ['get-objects'],
+            'except' => [],
             'class' => HttpBearerAuth::className()
         ];
 
@@ -88,14 +88,18 @@ class ObjectController extends Controller
 	 * 
 	 */
 
-	public function actionGetObjects(): array
+	public function actionGetObjects()//: array
     {
 		$output = [];
+		$objects = [];
+
         try {
 			$user = User::findOne(Yii::$app->user->identity->id);
 			$lastFetchDate = $user->last_fetch;
+
 			// get filter current user
-            $filterObject = Filter::find()->where(['user_id' => $user->id])->one();
+			$filterObject = Filter::find()->where(['user_id' => $user->id])->one();
+			
             if (is_null($filterObject)) {
                 throw new Exception("filter not set");
             }
@@ -122,17 +126,19 @@ class ObjectController extends Controller
             if ($filterObject->rent_type) {
 				// проверяем каждый rent_type из таблицы filters на наличие в таблице objects
 				$rent_type_array = array_filter(explode(',', $filterObject->rent_type));
-				for ($i=0;$i<count($rent_type_array);$i++)
+
+				for ($i = 0; $i < count($rent_type_array); $i++)
 				{
 					$current = $rent_type_array[$i];
 					$objectsQuery->andWhere("rent_type = $current")->asArray()->all();
 				}
-
-            }
+			}
+			
             if ($filterObject->property_type) {
 				// проверяем каждый property_type из таблицы filters на наличие в таблице objects
 				$property_type_array = array_filter(explode(',', $filterObject->property_type));
-				for ($i=0;$i<count($property_type_array);$i++)
+
+				for ($i = 0; $i < count($property_type_array); $i++)
 				{
 					$current = $property_type_array[$i];
 					$objectsQuery->andWhere("property_type = $current")->asArray()->all();
@@ -146,7 +152,7 @@ class ObjectController extends Controller
 
             if ($filterObject->substring) {
                 $objectsQuery->andWhere(['like', 'description', $filterObject->substring])
-					->orWhere(['like', 'name', $filterObject->substring]);
+					->orWhere(['like', 'objects.name', $filterObject->substring]);
 					
             }
 
@@ -157,7 +163,8 @@ class ObjectController extends Controller
 			
 			$objects = $objectsQuery->all();
 
-            $items = [];
+			$items = [];
+			
             foreach ($objects as $singleObject) {
 				// each element as an array
 				$singleObjectArray = (Array)$singleObject;
@@ -197,17 +204,18 @@ class ObjectController extends Controller
 				// set the time of Kiev
 				$dateTime = new DateTime(null, new \DateTimeZone("Europe/Kiev"));
                 $user->last_fetch = $dateTime->format('Y-m-d H:i:s');
-                $user->save();
+				$user->save();
             }
 
+
         } catch (Exception $e) {
-            $this->_writeLog($e);
-            $output['error'] = $e->getMessage();
+			$output['error'] = $e->getMessage();
         } finally {
             $output['data'] = $objects;
 
 			// Log
 			Yii::info("GetObjects Output" ,__METHOD__);
+
 
 			return $output;
         }
