@@ -101,6 +101,9 @@ class UserController extends Controller
             $fcmToken = $request->post('fcmToken');
 
             if (is_null($deviceType) || is_null($fcmToken)) {
+                // log
+                Yii::error("Fields are not filled" ,__METHOD__);
+                
                 return [
                     'error'=>'Fields are not filled'
                 ];
@@ -129,7 +132,7 @@ class UserController extends Controller
             Yii::$app->response->statusCode = 500;
 
             // log
-            Yii::info("Exception" ,__METHOD__);
+            Yii::error($e->getMessage() ,__METHOD__);
 
             return $output;
         }
@@ -150,7 +153,7 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionSignupWeb()//: array
+    public function actionSignupWeb(): array
     {
         $request = Yii::$app->request;
         $email = $request->post('email');
@@ -158,6 +161,9 @@ class UserController extends Controller
 
         try {
             if (is_null($email) || is_null($password)) {
+                // log
+                Yii::error("Fields are not filled" ,__METHOD__);
+
                 return [
                     'error'=>'Fields are not filled'
                 ];
@@ -188,6 +194,9 @@ class UserController extends Controller
                 ->setSubject('Подтверждение аккаунта')
                 ->setHtmlBody('Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>');
 
+                // log
+                Yii::info("User registration" ,__METHOD__);
+
                 return [
                     "mailSend" => $message->send()
                 ];
@@ -201,6 +210,9 @@ class UserController extends Controller
                 ];
             }
         } catch (Exception $e) {
+            // log
+            Yii::error($e->getMessage() ,__METHOD__);
+
             return [
                 'error' => $e->getMessage()
             ];
@@ -215,6 +227,9 @@ class UserController extends Controller
             $cities = City::find()->all();
 
             if (is_null($cities)) {
+                // log
+                Yii::error("Cities Not Found" ,__METHOD__);
+
                 return [
                     'error'=>'Cities Not Found'
                 ];
@@ -231,6 +246,9 @@ class UserController extends Controller
 
             return $citiesArray;
         } catch (Exception $e) {
+            // log
+            Yii::error($e->getMessage() ,__METHOD__);
+
             return [
                 'error' => $e->getMessage()
             ];
@@ -253,6 +271,9 @@ class UserController extends Controller
 
         try {
             if (is_null($verification_code)) {
+                // log
+                Yii::error("Request token not found" ,__METHOD__);
+
                 return [
                     'error'=>'Request token not found'
                 ];
@@ -270,18 +291,15 @@ class UserController extends Controller
                         "result" => true,
                     ];
                 } else {
-                    // log
-                    Yii::error("User Update Failed" ,__METHOD__);
-
                     throw new Exception("User Update Failed");
                 }
             } else {
-                // log
-                Yii::error("User by signup_token Not Found" ,__METHOD__);
-
                 throw new Exception("User by signup_token Not Found");
             }
         } catch (Exception $e) {
+            // log
+            Yii::error($e->getMessage() ,__METHOD__);
+
             return [
                 'error' => $e->getMessage()
             ];
@@ -296,14 +314,23 @@ class UserController extends Controller
      * 
      * @return string|bool
      */
-    public function actionLogin()
+    public function actionLogin(): array
     {   
-	$client = \Asana\Client::accessToken('0/0b003e3cf4c01f416402843c9c5eedbe');
-	
-	$client->workspaces->findAll();
-	$client->users->findByWorkspace(1164122211457555); 
-	$client->users->findById(1164121978692892);
-	return $client->user_task_lists->findByUser(1164121978692892, 1164122211457555);
+        try {
+            $client = \Asana\Client::accessToken('0/0b003e3cf4c01f416402843c9c5eedbe');
+            
+            $client->workspaces->findAll();
+            $client->users->findByWorkspace(1164122211457555); 
+            $client->users->findById(1164121978692892);
+            return $client->user_task_lists->findByUser(1164121978692892, 1164122211457555);
+        } catch(Exception $e) {
+            // log
+            Yii::error($e->getMessage() ,__METHOD__);
+
+            return [
+                'error'=>$e->getMessage()
+            ];
+        }
     }
 
     /**
@@ -357,7 +384,7 @@ class UserController extends Controller
                 	        "access_token" => $value
                         ];
                     } else {
-                        throw new Exception($model->errors);
+                        throw new Exception('User Save Failed');
                     }
                 } else {
             	    $user->access_token = uniqid();
@@ -366,19 +393,28 @@ class UserController extends Controller
             		        "access_token" => $user->access_token
             		    ];
             	    } else {
-                        throw new Exception($user->errors);
+                        throw new Exception('User Update Failed');
             	    }
                 }
             } catch(Facebook\Exceptions\FacebookResponseException $e){
+                // log
+                Yii::error("FacebookResponseException" ,__METHOD__);
                 echo 'Graph returned an error: ' . $e->getMessage();
             } catch(Facebook\Exceptions\FacebookSDKException $e){
+                // log
+                Yii::error("FacebookResponseException" ,__METHOD__);
                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
             } catch(Exception $e) {
+                // log
+                Yii::error($e->getMessage() ,__METHOD__);
+
                 return [
                     'error' => $e->getMessage()
                 ];
             }
-        } 
+        }
+        // log
+        Yii::info("Redirect_uri" ,__METHOD__);
         return ["redirect_uri" => $loginUrl];
     }
     
@@ -450,11 +486,15 @@ class UserController extends Controller
                     }
                 }
             } catch(Exception $e) {
+                // log
+                Yii::error($e->getMessage() ,__METHOD__);
                 return [
                     'error' => $e->getMessage()
                 ];
             }
         } else {
+            // log
+            Yii::info("Redirect_uri" ,__METHOD__);
             return [
                 "redirect_uri" => $auth_url
             ];
@@ -495,10 +535,16 @@ class UserController extends Controller
                 }
                 
                 if ($user->update()) {
+                    // log
+                    Yii::info("User Update true" ,__METHOD__);
+
                     return [
                         "result" => true
                     ];
                 } elseif (is_null($request->post("age")) && is_null($request->post("email")) && is_null($request->post("phone")) && is_null($request->post("gender"))) {
+                    // log
+                    Yii::error("Nothing to Change" ,__METHOD__);
+
                     return [
                         'error' => 'Nothing to Change'
                     ];
@@ -506,11 +552,17 @@ class UserController extends Controller
                     throw new Exception('User Update False');
                 }
             } catch(Exception $e) {
+                // log
+                Yii::error($e->getMessage() ,__METHOD__);
+
                 return [
                     'error' => $e->getMessage()
                 ];
             }
         } else {
+            // log
+            Yii::error("UnauthorizedHttpException" ,__METHOD__);
+            
             throw new \yii\web\UnauthorizedHttpException();
         }
     }

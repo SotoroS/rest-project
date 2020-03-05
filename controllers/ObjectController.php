@@ -216,7 +216,6 @@ class ObjectController extends Controller
 			// Log
 			Yii::info("GetObjects Output" ,__METHOD__);
 
-
 			return $output;
         }
     }
@@ -249,6 +248,9 @@ class ObjectController extends Controller
 
 				// Check address
 				if ($infoObject == false) {
+					// Log
+					Yii::error("Address Not Found" ,__METHOD__);
+
 					return [
 						'error'=>'Address Not Found'
 					];
@@ -259,8 +261,6 @@ class ObjectController extends Controller
 					$infoObject->DisplayPosition->Latitude,
 					$infoObject->DisplayPosition->Longitude
 				);
-				
-				
 
 				// If address no exsist create new address
 				if (is_null($address)) {
@@ -293,15 +293,9 @@ class ObjectController extends Controller
 						//$model->lg = $address->lg;
 
 						if (!$model->save()) {
-							// Log
-							Yii::error("Object Save False" ,__METHOD__);
-
 						 	throw new Exception('Object Save False');
 						}
 					} else { // Return error if not save address
-						// Log
-						Yii::error("Address Save Failed" ,__METHOD__);
-
 						throw new Exception("Address Save False");
 					}
 				} else { // if exist address model
@@ -312,20 +306,20 @@ class ObjectController extends Controller
 					//$model->lg = $address->lg;
 
 					if (!$model->save()) {
-						// Log
-						Yii::error("Object Save False" ,__METHOD__);
-
 						throw new Exception("Object Save False");
 					}
 				}
 				// Create images
 				$images = UploadedFile::getInstancesByName('images');
-						
+				
 				//Add images
 				if (!empty($images)) {
 					//Директория для изображений
 					$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $model->id;
 					
+					//Domain
+					$dom = 'https://' . $_SERVER['SERVER_NAME'];
+
 					//Если добавляеться первое изображение, то создаётся директория для изображений
 					if (!file_exists($dir)) {
 						FileHelper::createDirectory($dir);
@@ -340,23 +334,31 @@ class ObjectController extends Controller
 						$image->file = $file;
 		
 						//Путь к изображению
-						$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+						$path = '/' .'uploads/' . $model->id . '/' . uniqid() . '.' . $image->file->extension;
 		
 						//Присвоение $path (путь к изображению) к атрибуту $image->path(string)
-						$image->path = $path;
+						$image->path = $dom . $path;
 						$image->object_id = $model->id;
 
 						$image->position = 0;
 		
 						//Сохранение нового изображения в БД
 						if (!$image->save()) {
-							// log
-							Yii::error("Image Save False" ,__METHOD__);
-
 							throw new Exception('Image Save False');
 						}
 						//Сохранение изображения в директроии $dir
-						$image->file->saveAs($image->path);
+						$image->file->saveAs(Yii::getAlias('@webroot') . $path);
+					}
+					//Sorting Images
+					$images = Image::findAll(['object_id'=>$model->id]);
+
+					if (!empty($images)) {
+						$count = 1;
+						foreach ($images as $i) {
+							$i->position = $count;
+							$i->update();
+							$count = $count + 1;
+						}
 					}
 				}
 				// Log
@@ -374,6 +376,9 @@ class ObjectController extends Controller
 				];
 			}
 		} catch(Exception $e) {
+			// Log
+			Yii::error($e->getMessage() ,__METHOD__);
+
 			return [
 				'error' => $e->getMessage()
 			];
@@ -431,6 +436,9 @@ class ObjectController extends Controller
 			if (!empty($newImages)) {
 				// Directory for images
 				$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $id;
+
+				//Domain
+				$dom = 'https://' . $_SERVER['SERVER_NAME'];
 		
 				//Create Directory for images
 				if (!file_exists($dir)) {
@@ -446,23 +454,20 @@ class ObjectController extends Controller
 					$image->file = $file;
 
 					// Image path 
-					$path = $dir . '/' . uniqid() . '.' . $image->file->extension;
+					$path = '/' .'uploads/' . $id . '/' . uniqid() . '.' . $image->file->extension;
 
-					$image->path = $path;
+					$image->path = $dom . $path;
 					$image->object_id = $model->id;
 
 					$image->position = 0;
 
 					// Save image
 					if (!$image->save()) {
-						// log
-						Yii::error("Image cannot Save" ,__METHOD__);
-
 						throw new Exception('Image Save Failed');
 					}
 
 					// Save image to path
-					$image->file->saveAs($image->path);
+					$image->file->saveAs(Yii::getAlias('@webroot') . $path);
 				}
 			}
 			//Sorting Images
@@ -501,12 +506,12 @@ class ObjectController extends Controller
 					"result" => true
 				];
 			} else {
-				// Log
-				Yii::error("Object Update Failed",__METHOD__);
-
 				throw new Exception('Object Update Failed');
 			}
 		} catch(Exception $e) {
+			// Log
+			Yii::error($e->getMessage(), __METHOD__);
+
 			return [
 				'error' => $e->getMessage()
 			];
@@ -518,15 +523,25 @@ class ObjectController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionView($id): object//ARRAY
+	public function actionView($id): array
 	{
-	    $model = EstateObject::findByIdentity($id);
+		try {
+	    	$model = EstateObject::findByIdentity($id);
 		
     	    if (!is_null($model)) {
+				$images = Image::find()
+					->select('path')
+					->where(['object_id'=>$id])
+					->all();
+
+				$output = [
+					'object'=>$model,
+					'images'=>$images,
+				];
 				// Log
 				Yii::info("Object Found Success" ,__METHOD__);
 
-        		return $model;
+        		return $output;
     	    } else {
 				// Log
 				Yii::error("Object Not Found" ,__METHOD__);
@@ -534,7 +549,15 @@ class ObjectController extends Controller
         		return [
 					"error"=>"Object:$id Not Found"
 				];
-    	    }
+			}
+		} catch(Exception $e) {
+			// Log
+			Yii::error($e->getMessgae() ,__METHOD__);
+
+			return [
+				'error'=>$e->getMessgae()
+			];
+		}
 	}
 
 	/**
@@ -555,17 +578,10 @@ class ObjectController extends Controller
 		// Get info about address
 		$searchResult = json_decode(file_get_contents("https://geocoder.ls.hereapi.com/6.2/geocode.json?$param"));
 		
-		if (is_null($searchResult)) {
-			// Log
-			Yii::error("Get Address Failed" ,__METHOD__);
+		// Log
+		Yii::info("Get Address" ,__METHOD__);
 
-			return false;
-		} else {
-			// Log
-			Yii::info("Get Address Success" ,__METHOD__);
-
-			return $searchResult->Response->View[0]->Result[0]->Location;
-		}
+		return $searchResult->Response->View[0]->Result[0]->Location;
 	}
 
 	/**
