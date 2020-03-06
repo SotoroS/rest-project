@@ -61,7 +61,7 @@ class RequestController extends Controller
 		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
 		// OAuth 2.0
 		$behaviors['authenticator'] = [
-			'except' => ['set-filter'],
+			'except' => [],
 			'class' => HttpBearerAuth::className()
 		];
 
@@ -76,31 +76,24 @@ class RequestController extends Controller
 		try {
 			$fcmToken = $request->post('fcmToken');
 
-			$cityId = (int)$request->post('city') ?: 1;
+			$cityId = (int)$request->post('city_id') ?: 1;
             $cityAreaId = (int)$request->post('city_area_id') ?: 1;
             $request_type_id = (int)$request->post('request_type_id') ?: 1;
-			$notification = (int)$request->post('push_notification') ?: null;
+			$notification = (int)$request->post('push_notification') ?: 0;
 			
 			$rentType = $request->post('rent_type') ?: null;
 			$propertyType = $request->post('property_type') ?: null;
-			
-			$requestData = [
-                'city' => $cityId,
-                'city_area_id' => $cityAreaId,
-                'rent_type' => $rentType,
-                'property_type' => $propertyType,
-                'price_from' => (int)$request->post('price_from') ?: 0,
-                'price_to' => (int)$request->post('price_to') ?: 500000000,
-                'substring' => $request->post('substring') ?: "",
-            ];
+
+			$price_from = (int)$request->post('price_from') ?: 0;
+			$price_to = (int)$request->post('price_to') ?: 500000000;
+			$substring = $request->post('substring') ?: "";
 
 			// get current user
 			$user = User::findOne(Yii::$app->user->identity->id);
 
 			// current user filter
 			$filterObject = Filter::findOne(['user_id' => $user->id]);
-			$user->notifications = $request->post('push_enabled') ? 1 : 0;
-
+			
 			
 			// if there is a fcmToken, fill in the user
             if ($fcmToken) {
@@ -121,12 +114,13 @@ class RequestController extends Controller
             $filterObject->request_type_id = $request_type_id;
             $filterObject->city_area_id = $cityAreaId;
             $filterObject->city_id = $cityId;
-            $filterObject->price_from = $requestData['price_from'];
-            $filterObject->price_to = $requestData['price_to'];
-            $filterObject->substring = $requestData['substring'];
+            $filterObject->price_from = $price_from;
+            $filterObject->price_to = $price_to;
+            $filterObject->substring = $substring;
             $filterObject->save();
 			
 			$output['cities'] = City::find()->asArray()->all();
+			$output['setFilter'] = $filterObject;
 			
 			// Log
 			Yii::info("Get Address Success" ,__METHOD__);
@@ -155,7 +149,7 @@ class RequestController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionFilterNew(): array
+	public function actionFilterNew()//: array
 	{
 		$model = new Filter();
 		$request = Yii::$app->request->post();
@@ -165,7 +159,6 @@ class RequestController extends Controller
 			if ($model->load($request, '')) {
 				$model->user_id = Yii::$app->user->identity->id;
 
-				// return $model->addresses;
 				foreach ($model->addresses as $address) {
 
 					// Get address info by search address
@@ -219,7 +212,7 @@ class RequestController extends Controller
 					$model->request_type_id = $request_type->id;
 
 				} else {
-					return ["error" => "RequestName field is empty"];
+					$model->request_type_id = 1;
 				}
 				
 				if ($model->save()) {
