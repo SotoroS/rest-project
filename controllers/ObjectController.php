@@ -61,7 +61,7 @@ class ObjectController extends Controller
 		$behaviors['verbs'] = [
 			'class' => VerbFilter::className(),
 			'actions' => [
-				// 'get-objects'  => ['get'],
+				'get-objects' => ['get'],
 				'new'   => ['post'],
 				'update' => ['post'],
 				'view' => ['get'],
@@ -88,7 +88,7 @@ class ObjectController extends Controller
 	 * 
 	 */
 
-	public function actionGetObjects()//: array
+	public function actionGetObjects(): array
     {
 		$output = [];
 		$objects = [];
