@@ -98,7 +98,7 @@ class ObjectController extends Controller
 			$lastFetchDate = $user->last_fetch;
 
 			// get filter current user
-			$filterObject = Filter::find()->where(['user_id' => $user->id])->one();
+			$filterObject = Filter::findOne(['user_id' => $user->id]);
 			
             if (is_null($filterObject)) {
                 throw new Exception("filter not set");
@@ -161,7 +161,7 @@ class ObjectController extends Controller
 				->limit(100)->asArray()->all();
 			}
 			
-			$objects = $objectsQuery->all();
+			$objects = $objectsQuery->limit(100)->orderBy(['created_at' => SORT_DESC])->all(); 
 
 			$items = [];
 			
@@ -173,7 +173,7 @@ class ObjectController extends Controller
 				// search image
 				$images = Image::find()
 					->select('path')
-					->where("object_id = $singleObjectId")
+					->where("object_id = $singleObjectId") 
 					->orderBy('position')
 					->asArray()
 					->all(); 
