@@ -25,7 +25,7 @@ use micro\models\Metro;
 use micro\models\User;
 use micro\models\Filter;
 use micro\models\Image;
-//use micro\models\Object;
+use micro\models\City;
 use micro\models\Phone;
 use PharIo\Manifest\Url;
 
@@ -92,8 +92,10 @@ class ObjectController extends Controller
     {
 		$output = [];
 		$objects = [];
+		$items = [];
 
         try {
+			
 			$user = User::findOne(Yii::$app->user->identity->id);
 			$lastFetchDate = $user->last_fetch;
 
@@ -111,7 +113,7 @@ class ObjectController extends Controller
 							'objects.data',
 							'objects.url',
 							'objects.created_at',
-							'city_name' => 'cities.name',
+							'objects.city_id',
 							'rent_type' => 'rent_type.name'])
 				->joinWith('city')
 				->joinWith('rentType');
@@ -144,80 +146,95 @@ class ObjectController extends Controller
 					$objectsQuery->andWhere("property_type = $current")->asArray()->all();
 				}
             }
-
+			
 			$objectsQuery
 				->andWhere("price >= $filterObject->price_from")
 				->andWhere("price <= $filterObject->price_to");
-		
+			
 
             if ($filterObject->substring) {
                 $objectsQuery->andWhere(['like', 'description', $filterObject->substring])
 					->orWhere(['like', 'objects.name', $filterObject->substring]);
 					
             }
-
+			
             if ($lastFetchDate) {
 				$objectsQuery->andWhere("objects.created_at > $lastFetchDate")->orderBy(['created_at' => SORT_DESC])
 				->limit(100)->asArray()->all();
 			}
-			
-			$objects = $objectsQuery->limit(100)->orderBy(['created_at' => SORT_DESC])->all(); 
 
-			$items = [];
+			$objects = $objectsQuery->limit(100)->orderBy(['created_at' => SORT_DESC])->all(); 
 			
+			$items = [];
+
             foreach ($objects as $singleObject) {
 				// each element as an array
-				$singleObjectArray = (Array)$singleObject;
-				$singleObjectId = $singleObjectArray['id'];
+				//$singleObjectArray = (Array)$singleObject;
+				//$singleObjectId = $singleObjectArray['id'];
+				$singleObjectId = $singleObject->id;
 				
 				// search image
 				$images = Image::find()
-					->select('path')
-					->where("object_id = $singleObjectId") 
+					->where(['object_id' => $singleObjectId]) 
 					->orderBy('position')
-					->asArray()
 					->all(); 
 				
 				// if there is an imagery array, then replace each element with url
-                if (is_array($images)) {
-                    $images = array_map(function ($i) {
-                        return ('image/' . $i);
-                    }, $images);
+				$paths = [];
+                if (!empty($images)) {
+					$paths = [];
+					foreach ($images as $image) {
+						$paths[] = $image->path;
+					}
 				}
 				// search phone
 				$phones = Phone::find()
-					->select('path') 
-					->where("object_id = $singleObjectId") 
-					->toArray()
+					->select('phone') 
+					->where(['object_id' => $singleObjectId])
 					->all();
-				
+
+				$city = City::findOne(['id'=>$singleObject->city_id]);
+
 				// fill the array
-                $singleObjectArray['images'] = $images;
-                $singleObjectArray['phones'] = $phones;
-				$singleObjectArray['created_at'] = strtotime($singleObjectArray['created_at']) * 1000;
+				$fields = [
+					'id'=> $singleObjectId,
+					'name'=> $singleObject->name,
+					'description'=>$singleObject->description,
+					'price'=> $singleObject->price,
+					'data'=> $singleObject->data,
+					'url'=> $singleObject->url,
+					'created_at'=> $singleObject->created_at,
+					'city_name'=> $city->name,
+					'rent_type'=> $singleObject->rent_type
+				];
+                $fields['images'] = $paths;
+                $fields['phones'] = $phones;
+				//$singleObjectArray['created_at'] = strtotime($singleObjectArray['created_at']) * 1000;
 
 				// add to the array objects
-                $items[] = $singleObjectArray;
-            }
-
+				$items[] = $fields;
+			}
+			
+			//$objects = [];
+			//$objects[] 
+			/*
             if (sizeof($items) > 0) {
 				// set the time of Kiev
 				$dateTime = new DateTime(null, new \DateTimeZone("Europe/Kiev"));
                 $user->last_fetch = $dateTime->format('Y-m-d H:i:s');
 				$user->save();
             }
-
+			*/
 
         } catch (Exception $e) { 
 			$output['error'] = $e->getMessage();
-        } finally {
-            $output['data'] = $objects;
-
-			// Log
-			Yii::info("GetObjects Output" ,__METHOD__);
-
-			return $output;
         }
+		$output['data'] = $items;
+
+		// Log
+		Yii::info("GetObjects Output" ,__METHOD__);
+
+		return $output;
     }
 
 	/**
@@ -319,7 +336,7 @@ class ObjectController extends Controller
 					
 					//Domain
 					$dom = 'https://' . $_SERVER['SERVER_NAME'];
-
+					
 					//Если добавляеться первое изображение, то создаётся директория для изображений
 					if (!file_exists($dir)) {
 						FileHelper::createDirectory($dir);

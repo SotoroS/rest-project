@@ -39,7 +39,7 @@ class M200225195302CreateObjectsTable extends Migration
             'metro_id' => 'INT(19) DEFAULT 1', //FK
             'name' => 'VARCHAR(256) NOT NULL',
             'description' => 'TEXT NOT NULL',
-            'price' => 'DECIMAL(13,3) NOT NULL',
+            'price' => 'INT(19) NOT NULL',
             'url' => 'TEXT',
             'user_id' => 'INT(19) DEFAULT 1', //FK
             'city_id' => 'INT(19) DEFAULT 1', //FK

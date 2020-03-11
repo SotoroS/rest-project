@@ -149,7 +149,7 @@ class RequestController extends Controller
 	 *
 	 * @return array|bool
 	 */
-	public function actionFilterNew()//: array
+	public function actionFilterNew(): array
 	{
 		$model = new Filter();
 		$request = Yii::$app->request->post();
