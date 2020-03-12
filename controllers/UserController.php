@@ -65,7 +65,7 @@ class UserController extends Controller
                 'update' => ['post'],
                 'login-facebook' => ['get'],
                 'login-google' => ['get'],
-		'login' => ['post'],
+                'login' => ['post'],
             ],
         ];
             
