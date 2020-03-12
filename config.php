@@ -69,8 +69,8 @@ return [
 		      'transport' => [
 		           'class' => 'Swift_SmtpTransport',
 		            'host' => 'smtp.gmail.com',
-					'username' => '1volsuvolsu1@gmail.com',
-					'password' => 'shifrovanie123',
+					'username' => 'test.fokin.team@gmail.com',
+					'password' => 'Qwerty34',
 					'port' => '465',
 					'encryption' => 'ssl', 
                     ],

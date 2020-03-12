@@ -191,9 +191,9 @@ class UserController extends Controller
                 $message = Yii::$app->mailer->compose(); 
 
                 $message->setFrom('1volsuvolsu1@gmail.com') 
-                ->setTo($email)
-                ->setSubject('Подтверждение аккаунта')
-                ->setHtmlBody('Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>');
+                    ->setTo($email)
+                    ->setSubject('Подтверждение аккаунта')
+                    ->setHtmlBody('Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>');
 
                 // log
                 Yii::info("User registration" ,__METHOD__);

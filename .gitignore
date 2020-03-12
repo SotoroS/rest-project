@@ -47,5 +47,5 @@ phpunit.phar
 /node_modules
 .env
 
-/web/api/uploads/*
-/web/app/*
+# Images folder
+/web/uploads/*

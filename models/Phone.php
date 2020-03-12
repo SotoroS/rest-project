@@ -34,7 +34,7 @@ class Phone extends \yii\db\ActiveRecord
             [['object_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['phone'], 'string', 'max' => 256],
-            [['object_id'], 'exist', 'skipOnError' => true, 'targetClass' => Object::className(), 'targetAttribute' => ['object_id' => 'id']],
+            [['object_id'], 'exist', 'skipOnError' => true, 'targetClass' => EstateObject::className(), 'targetAttribute' => ['object_id' => 'id']],
         ];
     }
 
@@ -59,6 +59,6 @@ class Phone extends \yii\db\ActiveRecord
      */
     public function getObject()
     {
-        return $this->hasOne(Object::className(), ['id' => 'object_id']);
+        return $this->hasOne(EstateObject::className(), ['id' => 'object_id']);
     }
 }
