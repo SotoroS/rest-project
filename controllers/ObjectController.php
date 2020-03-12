@@ -132,7 +132,7 @@ class ObjectController extends Controller
 				for ($i = 0; $i < count($rent_type_array); $i++)
 				{
 					$current = $rent_type_array[$i];
-					$objectsQuery->andWhere("rent_type = $current")->asArray()->all();
+					$objectsQuery->andWhere(['rent_type' => $current])->asArray()->all();
 				}
 			}
 			
@@ -143,7 +143,7 @@ class ObjectController extends Controller
 				for ($i = 0; $i < count($property_type_array); $i++)
 				{
 					$current = $property_type_array[$i];
-					$objectsQuery->andWhere("property_type = $current")->asArray()->all();
+					$objectsQuery->andWhere(['property_type' => $current])->asArray()->all();
 				}
             }
 			
