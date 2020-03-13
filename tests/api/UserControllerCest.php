@@ -1,14 +1,57 @@
 <?php 
+use micro\models\User;
 
 class UserControllerCest
 {
+    public $alternativeEmail = 'ghettogopnik1703@gmail.com';
+    public $email = 'nape.maxim@gmail.com';
+    public $password = '1234';
+    public $testUser;
+
+    public function verifyViaApi(\ApiTester $I)
+    {
+        $this->testUser = User::find()->where(['email' => $this->email])->one();
+        $I->sendGET('/user/verify',[
+            'token' => $this->testUser->signup_token,
+        ]);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(
+            array('result' => true)
+        );
+    }
+
+    //НЕ РАБОТАЕТ, ОЖИДАЮ ПОКА БУДЕТ ОТПРАВКА ПОЧТЫ ПЕРЕПИСАНА НА YII2MAILER.
+    public function signupWebViaApi(\ApiTester $I)
+    {
+        $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
+        
+        //Работает
+        //Получение токена с помощью регулярного выражения из текста письма.
+        $I->sendPOST('/user/signup-web',[
+            'email' => $this->email,
+            'password' => $this->password
+        ]);
+        $response = json_decode($I->grabResponse(), true);
+        //\Codeception\Util\Debug::debug(is_array($response));die();
+        if (array_key_exists("mailSend",$response) && ($response["mailSend"]) == true)
+        {
+            $this->verifyViaApi($I);
+        }
+        else
+        {
+            $I->seeResponseContainsJson(
+                array('error' => 'User exist.')
+            );
+        }
+    }
+    //
+
     public function signupMobViaApi(\ApiTester $I)
     {
-        $I->amHttpAuthenticated('service_user', 'test1234');
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-        //Нужно разобраться как происходит signup-mob
+        
         $I->sendPOST('/user/signup-mob',[
-            'account_id' => '1',
+            'account_id' => $this->testUser->ID,
             'deviceType' => 'android',
             'fcmToken' => 'token',
         ]);
@@ -22,36 +65,6 @@ class UserControllerCest
         ]);
     }
 
-    //НЕ РАБОТАЕТ, ОЖИДАЮ ПОКА БУДЕТ ОТПРАВКА ПОЧТЫ ПЕРЕПИСАНА НА YII2MAILER.
-    public function signupWebViaApi(\ApiTester $I)
-    {
-        // $I->amHttpAuthenticated('service_user', 'test1234');
-        // $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-        
-        //Работает
-        // //Получение токена с помощью регулярного выражения из текста письма.
-        // $mail = 'ASfasfasfz \\n?token=4573452341fgjs';
-        // preg_match('/token=[a-z0-9]{13}/',$mail,$matches);
-        // preg_match('/[a-z0-9]{13}/',$matches[0],$match);
-        // $token = $match[0];
-        //
-
-        // $I->sendGET('/user/verify',[
-        //     'token' => $token,
-        // ]);
-        // //
-        // \Codeception\Util\Debug::debug($token);die();
-        // $token = strstr($I->grabLastSentEmail(),'?token=');
-        // $token = strstr($token,'">по ссылке</a>',true);
-
-        // $I->sendPOST('/user/verify',[
-        //     'token' => $token,
-        // ]);
-        // $I->seeResponseIsJson();
-        // $I->seeResponseContains('{"error":"User exist"}');
-    }
-    //
-
     public function getAreasViaApi(\ApiTester $I)
     {
         $I->sendGET('/user/get-areas');
@@ -62,23 +75,12 @@ class UserControllerCest
         ]);
     }
 
-    public function verifyViaApi(\ApiTester $I)
-    {
-        // ПУСТО
-        // Чтобы покрыть этот Action тестами, нужно получить текст письма, отправляемого пользователю
-        // Жду пока перепишут на Yii2\Mailer.
-    }
-
     public function loginViaApi(\ApiTester $I)
     {
-        // СНАЧАЛА НУЖНО СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ
-        // И ПОТОМ ИСПОЛЬЗОВАТЬ ЕГО ДАННЫЕ ДЛЯ ВХОДА
-
-        $I->amHttpAuthenticated('service_user', 'test1234');
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
         $I->sendPOST('/user/login',[
-            'email' => 'ghettogopnik1703@gmail.com',
-            'password' => '45678',
+            'email' => $this->email,
+            'password' => $this->password,
         ]);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType([
@@ -108,32 +110,43 @@ class UserControllerCest
     }
 
     //Нужно дописать
-    // public function updateViaApi(\ApiTester $I)
-    // {
-    //     // СНАЧАЛА НУЖНО СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ
-    //     // И ПОТОМ ИСПОЛЬЗОВАТЬ ЕГО ДАННЫЕ ДЛЯ ВХОДА
+    public function updateViaApi(\ApiTester $I)
+    {
+        $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-    //     $I->amHttpAuthenticated('service_user', 'test1234');
-    //     $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-    //     //Вход, получение access_token и авторизация
-    //     $I->sendPOST('/user/login',[
-    //         'email' => 'nape.maxim@gmail.com',
-    //         'password' => '45678',
-    //     ]);
-    //     $response=$I->grabResponse();
-    //     $response=json_decode($response);
-    //     $token = $response->access_token;
-    //     $I->amBearerAuthenticated($token);
-    //     //
-    //     $I->sendPOST('/user/login',[
-    //         'gender' => 'F',
-    //         'phone' => '+79999999999',
-    //         'email' => 'nape.maxim@gmail.com',
-    //         'age' => '22'
-    //     ]);
-    //     $I->seeResponseIsJson();
-    //     $I->seeResponseMatchesJsonType([
-    //         'return' => 'boolean',
-    //     ]);
-    // }
+        //Вход, получение access_token и авторизация
+        $I->sendPOST('/user/login',[
+            'email' => $this->email,
+            'password' => $this->password,
+        ]);
+        $response=$I->grabResponse();
+        $response=json_decode($response);
+        $token = $response->access_token;
+        $I->amBearerAuthenticated($token);
+        //
+
+        //Установка нового E-Mail
+        $I->sendPOST('/user/login',[
+            'gender' => 'F',
+            'phone' => '+79999999999',
+            'email' => $this->alternativeEmail,
+            'age' => '22'
+        ]);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(
+            array('return' => true)
+        );
+
+        //Возвращение старого E-Mail
+        $I->sendPOST('/user/login',[
+            'gender' => 'F',
+            'phone' => '+79999999999',
+            'email' => $this->email,
+            'age' => '22'
+        ]);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(
+            array('return' => true)
+        );
+    }
 }

@@ -6,7 +6,7 @@ actor: ApiTester
 modules:
     enabled:
         - REST:
-            url: https://nape.max.rest.fokin-team.ru/
+            url: https://rest.fokin-team.ru/
             depends: PhpBrowser
             part: Json
         - Yii2:
