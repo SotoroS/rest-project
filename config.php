@@ -16,11 +16,6 @@ return [
 	],
 	'params' => [
 		'here_api_key' => 'GIGsSEJb9m1LlcOOpL6jQSP-Mz51UEaV-kGj4orep1k',
-		'email_login' => '',
-		'email_pass' => '',
-		'email_port' => '',
-		'email_host' => '',
-		'email_from' => '',
 		'google_client_id' => '156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com',
 		'google_client_secret' => '0qepssGons1TcyctkXfW-IPO',
 		'google_redirect_uri' => 'https://rest.fokin-team.ru/user/login-google',
