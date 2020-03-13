@@ -49,3 +49,6 @@ phpunit.phar
 
 # Images folder
 /web/uploads/*
+
+# Runtime folder
+/runtime
