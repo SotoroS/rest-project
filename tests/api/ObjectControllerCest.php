@@ -10,7 +10,7 @@ class ObjectControllerCest
     public $testUser;
     public $testObject;
 
-    public function verifyViaApi(\ApiTester $I)
+    private function verifyViaApi(\ApiTester $I)
     {
         $this->testUser = User::find()->where(['email' => $this->email])->one();
         
@@ -44,6 +44,8 @@ class ObjectControllerCest
             $I->seeResponseContainsJson(
                 array('error' => 'User exist.')
             );
+            $testUser = User::find()->where(['email' => $this->email])->one();
+            $this->testUser = $testUser;
         }
 
         //Вход, получение access_token и авторизация
@@ -71,7 +73,10 @@ class ObjectControllerCest
         $response=$I->grabResponse();
         $response=json_decode($response);
 
-        $this->testObject = EstateObject::findOne($response->id);
+        
+
+        $this->testObject = EstateObject::find()->where(['user_id' => $testUser->ID])->orderBy('id DESC')->one(); //РАБОТАЕТ
+        //$testObject = EstateObject::find()->where(['id' => $testUser->ID])->one(); //ПОЧЕМУ-ТО НЕ РАБОТАЕТ
     }
 
     public function getObjectsViaApi(\ApiTester $I)
@@ -111,7 +116,7 @@ class ObjectControllerCest
         //
 
         //Замена имени у объекта
-        $I->sendPOST('/object/update/'.$this->testObject->ID,[ //НУЖНО БРАТЬ ID ИЗ ТОЛЬКО ЧТО СОЗДАННОГО ТЕСТОВОГО ОБЪЕКТА
+        $I->sendPOST('/object/update/'.$this->testObject->id,[ //НУЖНО БРАТЬ ID ИЗ ТОЛЬКО ЧТО СОЗДАННОГО ТЕСТОВОГО ОБЪЕКТА
             'name' => 'updateTest'
         ]);
         $I->seeResponseIsJson();
@@ -135,7 +140,7 @@ class ObjectControllerCest
         $I->amBearerAuthenticated($token);
         //
 
-        $I->sendGET('/object/view/'.$this->testObject->ID); //ТУТ ДОЛЖЕН БЫТЬ ID КАКОГО-ТО ОБЪЕКТА, ЖЕЛАТЕЛЬНО НОВОСОЗДАННОГО
+        $I->sendGET('/object/view/'.$this->testObject->id); //ТУТ ДОЛЖЕН БЫТЬ ID КАКОГО-ТО ОБЪЕКТА, ЖЕЛАТЕЛЬНО НОВОСОЗДАННОГО
         $I->seeResponseIsJson();
 
         //Проверка формата данных для даты в формате "гггг-мм-дд чч:мм:cc"
@@ -163,7 +168,8 @@ class ObjectControllerCest
             "updated_at" => 'string:datetime',
             "data" => 'boolean|null'
         ),
-            'images' => 'array|null'
+            'images' => 'array',
+            'phones' => 'array'
         ]);
     }
 }

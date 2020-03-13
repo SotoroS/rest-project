@@ -8,7 +8,7 @@ class UserControllerCest
     public $password = '1234';
     public $testUser;
 
-    public function verifyViaApi(\ApiTester $I)
+    private function verifyViaApi(\ApiTester $I)
     {
         $this->testUser = User::find()->where(['email' => $this->email])->one();
         $I->sendGET('/user/verify',[
@@ -42,6 +42,8 @@ class UserControllerCest
             $I->seeResponseContainsJson(
                 array('error' => 'User exist.')
             );
+            $testUser = User::find()->where(['email' => $this->email])->one();
+            $this->testUser = $testUser;
         }
     }
     //
@@ -49,7 +51,7 @@ class UserControllerCest
     public function signupMobViaApi(\ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-        
+        echo print_r($this->testUser,true);
         $I->sendPOST('/user/signup-mob',[
             'account_id' => $this->testUser->ID,
             'deviceType' => 'android',
@@ -69,10 +71,18 @@ class UserControllerCest
     {
         $I->sendGET('/user/get-areas');
         $I->seeResponseIsJson();
-        $I->seeResponseMatchesJsonType([
-            'name' => 'string',
-            'id' => 'integer'
-        ]);
+        $response = json_decode($I->grabResponse(),true);
+        if (empty($response))
+        {
+            $I->seeResponseIsValidOnJsonSchemaString(json_encode([]));
+        }
+        else
+        {
+            $I->seeResponseMatchesJsonType([
+                'name' => 'string',
+                'id' => 'integer'
+            ]);
+        }
     }
 
     public function loginViaApi(\ApiTester $I)
@@ -126,7 +136,7 @@ class UserControllerCest
         //
 
         //Установка нового E-Mail
-        $I->sendPOST('/user/login',[
+        $I->sendPOST('/user/update/'.$this->testUser->ID,[
             'gender' => 'F',
             'phone' => '+79999999999',
             'email' => $this->alternativeEmail,
@@ -134,11 +144,11 @@ class UserControllerCest
         ]);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(
-            array('return' => true)
+            array('result' => true)
         );
 
         //Возвращение старого E-Mail
-        $I->sendPOST('/user/login',[
+        $I->sendPOST('/user/update/'.$this->testUser->ID,[
             'gender' => 'F',
             'phone' => '+79999999999',
             'email' => $this->email,
@@ -146,7 +156,7 @@ class UserControllerCest
         ]);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(
-            array('return' => true)
+            array('result' => true)
         );
     }
 }

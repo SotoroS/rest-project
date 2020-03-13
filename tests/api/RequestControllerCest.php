@@ -10,7 +10,7 @@ class RequestControllerCest
     public $testUser;
     public $testFilter;
 
-    public function verifyViaApi(\ApiTester $I)
+    private function verifyViaApi(\ApiTester $I)
     {
         $this->testUser = User::find()->where(['email' => $this->email])->one();
         
@@ -45,6 +45,8 @@ class RequestControllerCest
             $I->seeResponseContainsJson(
                 array('error' => 'User exist.')
             );
+            $testUser = User::find()->where(['email' => $this->email])->one();
+            $this->testUser = $testUser;
         }
 
         //Вход, получение access_token и авторизация
@@ -95,7 +97,6 @@ class RequestControllerCest
         $response=$I->grabResponse();
         $response=json_decode($response);
         $token = $response->access_token;
-        $token = '5e5ebf6911d54';
         $I->amBearerAuthenticated($token);
         //
 
@@ -133,7 +134,7 @@ class RequestControllerCest
         //
 
         //ОТПРАВЛЯТЬ НЕОБХОДИМЫЕ ДАННЫЕ
-        $I->sendPOST('/request/update/'.$this->testFilter->ID,[ //ЗДЕСЬ ДОЛЖЕН БЫТЬ ID ФИЛЬТРА СОЗДАННОГО В ТЕСТЕ ВЫШЕ
+        $I->sendPOST('/request/update/'.$this->testFilter->id,[ //ЗДЕСЬ ДОЛЖЕН БЫТЬ ID ФИЛЬТРА СОЗДАННОГО В ТЕСТЕ ВЫШЕ
             'num_of_people' => 1,
             'family' => 2,
             'pets' => 3,
@@ -174,8 +175,7 @@ class RequestControllerCest
         $I->amBearerAuthenticated($token);
         //
         
-        $this->testFilter = Filter::find()->where(['user_id' => $this->testUser->ID])->one();
-        $I->sendGET('/request/view/'.$this->testFilter->ID); //НУЖНО ИСПОЛЬЗОВАТЬ ID ФИЛЬТРА СОЗДАННОГО В ТЕСТЕ ВЫШЕ
+        $I->sendGET('/request/view/'.$this->testFilter->id); //НУЖНО ИСПОЛЬЗОВАТЬ ID ФИЛЬТРА СОЗДАННОГО В ТЕСТЕ ВЫШЕ
 
         //Проверка формата данных для даты в формате "гггг-мм-дд чч:мм:cc"
         Codeception\Util\JsonType::addCustomFilter('datetime', function($value) {
