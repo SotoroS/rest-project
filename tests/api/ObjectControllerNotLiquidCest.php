@@ -1,15 +1,14 @@
-<?php
+<?php 
 
 use micro\models\User;
 use micro\models\EstateObject;
-use yii\web\UploadedFile;
 
 /**
- * Test for ObjectController
+ * Test for ObjectController with not liquid data
  * 
- * Class ObjectControllerCest
+ * Class ObjectControllerNotLiquidCest
  */
-class ObjectControllerCest
+class ObjectControllerNotLiquidCest
 {
     /**
      * @var string
@@ -38,32 +37,27 @@ class ObjectControllerCest
      * 
      * @var micro\models\EstateObject
      */
-    public $testObject = null;
+    public $testObject;
 
     /**
-     * Create new estate object
+     * View object
      * 
      * @param \ApiTester $I
      * 
      * @return void
      */
-    public function newObjectViaApi(\ApiTester $I)
+    public function viewObjectViaApi(\ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         $this->_init($I);
 
-        $I->sendPOST('/object/new', [
-            'address' => 'г.Волгоград, ул.50-летия ВЛКСМ',
-            'name' => 'test',
-            'description' => 'test',
-            'price' => '5000000'
-        ]);
+        $I->sendGET('/object/view/-1');
 
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'id' => 'integer',
+            'error' => 'string',
         ]);
     }
 
@@ -83,7 +77,34 @@ class ObjectControllerCest
         $I->sendGET('/object/get-objects');
 
         $I->seeResponseMatchesJsonType([
-            'data' => 'array',
+            'error' => 'string',
+        ]);
+    }
+
+    /**
+     * Create new estate object
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    public function newObjectViaApi(\ApiTester $I)
+    {
+        $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        $this->_init($I);
+
+        $I->sendPOST('/object/new', [
+            'address' => '-1',
+            'name' => '',
+            'description' => '',
+            'price' => '-5000000'
+        ]);
+
+        $I->seeResponseIsJson();
+
+        $I->seeResponseMatchesJsonType([
+            'error' => 'string',
         ]);
     }
 
@@ -103,64 +124,19 @@ class ObjectControllerCest
         $images = UploadedFile::getInstancesByName('images');
 
         $I->sendPOST('/object/update/' . $this->testObject->id, [
-            'name' => 'updateTest',
-            'phone' => '+79999999999',
+            'name' => '',
+            'phone' => '+79999999',
             'images' => [
-                codecept_data_dir('1.jpg'),
-                codecept_data_dir('2.jpg'),
-                codecept_data_dir('3.jpg'),
+                codecept_data_dir('1'),
+                codecept_data_dir(''),
+                codecept_data_dir('3.php'),
             ]
         ]);
 
         $I->seeResponseIsJson();
 
-        $I->seeResponseContainsJson(
-            array('result' => true)
-        );
-    }
-
-    /**
-     * View object
-     * 
-     * @param \ApiTester $I
-     * 
-     * @return void
-     */
-    public function viewObjectViaApi(\ApiTester $I)
-    {
-        $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-        $this->_init($I);
-
-        $I->sendGET('/object/view/' . $this->testObject->id);
-
-        $I->seeResponseIsJson();
-
-        Codeception\Util\JsonType::addCustomFilter('datetime', function ($value) {
-            return preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $value, $matches);
-        });
-
         $I->seeResponseMatchesJsonType([
-            'object' => array(
-                'id' => 'integer',
-                'address_id' => 'integer',
-                'building_type_id' => 'integer',
-                'rent_type' => 'integer',
-                'property_type' => 'integer',
-                'metro_id' => 'integer',
-                'name' => 'string',
-                'description' => 'string',
-                'price' => 'integer',
-                'url' => 'string:url|null',
-                'user_id' => 'integer',
-                'city_id' => 'integer',
-                'city_area_id' => 'integer',
-                'created_at' => 'string:datetime',
-                'updated_at' => 'string:datetime',
-                'data' => 'boolean|null'
-            ),
-            'images' => 'array',
-            'phones' => 'array'
+            'error' => 'string',
         ]);
     }
 
@@ -176,10 +152,6 @@ class ObjectControllerCest
         $this->_signupViaApi($I);
         $this->_loginViaApi($I);
 
-        $this->testObject = EstateObject::find()
-                ->where(['user_id' => $this->testUser->id])
-                ->orderBy('id DESC')
-                ->one();
 
         if (is_null($this->testObject) && $needTestObject)
         {
