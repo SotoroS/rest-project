@@ -1,68 +1,60 @@
-<?php 
+<?php
+
 use micro\models\User;
 use micro\models\Filter;
 
+/**
+ * Api test for request controller
+ * 
+ * Class RequestControllerCest
+ */
 class RequestControllerCest
 {
-    public $alternativeEmail = 'ghettogopnik1703@gmail.com';
-    public $email = 'nape.maxim@gmail.com';
-    public $password = '1234';
-    public $testUser;
-    public $testFilter;
+    /**
+     * Email address test user
+     * 
+     * @var string
+     */
+    private $email = 'nape.maxim@gmail.com';
 
-    private function verifyViaApi(\ApiTester $I)
-    {
-        $this->testUser = User::find()->where(['email' => $this->email])->one();
-        
-        $I->sendGET('/user/verify',[
-            'token' => $testUser->signup_token,
-        ]);
-        $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(
-            array('result' => true)
-        );
-    }
+    /**
+     * Password test user
+     * 
+     * @var string
+     */
+    private $password = '1234';
+    
+    /**
+     * @var User
+     */
+    private $testUser;
 
-    //НЕ ЗАКОНЧЕНО
+    /**
+     * @var Filter
+     */
+    private $testFilter;
+    
+    /**
+     * Access token test user
+     * 
+     * @var string
+     */
+    private $token;
+
+    /**
+     * Create new request object
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
     public function newViaApi(\ApiTester $I)
     {
+        $this->_init($I);
+
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Работает
-        //Получение токена с помощью регулярного выражения из текста письма.
-        $I->sendPOST('/user/signup-web',[
-            'email' => $this->email,
-            'password' => $this->password
-        ]);
-        $response = json_decode($I->grabResponse(), true);
-        //\Codeception\Util\Debug::debug(is_array($response));die();
-        if (array_key_exists("mailSend",$response) && ($response["mailSend"]) == true)
-        {
-            $this->verifyViaApi($I);
-        }
-        else
-        {
-            $I->seeResponseContainsJson(
-                array('error' => 'User exist.')
-            );
-            $testUser = User::find()->where(['email' => $this->email])->one();
-            $this->testUser = $testUser;
-        }
-
-        //Вход, получение access_token и авторизация
-        $I->sendPOST('/user/login',[
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-        $token = $response->access_token;
-        $I->amBearerAuthenticated($token);
-        //
-
-        //ОТПРАВЛЯТЬ НЕОБХОДИМЫЕ ДАННЫЕ
-        $I->sendPOST('/request/filter-new',[
-            'user_id' => $this->testUser->ID,
+        $I->sendPOST('/request/new-filter', [
             'num_of_people' => 1,
             'family' => 2,
             'pets' => 3,
@@ -75,35 +67,31 @@ class RequestControllerCest
             'addresses' => ['Саратов улица Вишневая 24'],
             'requestName' => 'Проверка'
         ]);
-        //ОТПРАВЛЯТЬ НЕОБХОДИМЫЕ ДАННЫЕ
 
         $I->seeResponseIsJson();
+
         $I->seeResponseContainsJson(
             array('result' => true)
         );
-
-        $this->testFilter = Filter::find()->where(['user_id' => $this->testUser->ID])->one();
     }
 
+    /**
+     * Set filter
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
     public function setViaApi(\ApiTester $I)
     {
+        $this->_init($I);
+
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Вход, получение access_token и авторизация
-        $I->sendPOST('/user/login',[
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-        $token = $response->access_token;
-        $I->amBearerAuthenticated($token);
-        //
-
-        $I->sendPOST('/request/set-filter',[
+        $I->sendPOST('/request/set-filter', [
             'fcmToken' => 'token',
-            //'city_area_id' => 1,
-            //'request_type_id' => 1,
+            'city_area_id' => 1,
+            'request_type_id' => 1,
             'push_notification' => 1,
             'price_from' => 40000,
             'price_to' => 500000,
@@ -113,75 +101,69 @@ class RequestControllerCest
         ]);
 
         $I->seeResponseIsJson();
+
         $I->seeResponseMatchesJsonType([
             'cities' => 'array',
         ]);
     }
 
+    /**
+     * Update filter
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
     public function updateViaApi(\ApiTester $I)
     {
+        $this->_init($I, true);
+
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Вход, получение access_token и авторизация
-        $I->sendPOST('/user/login',[
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-        $token = $response->access_token;
-        $I->amBearerAuthenticated($token);
-        //
-
-        //ОТПРАВЛЯТЬ НЕОБХОДИМЫЕ ДАННЫЕ
-        $I->sendPOST('/request/update/'.$this->testFilter->id,[ //ЗДЕСЬ ДОЛЖЕН БЫТЬ ID ФИЛЬТРА СОЗДАННОГО В ТЕСТЕ ВЫШЕ
+        $I->sendPOST('/request/update/' . $this->testFilter->id, [
             'num_of_people' => 1,
             'family' => 2,
             'pets' => 3,
-            //'request_type_id' => 1,
+            'request_type_id' => 1,
             'square_from' => 200,
             'square_to' => 500,
-            //'city_id' => 1,
+            'city_id' => 1,
             'price_from' => 20000,
             'price_to' => 5300000,
             'description' => 'Description',
-            //'city_area_id' => 1,
+            'city_area_id' => 1,
             'rent_type' => 'Rent Type',
             'property_type' => 'Property Type',
             'substring' => 'Substring',
-            'created_at' => 'Created At', //Здесь должна быть дата
-            'updated_at' => 'Updated At', //Здесь должна быть дата
         ]);
-        //ОТПРАВЛЯТЬ НЕОБХОДИМЫЕ ДАННЫЕ
 
         $I->seeResponseIsJson();
+
         $I->seeResponseContainsJson(
             array('result' => true)
         );
     }
 
+    /**
+     * View filter
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
     public function viewViaApi(\ApiTester $I)
     {
+        $this->_init($I, true);
+
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Вход, получение access_token и авторизация
-        $I->sendPOST('/user/login',[
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-        $token = $response->access_token;
-        $I->amBearerAuthenticated($token);
-        //
-        
-        $I->sendGET('/request/view/'.$this->testFilter->id); //НУЖНО ИСПОЛЬЗОВАТЬ ID ФИЛЬТРА СОЗДАННОГО В ТЕСТЕ ВЫШЕ
+        $I->sendGET('/request/view/' . $this->testFilter->id);
 
-        //Проверка формата данных для даты в формате "гггг-мм-дд чч:мм:cc"
-        Codeception\Util\JsonType::addCustomFilter('datetime', function($value) {
-            return preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/',$value,$matches);
+        // Проверка формата данных для даты в формате "гггг-мм-дд чч:мм:cc"
+        Codeception\Util\JsonType::addCustomFilter('datetime', function ($value) {
+            return preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $value, $matches);
         });
-        //
+
         $I->seeResponseMatchesJsonType([
             'id' => 'integer',
             'user_id' => 'integer',
@@ -205,5 +187,97 @@ class RequestControllerCest
             'created_at' => 'string:datetime',
             'updated_at' => 'string:datetime',
         ]);
+    }
+
+    /**
+     * Init workspace for test
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    private function _init(\ApiTester $I, bool $needTestFilter = false) {
+        $this->_signupViaApi($I);
+        $this->_loginViaApi($I);
+
+        $this->testFilter = Filter::find()->where(['user_id' => $this->testUser->id])->one();
+
+        // Create filter if need
+        if (is_null($this->testFilter) && $needTestFilter) {
+            $this->newViaApi($I);
+        }
+
+        // Set OAuth 2.0 token
+        $I->amBearerAuthenticated($this->token);
+    }
+
+    /**
+     * Signup test user
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    private function _signupViaApi(\ApiTester $I)
+    {
+        $I->sendPOST('/user/signup-web', [
+            'email' => $this->email,
+            'password' => $this->password
+        ]);
+
+        $response = json_decode($I->grabResponse(), true);
+
+        if (array_key_exists("status", $response) && ($response["status"]) == true) {
+            $this->_verifyViaApi($I);
+        } else {
+            $I->seeResponseContainsJson(
+                ['error' => 'User exist']
+            );
+        }
+    }
+
+    /**
+     * Verify test user
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    private function _verifyViaApi(\ApiTester $I)
+    {
+        $this->testUser = User::find()->where(['email' => $this->email])->one();
+
+        $I->sendGET('/user/verify', [
+            'token' => $this->testUser->signup_token,
+        ]);
+
+        $I->seeResponseIsJson();
+
+        $I->seeResponseContainsJson(
+            array('result' => true)
+        );
+    }
+
+    /**
+     * Login test user and get access token
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    private function _loginViaApi(\ApiTester $I)
+    {
+        $I->sendPOST('/user/login', [
+            'email' => $this->email,
+            'password' => $this->password,
+        ]);
+
+        $response = $I->grabResponse();
+        $response = json_decode($response);
+
+        $testUser = User::find()->where(['email' => $this->email])->one();
+
+        $this->testUser = $testUser;
+        $this->token = $response->access_token;
     }
 }

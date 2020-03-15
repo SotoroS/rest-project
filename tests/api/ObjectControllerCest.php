@@ -1,175 +1,251 @@
-<?php 
+<?php
+
 use micro\models\User;
 use micro\models\EstateObject;
 
+/**
+ * Test for ObjectController
+ * 
+ * Class ObjectControllerCest
+ */
 class ObjectControllerCest
 {
+    /**
+     * @var string
+     */
     public $alternativeEmail = 'ghettogopnik1703@gmail.com';
+
+    /**
+     * @var string
+     */
     public $email = 'nape.maxim@gmail.com';
+
+    /**
+     * @var string
+     */
     public $password = '1234';
+
+    /**
+     * Model of test user
+     * 
+     * @var micro\models\User
+     */
     public $testUser;
+
+    /**
+     * Model of test object
+     * 
+     * @var micro\models\EstateObject
+     */
     public $testObject;
 
-    private function verifyViaApi(\ApiTester $I)
-    {
-        $this->testUser = User::find()->where(['email' => $this->email])->one();
-        
-        $I->sendGET('/user/verify',[
-            'token' => $testUser->signup_token,
-        ]);
-        $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(
-            array('result' => true)
-        );
-    }
-
+    /**
+     * Create new estate object
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
     public function newObjectViaApi(\ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Работает
-        //Получение токена с помощью регулярного выражения из текста письма.
-        $I->sendPOST('/user/signup-web',[
-            'email' => $this->email,
-            'password' => $this->password
-        ]);
-        $response = json_decode($I->grabResponse(), true);
-        //\Codeception\Util\Debug::debug(is_array($response));die();
-        if (array_key_exists("mailSend",$response) && ($response["mailSend"]) == true)
-        {
-            $this->verifyViaApi($I);
-        }
-        else
-        {
-            $I->seeResponseContainsJson(
-                array('error' => 'User exist.')
-            );
-            $testUser = User::find()->where(['email' => $this->email])->one();
-            $this->testUser = $testUser;
-        }
+        $this->_init($I);
 
-        //Вход, получение access_token и авторизация
-        $I->sendPOST('/user/login',[
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-        $token = $response->access_token;
-        $I->amBearerAuthenticated($token);
-        //
-
-        $I->sendPOST('/object/new',[
+        $I->sendPOST('/object/new', [
             'address' => 'г.Волгоград, ул.50-летия ВЛКСМ',
             'name' => 'test',
             'description' => 'test',
             'price' => '5000000'
         ]);
+
         $I->seeResponseIsJson();
+
         $I->seeResponseMatchesJsonType([
             'id' => 'integer',
         ]);
 
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-
-        
-
-        $this->testObject = EstateObject::find()->where(['user_id' => $testUser->ID])->orderBy('id DESC')->one(); //РАБОТАЕТ
-        //$testObject = EstateObject::find()->where(['id' => $testUser->ID])->one(); //ПОЧЕМУ-ТО НЕ РАБОТАЕТ
+        $response = $I->grabResponse();
+        $response = json_decode($response);
     }
 
+    /**
+     * Get objects 
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
     public function getObjectsViaApi(\ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Вход, получение access_token и авторизация
-        $I->sendPOST('/user/login',[
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-        $token = $response->access_token;
-        $I->amBearerAuthenticated($token);
-        //
+        $this->_init($I);
 
         $I->sendGET('/object/get-objects');
+
         $I->seeResponseMatchesJsonType([
             'data' => 'array',
         ]);
     }
 
+    /**
+     * Update object
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
     public function updateObjectViaApi(\ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Вход, получение access_token и авторизация
-        $I->sendPOST('/user/login',[
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-        $token = $response->access_token;
-        $I->amBearerAuthenticated($token);
-        //
+        $this->_init($I);
 
-        //Замена имени у объекта
-        $I->sendPOST('/object/update/'.$this->testObject->id,[ //НУЖНО БРАТЬ ID ИЗ ТОЛЬКО ЧТО СОЗДАННОГО ТЕСТОВОГО ОБЪЕКТА
+        $I->sendPOST('/object/update/' . $this->testObject->id, [
             'name' => 'updateTest'
         ]);
+
         $I->seeResponseIsJson();
+
         $I->seeResponseContainsJson(
             array('result' => true)
         );
     }
 
+    /**
+     * View object
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
     public function viewObjectViaApi(\ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Вход, получение access_token и авторизация
-        $I->sendPOST('/user/login',[
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-        $response=$I->grabResponse();
-        $response=json_decode($response);
-        $token = $response->access_token;
-        $I->amBearerAuthenticated($token);
-        //
+        $this->_init($I);
 
-        $I->sendGET('/object/view/'.$this->testObject->id); //ТУТ ДОЛЖЕН БЫТЬ ID КАКОГО-ТО ОБЪЕКТА, ЖЕЛАТЕЛЬНО НОВОСОЗДАННОГО
+        $I->sendGET('/object/view/' . $this->testObject->id);
+
         $I->seeResponseIsJson();
 
-        //Проверка формата данных для даты в формате "гггг-мм-дд чч:мм:cc"
-        Codeception\Util\JsonType::addCustomFilter('datetime', function($value) {
-            return preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/',$value,$matches);
+        Codeception\Util\JsonType::addCustomFilter('datetime', function ($value) {
+            return preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $value, $matches);
         });
-        //
 
         $I->seeResponseMatchesJsonType([
-        'object' => array(
-            "id" => 'integer',
-            "address_id" => 'integer',
-            "building_type_id" => 'integer',
-            "rent_type" => 'integer',
-            "property_type" => 'integer',
-            "metro_id" => 'integer',
-            "name" => 'string',
-            "description" => 'string',
-            "price" => 'string',
-            "url" => 'string:url|null',
-            "user_id" => 'integer',
-            "city_id" => 'integer',
-            "city_area_id" => 'integer',
-            "created_at" => 'string:datetime',
-            "updated_at" => 'string:datetime',
-            "data" => 'boolean|null'
-        ),
+            'object' => array(
+                'id' => 'integer',
+                'address_id' => 'integer',
+                'building_type_id' => 'integer',
+                'rent_type' => 'integer',
+                'property_type' => 'integer',
+                'metro_id' => 'integer',
+                'name' => 'string',
+                'description' => 'string',
+                'price' => 'integer',
+                'url' => 'string:url|null',
+                'user_id' => 'integer',
+                'city_id' => 'integer',
+                'city_area_id' => 'integer',
+                'created_at' => 'string:datetime',
+                'updated_at' => 'string:datetime',
+                'data' => 'boolean|null'
+            ),
             'images' => 'array',
             'phones' => 'array'
         ]);
+    }
+
+    /**
+     * Init workspace for test
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    private function _init(\ApiTester $I, bool $needTestFilter = false)
+    {
+        $this->_signupViaApi($I);
+        $this->_loginViaApi($I);
+
+        $this->testObject = EstateObject::find()
+            ->where(['user_id' => $this->testUser->id])
+            ->orderBy('id DESC')
+            ->one();
+
+        // Set OAuth 2.0 token
+        $I->amBearerAuthenticated($this->token);
+    }
+
+    /**
+     * Signup test user
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    private function _signupViaApi(\ApiTester $I)
+    {
+        $I->sendPOST('/user/signup-web', [
+            'email' => $this->email,
+            'password' => $this->password
+        ]);
+
+        $response = json_decode($I->grabResponse(), true);
+
+        if (array_key_exists("status", $response) && ($response["status"]) == true) {
+            $this->_verifyViaApi($I);
+        } else {
+            $I->seeResponseContainsJson(
+                ['error' => 'User exist']
+            );
+        }
+    }
+
+    /**
+     * Verify test user
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    private function _verifyViaApi(\ApiTester $I)
+    {
+        $this->testUser = User::find()->where(['email' => $this->email])->one();
+
+        $I->sendGET('/user/verify', [
+            'token' => $this->testUser->signup_token,
+        ]);
+
+        $I->seeResponseIsJson();
+
+        $I->seeResponseContainsJson(
+            array('result' => true)
+        );
+    }
+
+    /**
+     * Login test user and get access token
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    private function _loginViaApi(\ApiTester $I)
+    {
+        $I->sendPOST('/user/login', [
+            'email' => $this->email,
+            'password' => $this->password,
+        ]);
+
+        $response = $I->grabResponse();
+        $response = json_decode($response);
+
+        $testUser = User::find()->where(['email' => $this->email])->one();
+
+        $this->testUser = $testUser;
+        $this->token = $response->access_token;
     }
 }
