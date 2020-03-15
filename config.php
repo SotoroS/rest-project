@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: sotoros
@@ -15,7 +16,8 @@ return [
 		'@micro' => __DIR__,
 	],
 	'params' => [
-		'here_api_key' => 'GIGsSEJb9m1LlcOOpL6jQSP-Mz51UEaV-kGj4orep1k',
+		// If you change username, you should change mail value in Mailer component
+		'email' => 'test.fokin.team@gmail.com',
 		'google_client_id' => '156874812665-unh00vf96tmf4msn0j43fhie0b69k6ke.apps.googleusercontent.com',
 		'google_client_secret' => '0qepssGons1TcyctkXfW-IPO',
 		'google_redirect_uri' => 'https://rest.fokin-team.ru/user/login-google',
@@ -42,7 +44,7 @@ return [
 			'username' => 'GodOfDB',
 			'password' => 'hard_pass!',
 			'charset' => 'utf8',
-		], 
+		],
 		'request' => [
 			'enableCookieValidation' => false,
 			'enableCsrfValidation' => false,
@@ -60,28 +62,30 @@ return [
 			],
 		],
 		'mailer' => [
-		    'class' => 'yii\swiftmailer\Mailer', 
-		      'transport' => [
-		           'class' => 'Swift_SmtpTransport',
-		            'host' => 'smtp.gmail.com',
-					'username' => 'test.fokin.team@gmail.com',
-					'password' => 'Qwerty34',
-					'port' => '465',
-					'encryption' => 'ssl', 
-                    ],
-                ],
-		'address' => [
-			'class' => 'micro\components\AddressComponent',
+			'class' => 'yii\swiftmailer\Mailer',
+			'transport' => [
+				'class' => 'Swift_SmtpTransport',
+				'host' => 'smtp.gmail.com',
+				// If you change username, you should change mail value in param
+				'username' => 'test.fokin.team@gmail.com',
+				'password' => 'Qwerty34',
+				'port' => '465',
+				'encryption' => 'ssl',
+			],
+		],
+		'hereMaps' => [
+			'class' => 'micro\components\HereMapsComponent',
+			'apiKey'=> 'GIGsSEJb9m1LlcOOpL6jQSP-Mz51UEaV-kGj4orep1k'
 		],
 		'user' => [
-            'identityClass' => 'micro\models\User',
-            'enableSession' => false,  
+			'identityClass' => 'micro\models\User',
+			'enableSession' => false,
 		],
 		'log' => [
 			'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
-                [
-                    'class' => 'yii\log\FileTarget',
+			'targets' => [
+				[
+					'class' => 'yii\log\FileTarget',
 					'levels' => ['info', 'error', 'warning'],
 				],
 			],
