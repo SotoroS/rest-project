@@ -1,5 +1,5 @@
 <?php
-//Строгая типизация
+
 declare(strict_types=1);
 
 namespace micro\controllers;
@@ -9,9 +9,10 @@ use Yii;
 use yii\base\Exception;
 use yii\rest\Controller;
 use yii\web\Response;
-use yii\filters\auth\HttpBearerAuth;
+
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\filters\auth\HttpBearerAuth;
 
 use micro\models\FilterAddress;
 use micro\models\Address;
@@ -20,45 +21,43 @@ use micro\models\Filter;
 use micro\models\RequestType;
 use micro\models\City;
 
-/** 
- * Class SiteController
- * @package micro\controllers
+/**
+ * Class RequestController
  */
 class RequestController extends Controller
 {
+	/**
+	 * @return void
+	 */
 	public function behaviors()
 	{
-		// удаляем rateLimiter, требуется для аутентификации пользователя
 		$behaviors = parent::behaviors();
 
 		$behaviors['access'] = [
-            'class' => AccessControl::className(),
-            'only' => ['set-filter', 'filter-new', 'update', 'view'],
-            'rules' => [
-                [
-                    'actions' => ['set-filter'],
-                	'allow' => true,
-                	'roles' => ['?'],
-                ],
-                [
-                    'actions' => ['set-filter', 'filter-new', 'update', 'view'],
-                    'allow' => true,
-                    'roles' => ['@'],
-                ],
+			'class' => AccessControl::className(),
+			'only' => ['set-filter', 'filter-new', 'update', 'view'],
+			'rules' => [
+				[
+					'actions' => ['set-filter', 'filter-new', 'update', 'view'],
+					'allow' => true,
+					'roles' => ['@'],
+				],
 			],
 		];
+
 		$behaviors['verbs'] = [
 			'class' => VerbFilter::className(),
 			'actions' => [
-				'set-filter'  => ['post'],
-				'filter-new'   => ['post'],
+				'set-filter' => ['post'],
+				'filter-new' => ['post'],
 				'update' => ['post'],
 				'view' => ['get'],
 			],
 		];
-		
-		// Возвращает результаты экшенов в формате JSON  
-		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
+
+		// Set JSON format for response  
+		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
+
 		// OAuth 2.0
 		$behaviors['authenticator'] = [
 			'except' => [],
@@ -67,154 +66,107 @@ class RequestController extends Controller
 
 		return $behaviors;
 	}
- 
+
+	/**
+	 * Set filter
+	 *
+	 * @return array
+	 */
 	public function actionSetFilter(): array
 	{
 		$request = Yii::$app->request;
 		$output = [];
 
 		try {
-			$fcmToken = $request->post('fcmToken');
-
-			$cityId = (int)$request->post('city_id') ?: 1;
-            $cityAreaId = (int)$request->post('city_area_id') ?: 1;
-            $request_type_id = (int)$request->post('request_type_id') ?: 1;
-			$notification = (int)$request->post('push_notification') ?: 0;
-			
-			$rentType = $request->post('rent_type') ?: null;
-			$propertyType = $request->post('property_type') ?: null;
-
-			$price_from = (int)$request->post('price_from') ?: 0;
-			$price_to = (int)$request->post('price_to') ?: 500000000;
-			$substring = $request->post('substring') ?: "";
-
-			// get current user
 			$user = User::findOne(Yii::$app->user->identity->id);
 
-			// current user filter
+			$user->notifications = (int) $request->post('push_notification') ?: 0;
+			$user->fcmToken = $request->post('fcmToken') ?: $user->fcmToken;
+
+			if (!$user->save()) {
+				throw new Exception('Cann\'t save user model');
+			}
+
 			$filterObject = Filter::findOne(['user_id' => $user->id]);
-			
-			
-			// if there is a fcmToken, fill in the user
-            if ($fcmToken) {
-                $user->fcmToken = $fcmToken;
-            }
 
-            if (is_null($filterObject)) {
-                $filterObject = new Filter();
-                $filterObject->user_id = $user->id;
-            }
+			// If not exist filter object - create new
+			if (is_null($filterObject)) {
+				$filterObject = new Filter();
+				
+				$filterObject->user_id = $user->id;
+			}
 
-            $user->notifications = $notification;
-			$user->save();
+			// Fill filter object model request data
+			$filterObject->rent_type = $request->post('rent_type') ?: null;
+			$filterObject->property_type = $request->post('property_type') ?: null;
+			$filterObject->request_type_id = (int) $request->post('request_type_id') ?: 1;
+			$filterObject->city_area_id = (int) $request->post('city_area_id') ?: 1;
+			$filterObject->city_id = (int) $request->post('city_id') ?: 1;
+			$filterObject->price_from = (int) $request->post('price_from') ?: 0;
+			$filterObject->price_to = (int) $request->post('price_to') ?: 500000000;
+			$filterObject->substring = $request->post('substring') ?: "";
 
-			// fill in the data
-			$filterObject->rent_type = $rentType;
-            $filterObject->property_type = $propertyType;
-            $filterObject->request_type_id = $request_type_id;
-            $filterObject->city_area_id = $cityAreaId;
-            $filterObject->city_id = $cityId;
-            $filterObject->price_from = $price_from;
-            $filterObject->price_to = $price_to;
-            $filterObject->substring = $substring;
-            $filterObject->save();
-			
+			if (!$filterObject->save()) {
+				throw new Exception('Cann\'t save filter object.');
+			}
+
 			$output['cities'] = City::find()->asArray()->all();
 			$output['setFilter'] = $filterObject;
-			
-			// Log
-			Yii::info("Get Address Success" ,__METHOD__);
 
 			return $output;
-
 		} catch (\Exception $e) {
-            $output['error'] = "Invalid data provided;";
-			// Log
-			Yii::error($e->getMessage() ,__METHOD__);
-			
-        } catch (\Throwable $e) {
-            // Log
-			Yii::error($e->getMessage() ,__METHOD__);
+            Yii::error($e->getMessage(), __METHOD__);
 
-			$output['error'] = $e->getMessage();
-			
-        } finally {
-            $output['status'] = true;
-            return $output;
-        }
+            return [
+                'error' => $e->getMessage()
+            ];
+		}
+
+		$output['status'] = true;
+
+		return $output;
 	}
 
 	/**
-	 * Create new object
+	 * Create new filter
 	 *
-	 * @return array|bool
+	 * @return array
 	 */
-	public function actionFilterNew(): array
+	public function actionNewFilter(): array
 	{
 		$model = new Filter();
+		
 		$request = Yii::$app->request->post();
+
 		$addressIds = [];
 
 		try {
 			if ($model->load($request, '')) {
 				$model->user_id = Yii::$app->user->identity->id;
 
-				foreach ($model->addresses as $address) {
-
-					// Get address info by search address
-					$infoObject = Yii::$app->address->getAddress($address);
-
-					// Find address by coordinates
-					$address = Address::findByCoordinates(
-						$infoObject->DisplayPosition->Latitude,
-						$infoObject->DisplayPosition->Longitude
-					); 
-					// If address no exsist create new address
-					if (is_null($address)) {
-						$address = new Address();
-
-						$address->lt = $infoObject->DisplayPosition->Latitude;
-						$address->lg = $infoObject->DisplayPosition->Longitude;
-
-						$address->streetName = $infoObject->Address->Street;
-						$address->cityAreaName = $infoObject->Address->District;
-						$address->cityName = $infoObject->Address->City;
-						$address->regionName = $infoObject->Address->County;
-
-						// Save address & object
-						if ($address->save()) {
-							// Add id address after save in array od ids
-							array_push($addressIds, $address->id);
-						} else { // Return error if not save address
-							throw new Exception('Address Save Failed');
-						}
-					} else { // if exist address model
-						// Add id address after save in array od ids
-						array_push($addressIds, $address->id);
-					}
-
+				foreach ($model->addresses as $searchText) {
+					$addressIds[] = $this->_getAddressBySearchText($searchText);
 				}
-				
+
 				// проверка на наличие requestName, если есть ищем среди возможных, если не находим - создаем новый. 
 				// Если requestName отсутствует записываем request_type_id = default 1
 				if (!is_null($model->requestName)) {
 					$request_type = RequestType::findByName($model->requestName);
 
 					if (is_null($request_type)) {
-
 						$request_type = new RequestType();
 						$request_type->name = $model->requestName;
-						
+
 						if (!$request_type->save()) {
-							throw new Exception('Request_type Save Failed');
+							throw new Exception('Request type save failed');
 						}
 					}
-					$model->request_type_id = $request_type->id;
 
+					$model->request_type_id = $request_type->id;
 				} else {
 					$model->request_type_id = 1;
 				}
-				
+
 				if ($model->save()) {
 					// Create rows in request_address table
 					foreach ($addressIds as $addressId) {
@@ -225,29 +177,21 @@ class RequestController extends Controller
 						$filterAddress->filters_id = $model->id;
 
 						if (!$filterAddress->save()) {
-							throw new Exception('FilterAddress Save Failed');
+							throw new Exception('Cann\'t save FilterAddress model');
 						}
 					}
-					// Log
-					Yii::info("Save Filter" ,__METHOD__);
 
 					return [
 						"result" => true
 					];
 				} else {
-					throw new Exception('Filter Save Failed');
+					throw new Exception('Cann\'t save filter model');
 				}
 			} else {
-				// Log
-				Yii::error('empty request' ,__METHOD__);
-
-				return [
-					'error' => 'empty request'
-				];
+				throw new Exception('Empty request');
 			}
-		} catch(Exception $e) {
-			// Log
-			Yii::error($e->getMessage() ,__METHOD__);
+		} catch (Exception $e) {
+			Yii::error($e->getMessage(), __METHOD__);
 
 			return [
 				'error' => $e->getMessage()
@@ -258,35 +202,25 @@ class RequestController extends Controller
 	/**
 	 * Update object by id
 	 *
-	 * @return array|bool
+	 * @return array
 	 */
 	public function actionUpdate($id): array
 	{
-		// $model = RequestObject::findByIdentity($id);
 		$model = Filter::findByIdentity($id);
 		$request = Yii::$app->request->post();
 
 		try {
 			if ($model->load($request, '') && $model->update()) {
-				// Log
-				Yii::info('Save Filter' ,__METHOD__);
-
 				return [
 					"result" => true
 				];
-			} elseif (empty($request)) {
-				// Log
-				Yii::error('Not all data entered' ,__METHOD__);
-
-				return [
-					'error'=>'Not all data entered'
-				];
+			} else if (empty($request)) {
+				throw new Exception('Not all data entered');
 			} else {
-				throw new Exception('Filter Update Failed');
+				throw new Exception('Cann\'t update filter model');
 			}
-		} catch(Exception $e) {
-			// Log
-			Yii::error($e->getMessage() ,__METHOD__);
+		} catch (Exception $e) {
+			Yii::error($e->getMessage(), __METHOD__);
 
 			return [
 				'error' => $e->getMessage()
@@ -297,28 +231,20 @@ class RequestController extends Controller
 	/**
 	 * View object by id
 	 *
-	 * @return array|bool
+	 * @return array
 	 */
 	public function actionView($id): array
 	{
 		$model = Filter::findByIdentity($id);
-        try {
-			if (!is_null($model)) {
-				// Log
-				Yii::error("Get Filter" ,__METHOD__);
 
+		try {
+			if (!is_null($model)) {
 				return $model->toArray();
 			} else {
-				// Log
-				Yii::error("Filter Not Found" ,__METHOD__);
-
-				return [
-					'error'=>"Filter Not Found"
-				];
+				throw new Exception('Filter not found');
 			}
-		} catch(Exception $e) {
-			// Log
-			Yii::error($e->getMessage() ,__METHOD__);
+		} catch (Exception $e) {
+			Yii::error($e->getMessage(), __METHOD__);
 
 			return [
 				'error' => $e->getMessage()
@@ -326,4 +252,47 @@ class RequestController extends Controller
 		}
 	}
 
-} 
+	/**
+	 * Get address by search text
+	 * 
+	 * @param string $searchText
+	 * 
+	 * @return int id addresse's 
+	 */
+	private function _getAddressBySearchText(string $searchText) {
+		if ($searchText == "") {
+			throw new Exception("Search text is empty");
+		}
+
+		// Get address info by search text
+		$infoObject = Yii::$app->hereMaps->findAddressByText($searchText)->View[0]->Result[0]->Location;
+
+		// Find address by coordinates
+		$address = Address::findByCoordinates(
+			$infoObject->DisplayPosition->Latitude,
+			$infoObject->DisplayPosition->Longitude
+		);
+
+		// If address not exsist - create new address
+		if (is_null($address)) {
+			$address = new Address();
+
+			$address->lt = $infoObject->DisplayPosition->Latitude;
+			$address->lg = $infoObject->DisplayPosition->Longitude;
+
+			$address->streetName = $infoObject->Address->Street;
+			$address->cityAreaName = $infoObject->Address->District;
+			$address->cityName = $infoObject->Address->City;
+			$address->regionName = $infoObject->Address->County;
+
+			// Save address and add to array of address ids
+			if ($address->save()) {
+				return $address->id;
+			} else {
+				throw new Exception('Cann\'t save address');
+			}
+		} else {
+			return $address->id;
+		}
+	}
+}

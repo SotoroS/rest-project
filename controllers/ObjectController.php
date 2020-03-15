@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace micro\controllers;
 
 use Yii;
+
 use \Datetime;
-use Yii\db\Query;
-use Yii\web\UrlManager;
 
 use yii\base\Exception;
 use yii\rest\Controller;
+
 use yii\web\Response;
 use yii\web\UploadedFile;
+
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\VerbFilter;
@@ -28,36 +29,37 @@ use micro\models\City;
 use micro\models\Image;
 use micro\models\Phone;
 use micro\models\RentType;
-use PharIo\Manifest\Url;
 
 /**
- * Class SiteController
+ * Class ObjectController
+ * 
  * @package micro\controllers
  */
 class ObjectController extends Controller
-{	
+{
+	/**
+	 * @return array
+	 */
 	public function behaviors()
 	{
+		$behaviors = parent::behaviors();
 
-		// удаляем rateLimiter, требуется для аутентификации пользователя
-        $behaviors = parent::behaviors();
-        
-        $behaviors['access'] = [
-            'class' => AccessControl::className(),
-            'only' => ['get-objects', 'new', 'update', 'view'],
-            'rules' => [
-                [
-                    'actions' => ['get-objects'],
-                	'allow' => true,
-                	'roles' => ['?'],
-                ],
-                [
-                    'actions' => ['get-objects', 'new', 'update', 'view'],
-                    'allow' => true,
-                    'roles' => ['@'],
-                ],
+		$behaviors['access'] = [
+			'class' => AccessControl::className(),
+			'only' => ['get-objects', 'new', 'update', 'view'],
+			'rules' => [
+				[
+					'actions' => ['get-objects'],
+					'allow' => true,
+					'roles' => ['?'],
+				],
+				[
+					'actions' => ['get-objects', 'new', 'update', 'view'],
+					'allow' => true,
+					'roles' => ['@'],
+				],
 			],
-			
+
 		];
 		$behaviors['verbs'] = [
 			'class' => VerbFilter::className(),
@@ -68,195 +70,178 @@ class ObjectController extends Controller
 				'view' => ['get'],
 			],
 		];
-            
-        // Возвращает результаты экшенов в формате JSON  
-        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON; 
-            
-        $behaviors['authenticator'] = [
-            'except' => [],
-            'class' => HttpBearerAuth::className()
-        ];
+
+		// Возвращает результаты экшенов в формате JSON  
+		$behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
+
+		$behaviors['authenticator'] = [
+			'except' => [],
+			'class' => HttpBearerAuth::className()
+		];
 
 		return $behaviors;
 	}
 
 	/**
 	 * Get all objects
-	 * 
-	 * 
 	 *
 	 * @return array
-	 * 
 	 */
 
 	public function actionGetObjects(): array
-    {
+	{
 		$output = [];
 		$objects = [];
 		$items = [];
 
-        try {
+		try {
 			$user = User::findOne(Yii::$app->user->identity->id);
 			$lastFetchDate = $user->last_fetch;
 
-			// get filter current user
 			$filterObject = Filter::find()
-			->where("user_id = $user->id")->orderBy(['created_at' => SORT_DESC])->one();
+				->where("user_id = $user->id")
+				->orderBy(['created_at' => SORT_DESC])
+				->one();
 
-			// print_r($filterObject);
-			// exit();
-			
-            if (is_null($filterObject)) {
-                throw new Exception("filter not set");
-            }
+			if (is_null($filterObject)) {
+				throw new Exception("Filter not set");
+			}
 
 			$objectsQuery = EstateObject::find()
-				->select(['objects.id', 'objects.name',
-							'objects.description',
-							'objects.price',
-							'objects.data',
-							'objects.url',
-							'objects.created_at',
-							'objects.city_id',
-							'objects.rent_type'])
+				->select([
+					'objects.id', 'objects.name',
+					'objects.description',
+					'objects.price',
+					'objects.data',
+					'objects.url',
+					'objects.created_at',
+					'objects.city_id',
+					'objects.rent_type'
+				])
 				->joinWith('city')
 				->joinWith('rentType');
 
 			$filterInfo[] = $objectsQuery;
 
-            // complement request
-            if ($filterObject->city_id) {
+			if ($filterObject->city_id) {
 				$objectsQuery->andWhere("city_id = $filterObject->city_id");
-            }
+			}
 
-            if ($filterObject->rent_type) {
-				// проверяем каждый rent_type из таблицы filters на наличие в таблице objects
+			if ($filterObject->rent_type) {
 				$rent_type_array = array_filter(explode(',', $filterObject->rent_type));
 
-				for ($i = 0; $i < count($rent_type_array); $i++)
-				{
+				for ($i = 0; $i < count($rent_type_array); $i++) {
 					$current = $rent_type_array[$i];
 					$objectsQuery->andWhere("rent_type = $current")->asArray()->all();
 				}
 			}
-			
-            if ($filterObject->property_type) {
-				// проверяем каждый property_type из таблицы filters на наличие в таблице objects
+
+			if ($filterObject->property_type) {
 				$property_type_array = array_filter(explode(',', $filterObject->property_type));
 
-				for ($i = 0; $i < count($property_type_array); $i++)
-				{
+				for ($i = 0; $i < count($property_type_array); $i++) {
 					$current = $property_type_array[$i];
 					$objectsQuery->andWhere("property_type = $current")->asArray()->all();
 				}
-            }
+			}
 
 			$objectsQuery
 				->andWhere("price >= $filterObject->price_from")
 				->andWhere("price <= $filterObject->price_to");
-		
 
-            if ($filterObject->substring) {
-                $objectsQuery->andWhere(['like', 'description', $filterObject->substring])
+
+			if ($filterObject->substring) {
+				$objectsQuery->andWhere(['like', 'description', $filterObject->substring])
 					->orWhere(['like', 'objects.name', $filterObject->substring]);
-					
-            }
-
-            if ($lastFetchDate) {
-				$objectsQuery->andWhere(['>=', 'objects.created_at', $lastFetchDate]);
-				// ->orderBy(['created_at' => SORT_DESC])
-				// ->limit(100)->asArray()->all();
 			}
-			
-			$objects = $objectsQuery->limit(100)->orderBy(['created_at' => SORT_DESC])->all(); 
 
-			// после обращения перезаписываем время обращения
+			if ($lastFetchDate) {
+				$objectsQuery->andWhere(['>=', 'objects.created_at', $lastFetchDate]);
+			}
+
+			$objects = $objectsQuery->limit(100)->orderBy(['created_at' => SORT_DESC])->all();
+
 			$dateTime = new DateTime();
-			// $dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
+
 			$user->last_fetch = $dateTime->format('Y-m-d H:i:s');
 			$user->update();
 
 			$items = [];
 
-            foreach ($objects as $singleObject) {
-				// each element as an array
-				//$singleObjectArray = (Array)$singleObject;
-				//$singleObjectId = $singleObjectArray['id'];
+			foreach ($objects as $singleObject) {
 				$singleObjectId = $singleObject->id;
-				
-				// search image
+
 				$images = Image::find()
-					->where(['object_id' => $singleObjectId]) 
+					->where(['object_id' => $singleObjectId])
 					->orderBy('position')
-					->all(); 
-				
-				// if there is an imagery array, then replace each element with url
+					->all();
+
 				$paths = [];
-                if (!empty($images)) {
+
+				if (!empty($images)) {
 					$paths = [];
+				
 					foreach ($images as $image) {
 						$paths[] = $image->path;
 					}
 				}
-				// search phone
+
 				$phones = Phone::find()
-					->select('phone') 
+					->select('phone')
 					->where(['object_id' => $singleObjectId])
 					->all();
-				// $phone[] = $phones->phone;
 
 				$phoneArray = [];
-                if (!empty($phones)) {
+
+				if (!empty($phones)) {
 					$phoneArray = [];
+
 					foreach ($phones as $phone) {
 						$phoneArray[] = $phone->phone;
 					}
 				}
 
-				$city = City::findOne(['id'=>$singleObject->city_id]);
-				$rent_type = RentType::findOne(['id'=>$singleObject->rent_type]);
+				$city = City::findOne(['id' => $singleObject->city_id]);
+				$rent_type = RentType::findOne(['id' => $singleObject->rent_type]);
 
-				// fill the array
 				$fields = [
-					'id'=> $singleObjectId,
-					'name'=> $singleObject->name,
-					'description'=>$singleObject->description,
-					'price'=> $singleObject->price,
-					'data'=> $singleObject->data,
-					'url'=> $singleObject->url,
-					'created_at'=> $singleObject->created_at,
-					'city_name'=> $city->name,
-					'rent_type'=> $rent_type->name,
+					'id' => $singleObjectId,
+					'name' => $singleObject->name,
+					'description' => $singleObject->description,
+					'price' => $singleObject->price,
+					'data' => $singleObject->data,
+					'url' => $singleObject->url,
+					'created_at' => $singleObject->created_at,
+					'city_name' => $city->name,
+					'rent_type' => $rent_type->name,
 				];
-                $fields['images'] = $paths;
-                $fields['phones'] = $phoneArray;
 
-				// add to the array objects
+				$fields['images'] = $paths;
+				$fields['phones'] = $phoneArray;
+
 				$items[] = $fields;
 			}
+		} catch (Exception $e) {
+			$output = [];
 
-			
+			Yii::error($e->getMessage(), __METHOD__);
 
-        } catch (Exception $e) { 
 			$output['error'] = $e->getMessage();
-        }
+		}
+
 		$output['data'] = $items;
 
-		// Log
-		Yii::info("GetObjects Output" ,__METHOD__);
-
 		return $output;
-    }
+	}
 
 	/**
 	 * Create new object
 	 *  
 	 * @param string $name
 	 * @param string $description
-	 * @param float $price
-	 * 
 	 * @param string $address
 	 * 
+	 * @param float $price
 	 * 
 	 * @param file|null $images[] - files of images
 	 * 
@@ -264,26 +249,19 @@ class ObjectController extends Controller
 	 */
 	public function actionNew(): array
 	{
-        $model = new EstateObject();
+		$model = new EstateObject();
 		$request = Yii::$app->request;
 
 		try {
 			if ($model->load($request->post(), '') && !is_null($request->post('address')) && !is_null($request->post('name')) && !is_null($request->post('description')) && !is_null($request->post('price'))) {
 				$model->user_id = Yii::$app->user->identity->getId();
 
-				// Get address info by search address
-				$infoObject = Yii::$app->address->getAddress($request->post('address'));
+				$infoObject = Yii::$app->hereMaps->findAddressByText($request->post('address'))->View[0]->Result[0]->Location;
 
-				// Check address
-				if ($infoObject == false) {  
-					// Log
-					Yii::error("Address Not Found" ,__METHOD__);
-
-					return [
-						'error'=>'Address Not Found'
-					];
+				if ($infoObject == false) {
+					throw new Exception('Address not found');
 				}
-				
+
 				// Find address by coordinates 
 				$address = Address::findByCoordinates(
 					$infoObject->DisplayPosition->Latitude,
@@ -305,23 +283,20 @@ class ObjectController extends Controller
 					// Save address & object
 					if ($address->save()) {
 						// Get nearby station info
-						$metroInfo = Yii::$app->address->getStation($address->lt, $address->lg);
-						
+						$metroInfo = Yii::$app->hereMaps->findStatationsNearby($address->lt, $address->lg);
+
 						// Create metro station
 						$metro = new Metro();
 
-						$metro->name = $metroInfo->Res->Stations->Stn[0]->name;
+						$metro->name = $metroInfo->Stations->Stn[0]->name;
 
 						// Save and link metro with object if no problem with save
 						if ($metro->save()) {
 							$model->metro_id = $metro->id;
 						}
-						
-						//$model->lt = $address->lt;
-						//$model->lg = $address->lg;
 
 						if (!$model->save()) {
-						 	throw new Exception('Object Save False');
+							throw new Exception('Object Save False');
 						}
 					} else { // Return error if not save address
 						throw new Exception("Address Save False");
@@ -329,64 +304,63 @@ class ObjectController extends Controller
 				} else { // if exist address model
 					// Link address to model
 					$model->address_id = $address->id;
-					
-					//$model->lt = $address->lt; 
-					//$model->lg = $address->lg;
 
 					if (!$model->save()) {
 						throw new Exception("Object Save False");
-					} 
+					}
 				}
 
-				// добавление телефона объекта 
 				if ($request->post('phone')) {
 					$phone = new Phone();
+
 					$phone->phone = $request->post('phone');
 					$phone->object_id = $model->id;
+					
 					$phone->save();
 				}
+				
 				// Create images
 				$images = UploadedFile::getInstancesByName('images');
-				
-				//Add images
+
+				// Add images
 				if (!empty($images)) {
-					//Директория для изображений
-					$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $model->id;
-					
-					//Domain
+					// Директория для изображений
+					$dir = Yii::getAlias('@webroot') . '/' . 'uploads/' . $model->id;
+
+					// Domain
 					$dom = 'https://' . $_SERVER['SERVER_NAME'];
 
-					//Если добавляеться первое изображение, то создаётся директория для изображений
+					// Если добавляеться первое изображение, то создаётся директория для изображений
 					if (!file_exists($dir)) {
 						FileHelper::createDirectory($dir);
 					}
-		
-					//Обработка каждого изображения
+
+					// Обработка каждого изображения
 					foreach ($images as $file) {
-						//Создание нового изображения
+						// Создание нового изображения
 						$image = new Image();
-		
+
 						//Запись данных изображения в объект image
 						$image->file = $file;
-		
-						//Путь к изображению
-						$path = '/' .'uploads/' . $model->id . '/' . uniqid() . '.' . $image->file->extension;
-		
-						//Присвоение $path (путь к изображению) к атрибуту $image->path(string)
+
+						// Путь к изображению
+						$path = '/' . 'uploads/' . $model->id . '/' . uniqid() . '.' . $image->file->extension;
+
+						// Присвоение $path (путь к изображению) к атрибуту $image->path(string)
 						$image->path = $dom . $path;
 						$image->object_id = $model->id;
 
 						$image->position = 0;
-		
-						//Сохранение нового изображения в БД
+
+						// Сохранение нового изображения в БД
 						if (!$image->save()) {
 							throw new Exception('Image Save False');
 						}
-						//Сохранение изображения в директроии $dir
+						// Сохранение изображения в директроии $dir
 						$image->file->saveAs(Yii::getAlias('@webroot') . $path);
 					}
-					//Sorting Images
-					$images = Image::findAll(['object_id'=>$model->id]);
+					// Sorting Images
+					$images = Image::findAll(['object_id' => $model->id]);
 
 					if (!empty($images)) {
 						$count = 1;
@@ -397,23 +371,15 @@ class ObjectController extends Controller
 						}
 					}
 				}
-				// Log
-				Yii::info("Object Save Success" ,__METHOD__);
 
 				return [
 					"id" => $model->id
 				];
 			} else {
-				// Log
-				Yii::error("Not all data entered" ,__METHOD__);
-
-				return [
-					'error'=>'Not all data entered'
-				];
+				throw new Exception("Not all data entered");
 			}
-		} catch(Exception $e) {
-			// Log
-			Yii::error($e->getMessage() ,__METHOD__);
+		} catch (Exception $e) {
+			Yii::error($e->getMessage(), __METHOD__);
 
 			return [
 				'error' => $e->getMessage()
@@ -434,7 +400,7 @@ class ObjectController extends Controller
 	 */
 	public function actionUpdate($id): array
 	{
-	    // $model = EstateObject::findByIdentity($id);
+		// $model = EstateObject::findByIdentity($id);
 		$model = EstateObject::findByIdentity($id);
 
 		try {
@@ -443,7 +409,7 @@ class ObjectController extends Controller
 				Yii::error("Object Not Found", __METHOD__);
 
 				return [
-					'error'=>"Object:$id Not Found"
+					'error' => "Object:$id Not Found"
 				];
 			}
 
@@ -452,7 +418,7 @@ class ObjectController extends Controller
 			// Phones update
 			if (isset($request['phone'])) {
 				$phone = new Phone();
-				
+
 				$phone->phone = $request['phone'];
 				$phone->object_id = $model->id;
 				$phone->save();
@@ -462,12 +428,12 @@ class ObjectController extends Controller
 			// Delete images
 			if (isset($request['image_paths_to_delete'])) {
 				foreach ($request['image_paths_to_delete'] as $url) {
-					$image = Image::findOne(['path'=>$url, 'object_id'=>$model->id]);
+					$image = Image::findOne(['path' => $url, 'object_id' => $model->id]);
 
 					if (!is_null($image)) {
 						FileHelper::removeDirectory($image->path);
 
-						if(!$image->delete()) {
+						if (!$image->delete()) {
 							throw new Exception("Image Delete Failed");
 						}
 					}
@@ -476,20 +442,20 @@ class ObjectController extends Controller
 
 			// Load new images
 			$newImages = UploadedFile::getInstancesByName('images');
-			
+
 			// Add new images
 			if (!empty($newImages)) {
 				// Directory for images
-				$dir = Yii::getAlias('@webroot') . '/' .'uploads/' . $id;
+				$dir = Yii::getAlias('@webroot') . '/' . 'uploads/' . $id;
 
 				//Domain
 				$dom = 'https://' . $_SERVER['SERVER_NAME'];
-		
+
 				//Create Directory for images
 				if (!file_exists($dir)) {
 					FileHelper::createDirectory($dir);
 				}
-				
+
 				// New images save
 				foreach ($newImages as $file) {
 					// Create new image
@@ -499,7 +465,7 @@ class ObjectController extends Controller
 					$image->file = $file;
 
 					// Image path 
-					$path = '/' .'uploads/' . $id . '/' . uniqid() . '.' . $image->file->extension;
+					$path = '/' . 'uploads/' . $id . '/' . uniqid() . '.' . $image->file->extension;
 
 					$image->path = $dom . $path;
 					$image->object_id = $model->id;
@@ -516,8 +482,8 @@ class ObjectController extends Controller
 				}
 			}
 			//Sorting Images
-			$images = Image::findAll(['object_id'=>$model->id]);
-			
+			$images = Image::findAll(['object_id' => $model->id]);
+
 			if (!empty($images)) {
 				$count = 1;
 				foreach ($images as $i) {
@@ -526,7 +492,7 @@ class ObjectController extends Controller
 					$count = $count + 1;
 				}
 			}
-			
+
 			// Update at - time //Neet to setting TimeZone
 			$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
 			$model->updated_at = $dateTime->format('Y-m-d H:i:s');
@@ -538,14 +504,14 @@ class ObjectController extends Controller
 					Yii::error("Object Load from request failed", __METHOD__);
 
 					return [
-						'error'=>"Nothing Update"
+						'error' => "Nothing Update"
 					];
 				}
 			}
 
 			if ($model->update()) {
 				// Log
-				Yii::info("Object Update Success",__METHOD__);
+				Yii::info("Object Update Success", __METHOD__);
 
 				return [
 					"result" => true
@@ -553,7 +519,7 @@ class ObjectController extends Controller
 			} else {
 				throw new Exception('Object Update Failed');
 			}
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			// Log
 			Yii::error($e->getMessage(), __METHOD__);
 
@@ -571,56 +537,46 @@ class ObjectController extends Controller
 	public function actionView($id): array
 	{
 		try {
-	    	$model = EstateObject::findByIdentity($id);
-		
-    	    if (!is_null($model)) {
+			$model = EstateObject::findByIdentity($id);
+
+			if (!is_null($model)) {
 				$images = Image::find()
-					->where(['object_id'=>$id])
+					->where(['object_id' => $id])
 					->orderBy('position')
 					->all();
-				
+
 				$paths = [];
+
 				foreach ($images as $image) {
 					$paths[] = $image->path;
 				}
 
 				$phones = Phone::find()
-				->where(['object_id'=>$id])
-				->all();
+					->where(['object_id' => $id])
+					->all();
 
 				$phonesArray = [];
+
 				foreach ($phones as $phone) {
 					$phonesArray[] = $phone->phone;
 				}
 
 				$output = [
-					'object'=>$model,
-					'images'=>$paths,
-					'phones'=>$phonesArray,
+					'object' => $model,
+					'images' => $paths,
+					'phones' => $phonesArray,
 				];
 
-				
-				
-				// Log
-				Yii::info("Object Found Success" ,__METHOD__);
-
-        		return $output;
-    	    } else {
-				// Log
-				Yii::error("Object Not Found" ,__METHOD__);
-
-        		return [
-					"error"=>"Object:$id Not Found"
-				];
+				return $output;
+			} else {
+				throw new Exception('Object not found');
 			}
-		} catch(Exception $e) {
-			// Log
-			Yii::error($e->getMessage() ,__METHOD__);
+		} catch (Exception $e) {
+			Yii::error($e->getMessage(), __METHOD__);
 
 			return [
-				'error'=>$e->getMessage()
+				'error' => $e->getMessage()
 			];
 		}
 	}
-
 }
