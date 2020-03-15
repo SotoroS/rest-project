@@ -52,7 +52,6 @@ class UserControllerCest
             $I->seeResponseContainsJson(
                 array('error' => 'User exist')
             );
-
             $testUser = User::find()->where(['email' => $this->email])->one();
             $this->testUser = $testUser;
         }
