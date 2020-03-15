@@ -400,13 +400,11 @@ class ObjectController extends Controller
 	 */
 	public function actionUpdate($id): array
 	{
-		// $model = EstateObject::findByIdentity($id);
 		$model = EstateObject::findByIdentity($id);
 
 		try {
 			if (!$model) {
-				// Log
-				Yii::error("Object Not Found", __METHOD__);
+				throw new Exception("Object Not Found");
 
 				return [
 					'error' => "Object:$id Not Found"
@@ -421,6 +419,7 @@ class ObjectController extends Controller
 
 				$phone->phone = $request['phone'];
 				$phone->object_id = $model->id;
+
 				$phone->save();
 			}
 
@@ -448,10 +447,10 @@ class ObjectController extends Controller
 				// Directory for images
 				$dir = Yii::getAlias('@webroot') . '/' . 'uploads/' . $id;
 
-				//Domain
+				// Domain
 				$dom = 'https://' . $_SERVER['SERVER_NAME'];
 
-				//Create Directory for images
+				// Create Directory for images
 				if (!file_exists($dir)) {
 					FileHelper::createDirectory($dir);
 				}
@@ -481,11 +480,13 @@ class ObjectController extends Controller
 					$image->file->saveAs(Yii::getAlias('@webroot') . $path);
 				}
 			}
-			//Sorting Images
+
+			// Sorting Images
 			$images = Image::findAll(['object_id' => $model->id]);
 
 			if (!empty($images)) {
 				$count = 1;
+
 				foreach ($images as $i) {
 					$i->position = $count;
 					$i->update();
@@ -493,34 +494,28 @@ class ObjectController extends Controller
 				}
 			}
 
-			// Update at - time //Neet to setting TimeZone
-			$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
-			$model->updated_at = $dateTime->format('Y-m-d H:i:s');
+			$oldValueCreateAt = $model->created_at;
 
 			// Object update
 			if (!$model->load($request, '')) {
-				if (empty($newImages) && !isset($request['image_paths_to_delete'])) {
-					// Log
-					Yii::error("Object Load from request failed", __METHOD__);
+				$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
 
-					return [
-						'error' => "Nothing Update"
-					];
+				$model->updated_at = $dateTime->format('Y-m-d H:i:s');
+				$model->created_at = $oldValueCreateAt;
+
+				if (empty($newImages) && !isset($request['image_paths_to_delete'])) {
+					throw new Exception("Object Load from request failed");
 				}
 			}
 
 			if ($model->update()) {
-				// Log
-				Yii::info("Object Update Success", __METHOD__);
-
 				return [
 					"result" => true
 				];
 			} else {
-				throw new Exception('Object Update Failed');
+				throw new Exception('Object update failed');
 			}
 		} catch (Exception $e) {
-			// Log
 			Yii::error($e->getMessage(), __METHOD__);
 
 			return [

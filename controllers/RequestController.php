@@ -20,6 +20,7 @@ use micro\models\User;
 use micro\models\Filter;
 use micro\models\RequestType;
 use micro\models\City;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Class RequestController
@@ -207,6 +208,11 @@ class RequestController extends Controller
 	public function actionUpdate($id): array
 	{
 		$model = Filter::findByIdentity($id);
+	
+		if ($model->user_id != Yii::$app->user->identity->id) {
+			throw new ForbiddenHttpException();
+		}
+	
 		$request = Yii::$app->request->post();
 
 		try {

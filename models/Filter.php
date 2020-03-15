@@ -37,9 +37,14 @@ use Yii;
  */
 class Filter extends \yii\db\ActiveRecord
 {
-
+    /**
+     * Address filter's
+     * 
+     * @var array
+     */
     public $addresses = [];
     public $requestName;
+
     /**
      * {@inheritdoc}
      */
@@ -54,7 +59,7 @@ class Filter extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'num_of_people', 'family', 'pets', 'request_type_id', 'square_from', 'square_to', 'city_id', 'price_from', 'price_to', 'city_area_id'], 'integer'],
+            [['user_id', 'num_of_people', 'request_type_id', 'square_from', 'square_to', 'city_id', 'price_from', 'price_to', 'city_area_id'], 'integer'],
             [['description'], 'string'],
             [['pivot_lt', 'pivot_lg', 'radius'], 'number'],
             [['created_at', 'updated_at', 'addresses'], 'safe'],
@@ -63,6 +68,7 @@ class Filter extends \yii\db\ActiveRecord
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
             [['request_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequestType::className(), 'targetAttribute' => ['request_type_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['family', 'pets'], 'integer', 'min' => 0],
         ];
     }
 
