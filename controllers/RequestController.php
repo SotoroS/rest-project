@@ -61,7 +61,6 @@ class RequestController extends Controller
 
 		// OAuth 2.0
 		$behaviors['authenticator'] = [
-			'except' => [],
 			'class' => HttpBearerAuth::className()
 		];
 
@@ -207,7 +206,7 @@ class RequestController extends Controller
 	 */
 	public function actionUpdate($id): array
 	{
-		$model = Filter::findByIdentity($id);
+		$model = Filter::findOne($id);
 	
 		if ($model->user_id != Yii::$app->user->identity->id) {
 			throw new ForbiddenHttpException();
@@ -285,6 +284,22 @@ class RequestController extends Controller
 
 			$address->lt = $infoObject->DisplayPosition->Latitude;
 			$address->lg = $infoObject->DisplayPosition->Longitude;
+
+			if (!isset($infoObject->Address->Street)) {
+				throw new Exception('Bad address');
+			}
+
+			if (!isset($infoObject->Address->District)) {
+				throw new Exception('Bad address');
+			}
+
+			if (!isset($infoObject->Address->City)) {
+				throw new Exception('Bad address');
+			}
+
+			if (!isset($infoObject->Address->County)) {
+				throw new Exception('Bad address');
+			}
 
 			$address->streetName = $infoObject->Address->Street;
 			$address->cityAreaName = $infoObject->Address->District;

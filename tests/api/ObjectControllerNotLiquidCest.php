@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use micro\models\User;
 use micro\models\EstateObject;
@@ -54,10 +54,10 @@ class ObjectControllerNotLiquidCest
 
         $I->sendGET('/object/view/-1');
 
-        $I->seeResponseIsJson();
+        // TODO: check status code
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'message' => 'string',
         ]);
     }
 
@@ -119,9 +119,7 @@ class ObjectControllerNotLiquidCest
     {
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        $this->_init($I);
-
-        $images = UploadedFile::getInstancesByName('images');
+        $this->_init($I, true);
 
         $I->sendPOST('/object/update/' . $this->testObject->id, [
             'name' => '',
@@ -152,15 +150,13 @@ class ObjectControllerNotLiquidCest
         $this->_signupViaApi($I);
         $this->_loginViaApi($I);
 
-
-        if (is_null($this->testObject) && $needTestObject)
-        {
+        if (is_null($this->testObject) && $needTestObject) {
             $this->testObject = EstateObject::find()
                 ->where(['user_id' => $this->testUser->id])
                 ->orderBy('id DESC')
                 ->one();
         }
-        
+
         // Set OAuth 2.0 token
         $I->amBearerAuthenticated($this->token);
     }

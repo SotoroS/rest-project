@@ -258,10 +258,6 @@ class ObjectController extends Controller
 
 				$infoObject = Yii::$app->hereMaps->findAddressByText($request->post('address'))->View[0]->Result[0]->Location;
 
-				if ($infoObject == false) {
-					throw new Exception('Address not found');
-				}
-
 				// Find address by coordinates 
 				$address = Address::findByCoordinates(
 					$infoObject->DisplayPosition->Latitude,
@@ -275,10 +271,26 @@ class ObjectController extends Controller
 					$address->lt = $infoObject->DisplayPosition->Latitude;
 					$address->lg = $infoObject->DisplayPosition->Longitude;
 
-					$address->streetName = $infoObject->Address->Street;
-					$address->cityAreaName = $infoObject->Address->District;
-					$address->cityName = $infoObject->Address->City;
-					$address->regionName = $infoObject->Address->County;
+					if (!isset($infoObject->Address->Street)) {
+						throw new Exception('Bad address');
+					}
+
+					if (!isset($infoObject->Address->District)) {
+						throw new Exception('Bad address');
+					}
+
+					if (!isset($infoObject->Address->City)) {
+						throw new Exception('Bad address');
+					}
+
+					if (!isset($infoObject->Address->County)) {
+						throw new Exception('Bad address');
+					}
+
+					$address->streetName = $infoObject->Address->Street ?: null;
+					$address->cityAreaName = $infoObject->Address->District ?: null;
+					$address->cityName = $infoObject->Address->City ?: null;
+					$address->regionName = $infoObject->Address->County ?: null;
 
 					// Save address & object
 					if ($address->save()) {
@@ -532,7 +544,7 @@ class ObjectController extends Controller
 	public function actionView($id): array
 	{
 		try {
-			$model = EstateObject::findByIdentity($id);
+			$model = EstateObject::findOne($id);
 
 			if (!is_null($model)) {
 				$images = Image::find()

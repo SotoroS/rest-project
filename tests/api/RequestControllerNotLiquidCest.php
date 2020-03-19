@@ -52,7 +52,7 @@ class RequestControllerNotLiquidCest
         $I->sendGET('/request/view/-1');
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'message' => 'string',
         ]);
     }
 
@@ -154,6 +154,8 @@ class RequestControllerNotLiquidCest
 
         $I->seeResponseIsJson();
 
+        // TODO: Check rule on update request 
+
         $I->seeResponseMatchesJsonType([
             'error' => 'string',
         ]);
@@ -174,7 +176,7 @@ class RequestControllerNotLiquidCest
 
         // Create filter if need
         if (is_null($this->testFilter) && $needTestFilter) {
-            $this->newViaApi($I);
+            $this->_newValidViaApi($I);
         }
 
         // Set OAuth 2.0 token
@@ -197,13 +199,13 @@ class RequestControllerNotLiquidCest
 
         $response = json_decode($I->grabResponse(), true);
 
-        if (array_key_exists("status", $response) && ($response["status"]) == true) {
-            $this->_verifyViaApi($I);
-        } else {
+        if (!array_key_exists("status", $response)) {
             $I->seeResponseContainsJson(
                 ['error' => 'User exist']
             );
         }
+
+        $this->_verifyViaApi($I);
     }
 
     /**
@@ -249,5 +251,37 @@ class RequestControllerNotLiquidCest
 
         $this->testUser = $testUser;
         $this->token = $response->access_token;
+    }
+
+        /**
+     * Create new request object
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    public function _newValidViaApi(\ApiTester $I)
+    {
+        $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        $I->sendPOST('/request/new-filter', [
+            'num_of_people' => 1,
+            'family' => 2,
+            'pets' => 3,
+            'price_from' => 20000,
+            'price_to' => 6000000,
+            'description' => 'Description',
+            'rent_type' => 'Rent Type',
+            'property_type' => 'Property Type',
+            'substring' => 'Substring',
+            'addresses' => ['Саратов улица Вишневая 24'],
+            'requestName' => 'Проверка'
+        ]);
+
+        $I->seeResponseIsJson();
+
+        $I->seeResponseContainsJson(
+            array('result' => true)
+        );
     }
 }

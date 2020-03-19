@@ -26,7 +26,9 @@ return [
 		'facebook_client_uri' => 'https://rest.fokin-team.ru/user/login-facebook',
 	],
 	'defaultRoute' => 'site/index',
-	'bootstrap' => ['log'],
+	'bootstrap' => [
+		'log'
+	],
 	'components' => [
 		'urlManager' => [
 			'class' => 'yii\web\UrlManager',
@@ -53,13 +55,7 @@ return [
 			]
 		],
 		'response' => [
-			'formatters' => [
-				\yii\web\Response::FORMAT_JSON => [
-					'class' => 'yii\web\JsonResponseFormatter',
-					'prettyPrint' => YII_DEBUG, // use "pretty" output in debug mode
-					'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
-				],
-			],
+			'format' =>  \yii\web\Response::FORMAT_JSON,
 		],
 		'mailer' => [
 			'class' => 'yii\swiftmailer\Mailer',
@@ -75,7 +71,7 @@ return [
 		],
 		'hereMaps' => [
 			'class' => 'micro\components\HereMapsComponent',
-			'apiKey'=> 'GIGsSEJb9m1LlcOOpL6jQSP-Mz51UEaV-kGj4orep1k'
+			'apiKey' => 'GIGsSEJb9m1LlcOOpL6jQSP-Mz51UEaV-kGj4orep1k'
 		],
 		'user' => [
 			'identityClass' => 'micro\models\User',
