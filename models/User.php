@@ -46,21 +46,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['age', 'verified', 'notifications', 'premium', 'status'], 'integer'],
-            // ['age', function($attribute,$params) {
-            //     if (($this->attribute < 0) && ($this->attribute != NULL))
-            //     {
-            //         $this->addError($attribute, 'Age must be greater than 0.');
-            //     }
-            // }],
             [['last_fetch', 'created_at', 'updated_at'], 'safe'],
             [['gender'], 'string', 'max' => 1],
-            // ['gender', function($attribute,$params) {
-            //     echo print_r($this->attribute,true);
-            //     if ((($this->attribute != 'F') || ($this->attribute != 'M')) && ($this->attribute != NULL))
-            //     {
-            //         $this->addError($attribute, 'Gender must be F or M.');
-            //     }
-            // }],
             [['phone'], 'string', 'max' => 30],
             [['email', 'password', 'access_token', 'signup_token', 'fcmToken', 'deviceType'], 'string', 'max' => 256],
             ['email','email']
