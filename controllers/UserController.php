@@ -496,12 +496,7 @@ class UserController extends Controller
 
         try {
             if (!is_null($request->post("gender"))) {
-                if ($request->post("gender") === 'F' || $request->post("gender") == 'M' || $request->post("gender") == NULL) {
-                    $user->gender = $request->post("gender");
-                }
-                else {
-                    throw new Exception('Gender must be F or M.');
-                }
+                $user->gender = $request->post("gender");
             }
 
             if (!is_null($request->post("phone"))) {
@@ -513,12 +508,7 @@ class UserController extends Controller
             }
 
             if (!is_null($request->post("age"))) {
-                if ($request->post("age") >= 0 || $request->post("gender") == NULL) {
-                    $user->age = $request->post("age");
-                }
-                else {
-                    throw new Exception('Age must be greater than 0.');
-                }
+                $user->age = $request->post("age");
             }
 
             if ($user->update()) {
@@ -536,7 +526,7 @@ class UserController extends Controller
             ) {
                 throw new Exception('Nothing to change');
             } else {
-                throw new Exception('Cann\'t update user model');
+                throw new Exception('Can\'t update user model');
             }
         } catch (Exception $e) {
             Yii::error($e->getMessage(), __METHOD__);
