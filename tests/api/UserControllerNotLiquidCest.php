@@ -1,6 +1,7 @@
 <?php 
 
 use micro\models\User;
+use micro\models\City;
 
 class UserControllerNotLiquidCest
 {
@@ -14,7 +15,7 @@ class UserControllerNotLiquidCest
     /**
      * @var string
      */
-    public $email = 'nape.maxim@gmail.com';
+    public $email = 'max.napedenin@gmail.com';
     
     /**
      * @var string
@@ -161,7 +162,7 @@ class UserControllerNotLiquidCest
         $I->sendPOST('/user/update/' . $this->testUser->ID, [
             'gender' => 'T',
             'phone' => '+7999999',
-            'email' => 'neEmail',
+            'email' => 'neEmail@gmail.com',
             'age' => '-52'
         ]);
 

@@ -100,7 +100,7 @@ class UserController extends Controller
             $deviceType = $request->post('deviceType');
             $fcmToken = $request->post('fcmToken');
 
-            if (is_null($deviceType) || is_null($fcmToken)) {
+            if (empty($deviceType) || empty($fcmToken)) {
                 throw new Exception("Not require request params");
             }
 
@@ -496,7 +496,12 @@ class UserController extends Controller
 
         try {
             if (!is_null($request->post("gender"))) {
-                $user->gender = $request->post("gender");
+                if ($request->post("gender") === 'F' || $request->post("gender") == 'M' || $request->post("gender") == NULL) {
+                    $user->gender = $request->post("gender");
+                }
+                else {
+                    throw new Exception('Gender must be F or M.');
+                }
             }
 
             if (!is_null($request->post("phone"))) {
@@ -508,7 +513,12 @@ class UserController extends Controller
             }
 
             if (!is_null($request->post("age"))) {
-                $user->age = $request->post("age");
+                if ($request->post("age") >= 0 || $request->post("gender") == NULL) {
+                    $user->age = $request->post("age");
+                }
+                else {
+                    throw new Exception('Age must be greater than 0.');
+                }
             }
 
             if ($user->update()) {

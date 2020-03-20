@@ -204,8 +204,11 @@ class RequestControllerNotLiquidCest
                 ['error' => 'User exist']
             );
         }
-
-        $this->_verifyViaApi($I);
+        else {
+            $this->_verifyViaApi($I);
+        }
+        
+        $this->_loginViaApi($I);
     }
 
     /**
@@ -222,7 +225,7 @@ class RequestControllerNotLiquidCest
         $I->sendGET('/user/verify', [
             'token' => $this->testUser->signup_token,
         ]);
-
+        
         $I->seeResponseIsJson();
 
         $I->seeResponseContainsJson(
