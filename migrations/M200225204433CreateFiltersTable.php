@@ -36,7 +36,6 @@ class M200225204433CreateFiltersTable extends Migration
             'num_of_people' => 'INT(19)',
             'family' => 'BOOLEAN',
             'pets' => 'BOOLEAN',
-            'request_type_id' => 'INT(19) DEFAULT 1', //fk request_type
             'square_from' => 'INT(19)',
             'square_to' => 'INT(19)',
             'city_id' => 'INT(19) DEFAULT 1', //fk  city
@@ -50,8 +49,8 @@ class M200225204433CreateFiltersTable extends Migration
             'rent_type' => 'VARCHAR(256)',
             'property_type' => 'VARCHAR(256)',
             'substring' => 'VARCHAR(256)',
-            'created_at' => 'TIMESTAMP',
-            'updated_at' => 'TIMESTAMP',
+            'created_at' => 'DATETIME',
+            'updated_at' => 'DATETIME',
         ]);
     }
 

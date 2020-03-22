@@ -41,6 +41,15 @@ class UserControllerNotLiquidCest
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         $I->sendPOST('/user/signup-web', [
+            'email' => $this->email,
+            'password' => ''
+        ]);
+
+        $I->seeResponseMatchesJsonType([
+            'error' => 'string',
+        ]);
+
+        $I->sendPOST('/user/signup-web', [
             'email' => 'neEmail',
             'password' => 'nePassword'
         ]);
@@ -52,15 +61,6 @@ class UserControllerNotLiquidCest
         $I->sendPOST('/user/signup-web', [
             'email' => '',
             'password' => 'nePassword'
-        ]);
-
-        $I->seeResponseMatchesJsonType([
-            'error' => 'string',
-        ]);
-
-        $I->sendPOST('/user/signup-web', [
-            'email' => $this->email,
-            'password' => ''
         ]);
 
         $I->seeResponseMatchesJsonType([

@@ -15,6 +15,9 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 use micro\models\User;
+use micro\models\UserMobile;
+use micro\models\UserWeb;
+
 use micro\models\City;
 use micro\models\CityArea;
 use micro\models\RentType;
@@ -96,23 +99,21 @@ class UserController extends Controller
         $user = null;
 
         try {
-            $account_id = $request->post('account_id');
-            $deviceType = $request->post('deviceType');
-            $fcmToken = $request->post('fcmToken');
-
-            if (empty($deviceType) || empty($fcmToken)) {
-                throw new Exception("Not require request params");
-            }
+            $id = $request->post('account_id');
 
             // Check user exist by id, if user existen't - create new user
-            if (is_null($user = User::findOne($account_id))) {
-                $user = new User();
+            if (is_null($user = UserMobile::findOne($id))) {
+                $user = new UserMobile();
             }
 
             $user->deviceType = $request->post('deviceType');
             $user->fcmToken = $request->post('fcmToken');
 
-            $user->save();
+            if (!$user->save()) {
+                return [
+                    'error' => $user->errors
+                ];
+            }
 
             $output['status'] = true;
             $output['cities'] = City::find()->asArray()->all();
@@ -146,16 +147,16 @@ class UserController extends Controller
         $password = $request->post('password');
 
         try {
-            if (is_null($email) || is_null($password)) {
-                throw new Exception("Not require request params");
+            if (empty($email) || empty($password)) {
+                throw new Exception("Require fields: email or password is empty");
             }
 
             // Find user by email
-            $user = User::findOne(['email' => $email]);
+            $user = UserWeb::findOne(['email' => $email]);
 
             // If not exist user by email - create new user
             if (is_null($user)) {
-                $model = new User();
+                $model = new UserWeb();
 
                 $password = password_hash($password, PASSWORD_DEFAULT);
                 $signup_token = uniqid();
@@ -207,8 +208,8 @@ class UserController extends Controller
 
             $cities = City::find()->all();
 
-            if (is_null($cities)) {
-                throw new Exception("Cities not found");
+            if (empty($cities)) {
+                throw new Exception("Cities not found.");
             }
 
             foreach ($cities as $city) {
@@ -287,8 +288,8 @@ class UserController extends Controller
         $password = $request->post('password');
 
         try {
-            if (is_null($email) && is_null($password)) {
-                throw new Exception("Request is empty Email or Password not found");
+            if (empty($email) || empty($password)) {
+                throw new Exception("Required field: Email or Password is empty");
             }
 
             $user = User::findOne(['email' => $email]);
@@ -369,7 +370,7 @@ class UserController extends Controller
 
                     $model->email = $email;
                     $model->verified = 1;
-                    $model->access_token = $value;
+                    $model->access_token = uniqid();
 
                     if ($model->save()) {
                         return [
@@ -491,8 +492,8 @@ class UserController extends Controller
     public function actionUpdate(): array
     {
         $request = Yii::$app->request;
-
-        $user = User::find(Yii::$app->user->identity->id)->one();
+        
+        $user = User::findOne(Yii::$app->user->identity->id);
 
         try {
             if (!is_null($request->post("gender"))) {
@@ -512,9 +513,6 @@ class UserController extends Controller
             }
 
             if ($user->update()) {
-                // log
-                Yii::info("User Update true", __METHOD__);
-
                 return [
                     "result" => true
                 ];
@@ -526,7 +524,9 @@ class UserController extends Controller
             ) {
                 throw new Exception('Nothing to change');
             } else {
-                throw new Exception('Can\'t update user model');
+                return [
+                    "error" => $user->errors
+                ];
             }
         } catch (Exception $e) {
             Yii::error($e->getMessage(), __METHOD__);

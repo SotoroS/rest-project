@@ -32,6 +32,7 @@ return [
 			'dsn' => 'mysql:host=localhost;dbname=rest',
 			'username' => 'GodOfDB',
 			'password' => 'hard_pass!',
+			'charset' => 'utf8'
 		],
 	],
 	'bootstrap' => [

@@ -87,7 +87,6 @@ class ObjectController extends Controller
 	 *
 	 * @return array
 	 */
-
 	public function actionGetObjects(): array
 	{
 		$output = [];
@@ -109,7 +108,8 @@ class ObjectController extends Controller
 
 			$objectsQuery = EstateObject::find()
 				->select([
-					'objects.id', 'objects.name',
+					'objects.id',
+					'objects.name',
 					'objects.description',
 					'objects.price',
 					'objects.data',
@@ -180,7 +180,7 @@ class ObjectController extends Controller
 
 				if (!empty($images)) {
 					$paths = [];
-				
+
 					foreach ($images as $image) {
 						$paths[] = $image->path;
 					}
@@ -253,7 +253,13 @@ class ObjectController extends Controller
 		$request = Yii::$app->request;
 
 		try {
-			if ($model->load($request->post(), '') && !is_null($request->post('address')) && !is_null($request->post('name')) && !is_null($request->post('description')) && !is_null($request->post('price'))) {
+			if (
+				$model->load($request->post(), '')
+				&& !empty($request->post('address'))
+				&& !empty($request->post('name'))
+				&& !empty($request->post('description'))
+				&& !empty($request->post('price'))
+			) {
 				$model->user_id = Yii::$app->user->identity->getId();
 
 				$infoObject = Yii::$app->hereMaps->findAddressByText($request->post('address'))->View[0]->Result[0]->Location;
@@ -318,7 +324,9 @@ class ObjectController extends Controller
 					$model->address_id = $address->id;
 
 					if (!$model->save()) {
-						throw new Exception("Object Save False");
+						return [
+							'error' => $model->errors
+						];
 					}
 				}
 
@@ -327,10 +335,14 @@ class ObjectController extends Controller
 
 					$phone->phone = $request->post('phone');
 					$phone->object_id = $model->id;
-					
-					$phone->save();
+
+					if (!$phone->save()) {
+						return [
+							'error' => $phone->errors
+						];
+					}
 				}
-				
+
 				// Create images
 				$images = UploadedFile::getInstancesByName('images');
 
@@ -388,7 +400,7 @@ class ObjectController extends Controller
 					"id" => $model->id
 				];
 			} else {
-				throw new Exception("Not all data entered");
+				throw new Exception("Not set address, name, description, price.");
 			}
 		} catch (Exception $e) {
 			Yii::error($e->getMessage(), __METHOD__);
@@ -412,7 +424,11 @@ class ObjectController extends Controller
 	 */
 	public function actionUpdate($id): array
 	{
-		$model = EstateObject::findByIdentity($id);
+		$user = User::findOne(Yii::$app->user->identity->id);
+		$model = EstateObject::findByIdentity([
+			'id' => $id,
+			'user_id' => $user->id
+		]);
 
 		try {
 			if (!$model) {
@@ -447,6 +463,8 @@ class ObjectController extends Controller
 						if (!$image->delete()) {
 							throw new Exception("Image Delete Failed");
 						}
+					} else {
+						throw new Exception("Cannot find image with that url for current user.");
 					}
 				}
 			}
@@ -510,15 +528,16 @@ class ObjectController extends Controller
 
 			// Object update
 			if (!$model->load($request, '')) {
-				$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
-
-				$model->updated_at = $dateTime->format('Y-m-d H:i:s');
-				$model->created_at = $oldValueCreateAt;
-
 				if (empty($newImages) && !isset($request['image_paths_to_delete'])) {
 					throw new Exception("Object Load from request failed");
 				}
 			}
+
+			// Update fields updated_at by current time and protect created_at from change by user.
+			$dateTime = new DateTime("", new \DateTimeZone("Europe/Kiev"));
+
+			$model->updated_at = $dateTime->format('Y-m-d H:i:s');
+			$model->created_at = $oldValueCreateAt;
 
 			if ($model->update()) {
 				return [

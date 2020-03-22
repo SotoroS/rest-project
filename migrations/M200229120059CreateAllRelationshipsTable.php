@@ -282,21 +282,6 @@ class M200229120059CreateAllRelationshipsTable extends Migration
             'id'
         );
 
-        // creates index for column `request_type_id` in table `filters`
-        $this->createIndex(
-            'idx-filters-request_type_id',
-            'filters',
-            'request_type_id'
-        );
-        // add foreign key for table `request_type`
-        $this->addForeignKey(
-            'fk-filters-request_type_id',
-            'filters',
-            'request_type_id',
-            'request_type',
-            'id'
-        );
-
         // creates index for column `city_id` in table `filters`
         $this->createIndex(
             'idx-filters-city_id',
@@ -598,17 +583,6 @@ class M200229120059CreateAllRelationshipsTable extends Migration
         // drops index for column `user_id`
         $this->dropIndex(
             'idx-filters-user_id',
-            'filters'
-        );
-
-        // drops foreign key for table `request_type`
-        $this->dropForeignKey(
-            'fk-filters-request_type_id',
-            'filters'
-        );
-        // drops index for column `request_type_id`
-        $this->dropIndex(
-            'idx-filters-request_type_id',
             'filters'
         );
 
