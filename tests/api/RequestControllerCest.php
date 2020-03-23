@@ -61,8 +61,8 @@ class RequestControllerCest
             'price_from' => 20000,
             'price_to' => 6000000,
             'description' => 'Description',
-            'rent_type' => 'Rent Type',
-            'property_type' => 'Property Type',
+            'rent_type' => '[1,2,3]',
+            'property_type' => '[2,3]',
             'substring' => 'Substring',
             'addresses' => ['Саратов улица Вишневая 24'],
             'requestName' => 'Проверка'
@@ -70,9 +70,9 @@ class RequestControllerCest
 
         $I->seeResponseIsJson();
 
-        $I->seeResponseContainsJson(
-            array('result' => true)
-        );
+        $I->seeResponseMatchesJsonType([
+            'id' => 'integer'
+        ]);
     }
 
     /**
@@ -91,7 +91,7 @@ class RequestControllerCest
         $I->sendPOST('/request/set-filter', [
             'fcmToken' => 'token',
             'city_area_id' => 1,
-            'request_type_id' => 1,
+            'rent_type' => '[1,3]',
             'push_notification' => 1,
             'price_from' => 40000,
             'price_to' => 500000,
@@ -124,7 +124,6 @@ class RequestControllerCest
             'num_of_people' => 1,
             'family' => 2,
             'pets' => 3,
-            'request_type_id' => 1,
             'square_from' => 200,
             'square_to' => 500,
             'city_id' => 1,
@@ -132,8 +131,8 @@ class RequestControllerCest
             'price_to' => 5300000,
             'description' => 'Description',
             'city_area_id' => 1,
-            'rent_type' => 'Rent Type',
-            'property_type' => 'Property Type',
+            'rent_type' => '[1,2,3]', 
+            'property_type' => '[1,2]',
             'substring' => 'Substring',
         ]);
 
@@ -170,7 +169,6 @@ class RequestControllerCest
             'num_of_people' => 'integer|null',
             'family' => 'integer|null',
             'pets' => 'integer|null',
-            'request_type_id' => 'integer|null',
             'square_from' => 'integer|null',
             'square_to' => 'integer|null',
             'city_id' => 'integer',
@@ -184,8 +182,8 @@ class RequestControllerCest
             'rent_type' => 'string|null',
             'property_type' => 'string|null',
             'substring' => 'string',
-            'created_at' => 'string:datetime',
-            'updated_at' => 'string:datetime',
+            'created_at' => 'string:datetime|null',
+            'updated_at' => 'string:datetime|null',
         ]);
     }
 
@@ -200,15 +198,15 @@ class RequestControllerCest
         $this->_signupViaApi($I);
         $this->_loginViaApi($I);
 
+        // Set OAuth 2.0 token
+        $I->amBearerAuthenticated($this->token);
+
         $this->testFilter = Filter::find()->where(['user_id' => $this->testUser->id])->one();
 
         // Create filter if need
         if (is_null($this->testFilter) && $needTestFilter) {
             $this->newViaApi($I);
         }
-
-        // Set OAuth 2.0 token
-        $I->amBearerAuthenticated($this->token);
     }
 
     /**

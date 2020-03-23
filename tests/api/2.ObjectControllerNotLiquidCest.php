@@ -37,7 +37,27 @@ class ObjectControllerNotLiquidCest
      * 
      * @var micro\models\EstateObject
      */
-    public $testObject;
+    public $testObject = null;
+
+    /**
+     * Get objects 
+     * 
+     * @param \ApiTester $I
+     * 
+     * @return void
+     */
+    public function getObjectsViaApi(\ApiTester $I)
+    {
+        $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        $this->_init($I);
+
+        $I->sendGET('/object/get-objects');
+
+        $I->seeResponseMatchesJsonType([
+            'error' => 'string|array',
+        ]);
+    }
 
     /**
      * View object
@@ -62,26 +82,6 @@ class ObjectControllerNotLiquidCest
     }
 
     /**
-     * Get objects 
-     * 
-     * @param \ApiTester $I
-     * 
-     * @return void
-     */
-    public function getObjectsViaApi(\ApiTester $I)
-    {
-        $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-        $this->_init($I);
-
-        $I->sendGET('/object/get-objects');
-
-        $I->seeResponseMatchesJsonType([
-            'error' => 'string',
-        ]);
-    }
-
-    /**
      * Create new estate object
      * 
      * @param \ApiTester $I
@@ -92,7 +92,7 @@ class ObjectControllerNotLiquidCest
     {
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        $this->_init($I);
+        $this->_init($I,true);
 
         $I->sendPOST('/object/new', [
             'address' => '-1',
@@ -104,7 +104,7 @@ class ObjectControllerNotLiquidCest
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -120,7 +120,6 @@ class ObjectControllerNotLiquidCest
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         $this->_init($I, true);
-
         $I->sendPOST('/object/update/' . $this->testObject->id, [
             'name' => '',
             'phone' => '+79999999',
@@ -134,7 +133,7 @@ class ObjectControllerNotLiquidCest
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -150,15 +149,18 @@ class ObjectControllerNotLiquidCest
         $this->_signupViaApi($I);
         $this->_loginViaApi($I);
 
-        if (is_null($this->testObject) && $needTestObject) {
-            $this->testObject = EstateObject::find()
-                ->where(['user_id' => $this->testUser->id])
-                ->orderBy('id DESC')
-                ->one();
-        }
-
         // Set OAuth 2.0 token
         $I->amBearerAuthenticated($this->token);
+
+        if (is_null($this->testObject) && $needTestObject) {
+            $I->sendPOST('/object/new', [
+                'address' => 'Волгоград, ул 50-летия ВЛКСМ, 2',
+                'name' => 'Мой дом',
+                'description' => 'Пустой',
+                'price' => '5000000'
+            ]);
+            $this->testObject = EstateObject::findOne(['user_id' => $this->testUser->id]);
+        }
     }
 
     /**
@@ -196,7 +198,7 @@ class ObjectControllerNotLiquidCest
     private function _verifyViaApi(\ApiTester $I)
     {
         $this->testUser = User::find()->where(['email' => $this->email])->one();
-
+        
         $I->sendGET('/user/verify', [
             'token' => $this->testUser->signup_token,
         ]);

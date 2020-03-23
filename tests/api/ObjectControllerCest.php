@@ -176,6 +176,9 @@ class ObjectControllerCest
         $this->_signupViaApi($I);
         $this->_loginViaApi($I);
 
+        // Set OAuth 2.0 token
+        $I->amBearerAuthenticated($this->token);
+
         $this->testObject = EstateObject::find()
                 ->where(['user_id' => $this->testUser->id])
                 ->orderBy('id DESC')
@@ -188,9 +191,6 @@ class ObjectControllerCest
                 ->orderBy('id DESC')
                 ->one();
         }
-        
-        // Set OAuth 2.0 token
-        $I->amBearerAuthenticated($this->token);
     }
 
     /**

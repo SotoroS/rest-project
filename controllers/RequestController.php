@@ -8,7 +8,9 @@ use Yii;
 
 use yii\base\Exception;
 use yii\rest\Controller;
+
 use yii\web\Response;
+use yii\web\ForbiddenHttpException;
 
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -18,9 +20,7 @@ use micro\models\FilterAddress;
 use micro\models\Address;
 use micro\models\User;
 use micro\models\Filter;
-use micro\models\RentType;
 use micro\models\City;
-use yii\web\ForbiddenHttpException;
 
 /**
  * Class RequestController
@@ -96,7 +96,7 @@ class RequestController extends Controller
 
 			$filterObject->rentTypeIds = $request->post('rent_type') ? json_decode($request->post('rent_type')) : [];
 			$filterObject->propertyTypeIds = $request->post('property_type') ? json_decode($request->post('property_type')) : [];
-			
+
 			$filterObject->city_area_id = (int) $request->post('city_area_id') ?: 1;
 			$filterObject->city_id = (int) $request->post('city_id') ?: 1;
 			$filterObject->price_from = (int) $request->post('price_from') ?: 0;
@@ -134,71 +134,34 @@ class RequestController extends Controller
 
 		$request = Yii::$app->request;
 
-		$addressIds = [];
+		$addresses = [];
+
 		try {
-			if ($model->loadOnlyAttributes($request->post())) {
+			if ($model->load($request->post(), '')) {
 				$model->user_id = Yii::$app->user->identity->id;
+
 				$model->rentTypeIds = $request->post('rent_type') ? json_decode($request->post('rent_type')) : [];
 				$model->propertyTypeIds = $request->post('property_type') ? json_decode($request->post('property_type')) : [];
-				
+
 				foreach ($model->addresses as $searchText) {
-					$addressIds[] = $this->_getAddressBySearchText($searchText);
+					$addresses[] = $this->_getAddress($searchText);
 				}
-				
-				// проверка на наличие rentTypeIds, если есть ищем среди возможных, если не находим - выдаём ошибку. 
-				// Если rentType отсутствует, записываем rent_type_id = default 1
-				if (!is_null($model->rentTypeIds)) {
-					foreach($model->rentTypeIds as $id) {
-						$rent_type = RentType::findById($id);
-						if (!is_null($rent_type)) {
-							$rent_type = null;
-						}
-						else
-						{
-							throw new Exception('Can\'t find rent type with id ' . $id . '.');
-						}
-					}
-				}
-				else {
-					$model->rent_type = ['1'];
-					$model->rentTypeIds = json_decode($model->rent_type);
-				}
-
-				// 	if (is_null($request_type)) {
-				// 		$request_type = new RequestType();
-				// 		$request_type->name = $model->requestName;
-
-				// 		if (!$request_type->save()) {
-				// 			throw new Exception('Request type save failed');
-				// 		}
-				// 	}
-
-				// 	$model->request_type_id = $request_type->id;
-				// } else {
-				// 	$model->request_type_id = 1;
-				// }
 
 				if ($model->save()) {
-					// Create rows in request_address table
-					foreach ($addressIds as $addressId) {
-						// $requestAdrress = new RequestAddress();
+					foreach ($addresses as $address) {
 						$filterAddress = new FilterAddress();
 
-						$filterAddress->address_id = $addressId;
+						$filterAddress->address_id = $address->id;
 						$filterAddress->filters_id = $model->id;
 
 						if (!$filterAddress->save()) {
-							throw new Exception('Cann\'t save FilterAddress model');
+							return ['error' => $filterAddress->errors];
 						}
 					}
 
-					return [
-						'result' => true
-					];
+					return ['id' => $model->id];
 				} else {
-					return [
-						'error' => $model->errors
-					];
+					return ['error' => $model->errors];
 				}
 			} else {
 				throw new Exception('Empty request or wrong attributes.');
@@ -206,9 +169,7 @@ class RequestController extends Controller
 		} catch (Exception $e) {
 			Yii::error($e->getMessage(), __METHOD__);
 
-			return [
-				'error' => $e->getMessage()
-			];
+			return ['error' => $e->getMessage()];
 		}
 	}
 
@@ -219,39 +180,30 @@ class RequestController extends Controller
 	 */
 	public function actionUpdate($id): array
 	{
+		$request = Yii::$app->request;
 		$model = Filter::findOne($id);
 
 		if ($model->user_id != Yii::$app->user->identity->id) {
 			throw new ForbiddenHttpException();
 		}
 
-		$request = Yii::$app->request;
-
 		try {
 			if ($model->load($request->post(), '')) {
 				$model->rentTypeIds = $request->post('rent_type') ? json_decode($request->post('rent_type')) : [];
 				$model->propertyTypeIds = $request->post('property_type') ? json_decode($request->post('property_type')) : [];
+
 				if ($model->update()) {
-					return [
-						"result" => true
-					];
+					return ['result' => true];
+				} else {
+					return ['error' => $model->errors];
 				}
-				else {
-					throw new Exception('Can\'t update filter.');
-				}
-			} else if (empty($request->post())) {
-				throw new Exception('Not all data entered');
 			} else {
-				return [
-					"error" => $model->errors
-				];
+				return ['error' => $model->errors];
 			}
 		} catch (Exception $e) {
 			Yii::error($e->getMessage(), __METHOD__);
 
-			return [
-				'error' => $e->getMessage()
-			];
+			return ['error' => $e->getMessage()];
 		}
 	}
 
@@ -264,6 +216,10 @@ class RequestController extends Controller
 	{
 		$model = Filter::findByIdentity($id);
 
+		if ($model->user_id != Yii::$app->user->identity->id) {
+			throw new ForbiddenHttpException();
+		}
+
 		try {
 			if (!is_null($model)) {
 				return $model->toArray();
@@ -273,72 +229,56 @@ class RequestController extends Controller
 		} catch (Exception $e) {
 			Yii::error($e->getMessage(), __METHOD__);
 
-			return [
-				'error' => $e->getMessage()
-			];
+			return ['error' => $e->getMessage()];
 		}
 	}
 
 	/**
-	 * Get address by search text
+	 * Get address
 	 * 
-	 * @param string $searchText
+	 * If address not exist in database - create new and return
 	 * 
-	 * @return int id addresse's 
+	 * @param string $searchText search text for find gei object by address
+	 * 
+	 * @return Address address object
 	 */
-	private function _getAddressBySearchText(string $searchText)
+	private function _getAddress($searchText)
 	{
-		if ($searchText == "") {
-			throw new Exception("Search text is empty");
-		}
-
-		// Get address info by search text
 		$infoObject = Yii::$app->hereMaps->findAddressByText($searchText)->View[0]->Result[0]->Location;
 
-		// Find address by coordinates
+		// Find address by coordinates 
 		$address = Address::findByCoordinates(
 			$infoObject->DisplayPosition->Latitude,
 			$infoObject->DisplayPosition->Longitude
 		);
 
-		// If address not exsist - create new address
+		// If address no exsist create new address
 		if (is_null($address)) {
 			$address = new Address();
 
 			$address->lt = $infoObject->DisplayPosition->Latitude;
 			$address->lg = $infoObject->DisplayPosition->Longitude;
 
-			if (!isset($infoObject->Address->Street)) {
+			if (
+				!isset($infoObject->Address->Street)
+				|| !isset($infoObject->Address->District)
+				|| !isset($infoObject->Address->City)
+				|| !isset($infoObject->Address->County)
+			) {
 				throw new Exception('Bad address');
 			}
 
-			if (!isset($infoObject->Address->District)) {
-				throw new Exception('Bad address');
-			}
+			$address->streetName = $infoObject->Address->Street ?: null;
+			$address->cityAreaName = $infoObject->Address->District ?: null;
+			$address->cityName = $infoObject->Address->City ?: null;
+			$address->regionName = $infoObject->Address->County ?: null;
 
-			if (!isset($infoObject->Address->City)) {
-				throw new Exception('Bad address');
+			// Save address & object
+			if (!$address->save()) {
+				throw new Exception('Cann\'t create new address model');
 			}
-
-			if (!isset($infoObject->Address->County)) {
-				throw new Exception('Bad address');
-			}
-
-			$address->streetName = $infoObject->Address->Street;
-			$address->cityAreaName = $infoObject->Address->District;
-			$address->cityName = $infoObject->Address->City;
-			$address->regionName = $infoObject->Address->County;
-
-			// Save address and add to array of address ids
-			if ($address->save()) {
-				return $address->id;
-			} else {
-				return [
-					'error' => $address->errors
-				];
-			}
-		} else {
-			return $address->id;
 		}
+	
+		return $address;
 	}
 }

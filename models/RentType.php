@@ -54,7 +54,14 @@ class RentType extends \yii\db\ActiveRecord
         return $this->hasMany(Object::className(), ['rent_type' => 'id']);
     }
 
+    /**
+     * Find rent type by id
+     * 
+     * @param int $id
+     * 
+     * @return \yii\db\ActiveQuery
+     */
     public static function findById($id) {
-        return static::findOne($id);
-    }
+        return self::findOne($id);
+    } 
 }

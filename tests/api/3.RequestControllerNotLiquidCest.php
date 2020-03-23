@@ -45,7 +45,7 @@ class RequestControllerNotLiquidCest
      */
     public function viewViaApi(\ApiTester $I)
     {
-        $this->_init($I, true);
+        $this->_init($I);
 
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -65,7 +65,7 @@ class RequestControllerNotLiquidCest
      */
     public function newViaApi(\ApiTester $I)
     {
-        $this->_init($I);
+        $this->_init($I,true);
 
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -86,7 +86,7 @@ class RequestControllerNotLiquidCest
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -118,7 +118,7 @@ class RequestControllerNotLiquidCest
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -131,7 +131,7 @@ class RequestControllerNotLiquidCest
      */
     public function updateViaApi(\ApiTester $I)
     {
-        $this->_init($I, true);
+        $this->_init($I,true);
 
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -157,7 +157,7 @@ class RequestControllerNotLiquidCest
         // TODO: Check rule on update request 
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -172,15 +172,14 @@ class RequestControllerNotLiquidCest
         $this->_signupViaApi($I);
         $this->_loginViaApi($I);
 
-        $this->testFilter = Filter::find()->where(['user_id' => $this->testUser->id])->one();
+        // Set OAuth 2.0 token
+        $I->amBearerAuthenticated($this->token);
 
         // Create filter if need
         if (is_null($this->testFilter) && $needTestFilter) {
-            $this->_newValidViaApi($I);
+            $this->testFilter = $this->_newValidViaApi($I);
+            $this->testFilter = Filter::find()->where(['user_id' => $this->testUser->id])->one();
         }
-
-        // Set OAuth 2.0 token
-        $I->amBearerAuthenticated($this->token);
     }
 
     /**
@@ -268,14 +267,11 @@ class RequestControllerNotLiquidCest
         $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         $I->sendPOST('/request/new-filter', [
-            'num_of_people' => 1,
-            'family' => 2,
-            'pets' => 3,
             'price_from' => 20000,
             'price_to' => 6000000,
             'description' => 'Description',
-            'rent_type' => 'Rent Type',
-            'property_type' => 'Property Type',
+            'rent_type' => '[1,2,3]',
+            'property_type' => '[2,3]',
             'substring' => 'Substring',
             'addresses' => ['Саратов улица Вишневая 24'],
             'requestName' => 'Проверка'
@@ -283,8 +279,8 @@ class RequestControllerNotLiquidCest
 
         $I->seeResponseIsJson();
 
-        $I->seeResponseContainsJson(
-            array('result' => true)
+        $I->seeResponseMatchesJsonType(
+            array('id' => 'integer')
         );
     }
 }

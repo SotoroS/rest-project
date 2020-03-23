@@ -39,8 +39,6 @@ use micro\models\RentType;
 class Filter extends \yii\db\ActiveRecord
 {
     /**
-     * Address filter's
-     * 
      * @var array
      */
     public $addresses = [];
@@ -88,48 +86,15 @@ class Filter extends \yii\db\ActiveRecord
     {
         $isValid = true;
 
-        $rentTypeIdsError = "";
-        $propertyTypeIdsError = "";
-
-        if (!is_array($this->rentTypeIds)) {
-            $isValid = false;
-            $this->addError('rent_type', 'Is not array.');
-        } else {
-            foreach ($this->rentTypeIds as $id) {
-                if (is_null(RentType::findOne($id))) {
-                    $rentTypeIdsError .= $id . ' ';
-                }
-            }
-
-            if (!empty($rentTypeIdsError)) {
-                $isValid = false;
-                $this->addError('rent_type', "Not exist rent type with id $rentTypeIdsError.");
-            }
-
-            $this->rent_type = implode(",", $this->rentTypeIds);
-        }
-
-        if (!is_array($this->propertyTypeIds)) {
-            $isValid = false;
-            $this->addError('property_type', 'Is not array.');
-        } else {
-            foreach ($this->propertyTypeIds as $id) {
-                if (is_null(PropertyType::findOne($id))) {
-                    $propertyTypeIdsError .= $id . ' ';
-                }
-            }
-
-            if (!empty($propertyTypeIdsError)) {
-                $isValid = false;
-                $this->addError('property_type', "Not exist property type with id $rentTypeIdsError.");
-            }
-
-            $this->property_type = implode(",", $this->propertyTypeIds);
-        }
+        $isValid = $this->validateRentTypes() ?? false;
+        $isValid = $this->validatePropertyTypes() ?? false;
 
         return $isValid && parent::validate($attributeNames, $clearErrors);
     }
 
+    /**
+     * {{@inheritdoc}}
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -246,17 +211,65 @@ class Filter extends \yii\db\ActiveRecord
         return PropertyType::findAll($this->propertyTypeIds);
     }
 
-    public function loadOnlyAttributes($data)
-    {
-        foreach ($this->attributes() as $attr) {
-            foreach (array_keys($data) as $key) {
-                if ($attr == $key) {
-                    $this->load($data, '');
-                    return true;
+    /**
+     * Validate rent types
+     * 
+     * @return bool is valid
+     */
+    private function validateRentTypes() {
+        $isValid = true;
+        $rentTypeIdsError = "";
+
+        if (!is_array($this->rentTypeIds)) {
+            $isValid = false;
+            $this->addError('rent_type', 'Is not array.');
+        } else {
+            foreach ($this->rentTypeIds as $id) {
+                if (is_null(RentType::findOne($id))) {
+                    $rentTypeIdsError .= $id . ' ';
                 }
             }
+
+            if (!empty($rentTypeIdsError)) {
+                $isValid = false;
+                $this->addError('rent_type', "Not exist rent type with id $rentTypeIdsError.");
+            }
+
+            $this->rent_type = implode(",", $this->rentTypeIds);
         }
 
-        return false;
+        return $isValid;
+    }
+
+    /**
+     * Validate property types
+     * 
+     * @return bool is valid
+     */
+    private function validatePropertyTypes() {
+        $isValid = true;
+        $propertyTypeIdsError = "";
+
+        if (!is_array($this->propertyTypeIds)) {
+            $isValid = false;
+
+            $this->addError('property_type', 'Is not array.');
+        } else {
+            foreach ($this->propertyTypeIds as $id) {
+                if (is_null(PropertyType::findOne($id))) {
+                    $propertyTypeIdsError .= $id . ' ';
+                }
+            }
+
+            if (!empty($propertyTypeIdsError)) {
+                $isValid = false;
+            
+                $this->addError('property_type', "Not exist property type with id $propertyTypeIdsError.");
+            }
+
+            $this->property_type = implode(",", $this->propertyTypeIds);
+        }
+
+        return $isValid;
     }
 }

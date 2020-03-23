@@ -46,7 +46,7 @@ class UserControllerNotLiquidCest
         ]);
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
 
         $I->sendPOST('/user/signup-web', [
@@ -55,7 +55,7 @@ class UserControllerNotLiquidCest
         ]);
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
 
         $I->sendPOST('/user/signup-web', [
@@ -64,7 +64,7 @@ class UserControllerNotLiquidCest
         ]);
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -88,7 +88,7 @@ class UserControllerNotLiquidCest
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -112,7 +112,7 @@ class UserControllerNotLiquidCest
         $I->seeResponseIsJson();
         
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -129,7 +129,7 @@ class UserControllerNotLiquidCest
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 
@@ -169,7 +169,7 @@ class UserControllerNotLiquidCest
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
+            'error' => 'string|array',
         ]);
     }
 

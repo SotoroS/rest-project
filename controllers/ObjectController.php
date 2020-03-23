@@ -129,20 +129,24 @@ class ObjectController extends Controller
 
 			if ($filterObject->rent_type) {
 				$rent_type_array = array_filter(explode(',', $filterObject->rent_type));
+				$subQuery = ['or'];
 
 				for ($i = 0; $i < count($rent_type_array); $i++) {
 					$current = $rent_type_array[$i];
-					$objectsQuery->andWhere("rent_type = $current")->asArray()->all();
+					array_push($subQuery,["rent_type"=>$current]);
 				}
+				$objectsQuery->andWhere($subQuery)->asArray()->all();
 			}
-
+			
 			if ($filterObject->property_type) {
 				$property_type_array = array_filter(explode(',', $filterObject->property_type));
-
+				$subQuery = ['or'];
+				
 				for ($i = 0; $i < count($property_type_array); $i++) {
 					$current = $property_type_array[$i];
-					$objectsQuery->andWhere("property_type = $current")->asArray()->all();
+					array_push($subQuery,["property_type"=>$current]);
 				}
+				$objectsQuery->andFilterWhere($subQuery)->asArray()->all();
 			}
 
 			$objectsQuery
@@ -160,15 +164,15 @@ class ObjectController extends Controller
 			}
 
 			$objects = $objectsQuery->limit(100)->orderBy(['created_at' => SORT_DESC])->all();
-
+			
 			$dateTime = new DateTime();
 
 			$user->last_fetch = $dateTime->format('Y-m-d H:i:s');
 			$user->update();
 
 			$items = [];
-
-			foreach ($objects as $singleObject) {
+			foreach ($objects as $singleObject) {		
+				$singleObject=(object)$singleObject;
 				$singleObjectId = $singleObject->id;
 
 				$images = Image::find()
@@ -261,75 +265,19 @@ class ObjectController extends Controller
 				&& !empty($request->post('price'))
 			) {
 				$model->user_id = Yii::$app->user->identity->getId();
-
-				$infoObject = Yii::$app->hereMaps->findAddressByText($request->post('address'))->View[0]->Result[0]->Location;
-
-				// Find address by coordinates 
-				$address = Address::findByCoordinates(
-					$infoObject->DisplayPosition->Latitude,
-					$infoObject->DisplayPosition->Longitude
+				echo print_r($model->save(),true);
+				exit();
+				$address = $this->_getAddress($request->post('address'));
+				
+				$metro = $this->_getMetro(
+					(float)$address->lt,
+					(float)$address->lg
 				);
-
-				// If address no exsist create new address
-				if (is_null($address)) {
-					$address = new Address();
-
-					$address->lt = $infoObject->DisplayPosition->Latitude;
-					$address->lg = $infoObject->DisplayPosition->Longitude;
-
-					if (!isset($infoObject->Address->Street)) {
-						throw new Exception('Bad address');
-					}
-
-					if (!isset($infoObject->Address->District)) {
-						throw new Exception('Bad address');
-					}
-
-					if (!isset($infoObject->Address->City)) {
-						throw new Exception('Bad address');
-					}
-
-					if (!isset($infoObject->Address->County)) {
-						throw new Exception('Bad address');
-					}
-
-					$address->streetName = $infoObject->Address->Street ?: null;
-					$address->cityAreaName = $infoObject->Address->District ?: null;
-					$address->cityName = $infoObject->Address->City ?: null;
-					$address->regionName = $infoObject->Address->County ?: null;
-
-					// Save address & object
-					if ($address->save()) {
-						// Get nearby station info
-						$metroInfo = Yii::$app->hereMaps->findStatationsNearby($address->lt, $address->lg);
-
-						// Create metro station
-						$metro = new Metro();
-
-						$metro->name = $metroInfo->Stations->Stn[0]->name;
-
-						// Save and link metro with object if no problem with save
-						if ($metro->save()) {
-							$model->metro_id = $metro->id;
-						}
-
-						if (!$model->save()) {
-							throw new Exception('Object Save False');
-						}
-					} else { // Return error if not save address
-						throw new Exception("Address Save False");
-					}
-				} else { // if exist address model
-					// Link address to model
-					$model->address_id = $address->id;
-
-					if (!$model->save()) {
-						return [
-							'error' => $model->errors
-						];
-					}
-				}
-
+				
+				$model->address_id = $address->id;
+				$model->metro_id = $metro->id;
+				$model->save();
+				
 				if ($request->post('phone')) {
 					$phone = new Phone();
 
@@ -396,8 +344,10 @@ class ObjectController extends Controller
 					}
 				}
 
+				$model->save();
+				
 				return [
-					"id" => $model->id
+					'id' => $model->id
 				];
 			} else {
 				throw new Exception("Not set address, name, description, price.");
@@ -604,5 +554,81 @@ class ObjectController extends Controller
 				'error' => $e->getMessage()
 			];
 		}
+	}
+
+	/**
+	 * Get address
+	 * 
+	 * If address not exist in database - create new and return
+	 * 
+	 * @param string $searchText search text for find gei object by address
+	 * 
+	 * @return Address address object
+	 */
+	private function _getAddress($searchText)
+	{
+		$infoObject = Yii::$app->hereMaps->findAddressByText($searchText)->View[0]->Result[0]->Location;
+		
+		// Find address by coordinates 
+		$address = Address::findByCoordinates(
+			$infoObject->DisplayPosition->Latitude,
+			$infoObject->DisplayPosition->Longitude
+		);
+		
+		// If address no exsist create new address
+		if (is_null($address)) {
+			$address = new Address();
+
+			$address->lt = $infoObject->DisplayPosition->Latitude;
+			$address->lg = $infoObject->DisplayPosition->Longitude;
+
+			if (
+				!isset($infoObject->Address->Street)
+				|| !isset($infoObject->Address->District)
+				|| !isset($infoObject->Address->City)
+				|| !isset($infoObject->Address->County)
+			) {
+				throw new Exception('Bad address');
+			}
+
+			$address->streetName = $infoObject->Address->Street ?: null;
+			$address->cityAreaName = $infoObject->Address->District ?: null;
+			$address->cityName = $infoObject->Address->City ?: null;
+			$address->regionName = $infoObject->Address->County ?: null;
+
+			// Save address & object
+			if (!$address->save()) {
+				throw new Exception('Cann\'t create new address model');
+			}
+		}
+	
+		return $address;
+	}
+
+	/**
+	 * Get nearby metro model
+	 * 
+	 * @param float $lt - lantitude of center point search
+	 * @param float $lg - longitude of center point search
+	 * 
+	 * @return Metro metro model
+	 */
+	private function _getMetro($lt, $lg)
+	{
+		$infoObject = Yii::$app->hereMaps->findStatationsNearby($lt, $lg);
+		
+		$metro = Metro::find()->where(['name' => $infoObject->Stations->Stn[0]->name])->one();
+		
+		if (is_null($metro)) {
+			$metro = new Metro();
+
+			$metro->name = $infoObject->Stations->Stn[0]->name;
+
+			if (!$metro->save()) {
+				throw new Exception("Cann't create new metro station model");
+			}
+		}
+		
+		return $metro;
 	}
 }

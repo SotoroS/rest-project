@@ -78,7 +78,6 @@ class Address extends \yii\db\ActiveRecord
      */
     public function beforeValidate() 
     {
-        
         // Check exist needed variable value
         if (is_null($this->regionName) 
             || is_null($this->cityName)
