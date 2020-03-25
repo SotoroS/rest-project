@@ -37,9 +37,31 @@ use micro\models\RentType;
  */
 class ObjectController extends Controller
 {
-	/**
-	 * @return array
-	 */
+   /**
+     * Returns a list of behaviors that this component should behave as.
+     *
+     * Child classes may override this method to specify the behaviors they want to behave as.
+     *
+     * The return value of this method should be an array of behavior objects or configurations
+     * indexed by behavior names. A behavior configuration can be either a string specifying
+     * the behavior class or an array of the following structure:
+     *
+     * ```php
+     * 'behaviorName' => [
+     *     'class' => 'BehaviorClass',
+     *     'property1' => 'value1',
+     *     'property2' => 'value2',
+     * ]
+     * ```
+     *
+     * Note that a behavior class must extend from [[Behavior]]. Behaviors can be attached using a name or anonymously.
+     * When a name is used as the array key, using this name, the behavior can later be retrieved using [[getBehavior()]]
+     * or be detached using [[detachBehavior()]]. Anonymous behaviors can not be retrieved or detached.
+     *
+     * Behaviors declared in this method will be attached to the component automatically (on demand).
+     *
+     * @return array the behavior configurations.
+     */
 	public function behaviors()
 	{
 		$behaviors = parent::behaviors();
@@ -82,11 +104,55 @@ class ObjectController extends Controller
 		return $behaviors;
 	}
 
-	/**
-	 * Get all objects
-	 *
-	 * @return array
-	 */
+    /**
+     * Get all objects (<b>POST</b>)
+     * <br> URL: https://rest.fokin-team.ru/object/get-objects
+     * 
+     * Example of successfull response:
+     * 
+     * ```json
+     * {
+	 *  'data': [
+     *   {
+	 *    'id': '...',
+	 *    'name': '...',
+	 *    'description': '...',
+	 *    'price': '...',
+	 *    'data': '...',
+	 *    'url': '...',
+	 *    'created_at': '...',
+	 *    'city_name': '...',
+	 *    'rent_type': '...',
+	 *    'images': [
+	 *     '...',
+	 *     '...',
+	 *     ...
+	 *    ],
+	 *    'phones': [
+	 *     '...',
+	 *     '...',
+	 *     ...
+	 *    ]
+	 *   },
+	 *   ...
+	 *  ]
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * ```
+     * 
+     * @param string $signature The hash signature for this request
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
+     */
 	public function actionGetObjects(): array
 	{
 		$output = [];
@@ -239,19 +305,34 @@ class ObjectController extends Controller
 	}
 
 	/**
-	 * Create new object
+	 * Create new object (<b>POST</b>)
+     * <br> URL: https://rest.fokin-team.ru/object/new
 	 *  
-	 * @param string $name
-	 * @param string $description
-	 * @param string $address
+	 * Example of successfull response:
+     * 
+     * ```json
+	 * {
+	 *  'id': '...'
+ 	 * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * ```
 	 * 
-	 * @param float $price
+	 * @param string $name Name of new object
+	 * @param string $description Description of new object
+	 * @param string $address Address of new object
+	 * @param float $price Price of new object
+	 * @param array $images Images of new object
 	 * 
-	 * @param file|null $images[] - files of images
-	 * 
-	 * @return array|bool
+	 * @return array Response
 	 */
-	public function actionNew(): array
+	public function actionNew($signature = '', $name = '', $description = '', $address = '', $price = '', $images = []): array
 	{
 		$model = new EstateObject();
 		$request = Yii::$app->request;
@@ -265,8 +346,7 @@ class ObjectController extends Controller
 				&& !empty($request->post('price'))
 			) {
 				$model->user_id = Yii::$app->user->identity->getId();
-				echo print_r($model->save(),true);
-				exit();
+
 				$address = $this->_getAddress($request->post('address'));
 				
 				$metro = $this->_getMetro(
@@ -285,9 +365,7 @@ class ObjectController extends Controller
 					$phone->object_id = $model->id;
 
 					if (!$phone->save()) {
-						return [
-							'error' => $phone->errors
-						];
+						return ['error' => $phone->errors];
 					}
 				}
 
@@ -326,7 +404,7 @@ class ObjectController extends Controller
 
 						// Сохранение нового изображения в БД
 						if (!$image->save()) {
-							throw new Exception('Image Save False');
+							return ['error' => $images->error];
 						}
 						// Сохранение изображения в директроии $dir
 						$image->file->saveAs(Yii::getAlias('@webroot') . $path);
@@ -336,43 +414,64 @@ class ObjectController extends Controller
 
 					if (!empty($images)) {
 						$count = 1;
+
 						foreach ($images as $i) {
 							$i->position = $count;
 							$i->update();
+						
 							$count = $count + 1;
 						}
 					}
 				}
 
-				$model->save();
+				if (!$model->save()) {
+					return ['error' => $model->errors];
+				}
 				
-				return [
-					'id' => $model->id
-				];
+				return ['id' => $model->id];
 			} else {
 				throw new Exception("Not set address, name, description, price.");
 			}
 		} catch (Exception $e) {
 			Yii::error($e->getMessage(), __METHOD__);
 
-			return [
-				'error' => $e->getMessage()
-			];
+			return ['error' => $e->getMessage()];
 		}
 	}
 
 	/**
-	 * Update object by id
-	 *
-	 * @param string $name
-	 * @param string $description
-	 * @param float $price
-	 * @param file $images[] 
-	 * @param string $image_paths_to_delete[]
-	 * 
-	 * @return array|bool
+	 * Update object by id (<b>POST</b>)
+     * <br> URL: https://rest.fokin-team.ru/object/update/$id
+     * 
+     * Example of successfull response:
+     * 
+     * ```json
+     * {
+	 *  'status': true
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * ```
+     * 
+	 * @param int $id ID of estate object
+	 * @param string $name New name of estate object
+	 * @param string $description New Description of estate object
+	 * @param string $phone New phone of estate object
+	 * @param float $price New price of estate object
+	 * @param array $images New images of estate object
+	 * @param array $image_paths_to_delete Delete images of estate object
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
 	 */
-	public function actionUpdate($id): array
+	public function actionUpdate($id, $name = '', $description = '', $phone = '', $price = 0, $images = [], $image_paths_to_delete = []): array
 	{
 		$user = User::findOne(Yii::$app->user->identity->id);
 		$model = EstateObject::findByIdentity([
@@ -383,10 +482,6 @@ class ObjectController extends Controller
 		try {
 			if (!$model) {
 				throw new Exception("Object Not Found");
-
-				return [
-					'error' => "Object:$id Not Found"
-				];
 			}
 
 			$request = Yii::$app->request->post();
@@ -398,11 +493,11 @@ class ObjectController extends Controller
 				$phone->phone = $request['phone'];
 				$phone->object_id = $model->id;
 
-				$phone->save();
+				if (!$phone->save()) {
+					return ['error' => $phone->errors];
+				}
 			}
 
-			// Images update
-			// Delete images
 			if (isset($request['image_paths_to_delete'])) {
 				foreach ($request['image_paths_to_delete'] as $url) {
 					$image = Image::findOne(['path' => $url, 'object_id' => $model->id]);
@@ -411,7 +506,7 @@ class ObjectController extends Controller
 						FileHelper::removeDirectory($image->path);
 
 						if (!$image->delete()) {
-							throw new Exception("Image Delete Failed");
+							throw new Exception("Image delete failed");
 						}
 					} else {
 						throw new Exception("Cannot find image with that url for current user.");
@@ -453,7 +548,7 @@ class ObjectController extends Controller
 
 					// Save image
 					if (!$image->save()) {
-						throw new Exception('Image Save Failed');
+						return ['error' => $image->errors];
 					}
 
 					// Save image to path
@@ -490,25 +585,49 @@ class ObjectController extends Controller
 			$model->created_at = $oldValueCreateAt;
 
 			if ($model->update()) {
-				return [
-					"result" => true
-				];
+				return ['status' => true];
 			} else {
-				throw new Exception('Object update failed');
+				return ['error' => $model->errors];
 			}
 		} catch (Exception $e) {
 			Yii::error($e->getMessage(), __METHOD__);
 
-			return [
-				'error' => $e->getMessage()
-			];
+			return ['error' => $e->getMessage()];
 		}
 	}
 
 	/**
-	 * View object by id
-	 *
-	 * @return array|bool
+	 * View object by id (<b>GET</b>)
+     * <br> URL: https://rest.fokin-team.ru/object/view/$id
+     * 
+     * Example of successfull response:
+     * 
+     * ```json
+     * {
+	 *  'object': {...},
+	 *  'images': [
+	 *    {...},
+	 *    ...
+	 *   ],
+	 *  'phones': [
+	 *   {...},
+	 *   ... 
+	 *  ]
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * ```
+     * @param int $id ID of object
+	 * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
 	 */
 	public function actionView($id): array
 	{
@@ -550,9 +669,7 @@ class ObjectController extends Controller
 		} catch (Exception $e) {
 			Yii::error($e->getMessage(), __METHOD__);
 
-			return [
-				'error' => $e->getMessage()
-			];
+			return ['error' => $e->getMessage()];
 		}
 	}
 

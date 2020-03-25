@@ -1,0 +1,150 @@
+Array
+(
+    [0] => Array
+        (
+            [line] => 254
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $name in actionNew().
+        )
+
+    [1] => Array
+        (
+            [line] => 254
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $description in actionNew().
+        )
+
+    [2] => Array
+        (
+            [line] => 254
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $address in actionNew().
+        )
+
+    [3] => Array
+        (
+            [line] => 254
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $price in actionNew().
+        )
+
+    [4] => Array
+        (
+            [line] => 254
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $images[] in actionNew().
+        )
+
+    [5] => Array
+        (
+            [line] => 375
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $name in actionUpdate().
+        )
+
+    [6] => Array
+        (
+            [line] => 375
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $description in actionUpdate().
+        )
+
+    [7] => Array
+        (
+            [line] => 375
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $price in actionUpdate().
+        )
+
+    [8] => Array
+        (
+            [line] => 375
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $images[] in actionUpdate().
+        )
+
+    [9] => Array
+        (
+            [line] => 375
+            [file] => controllers/ObjectController.php
+            [message] => Undefined parameter documented: $image_paths_to_delete[] in actionUpdate().
+        )
+
+    [10] => Array
+        (
+            [line] => 93
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $account_id in actionSignupMob().
+        )
+
+    [11] => Array
+        (
+            [line] => 93
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $deviceType in actionSignupMob().
+        )
+
+    [12] => Array
+        (
+            [line] => 93
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $fcmToken in actionSignupMob().
+        )
+
+    [13] => Array
+        (
+            [line] => 141
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $email in actionSignupWeb().
+        )
+
+    [14] => Array
+        (
+            [line] => 141
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $password in actionSignupWeb().
+        )
+
+    [15] => Array
+        (
+            [line] => 238
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $token in actionVerify().
+        )
+
+    [16] => Array
+        (
+            [line] => 281
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $email in actionLogin().
+        )
+
+    [17] => Array
+        (
+            [line] => 281
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $password in actionLogin().
+        )
+
+    [18] => Array
+        (
+            [line] => 333
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $code in actionLoginFacebook().
+        )
+
+    [19] => Array
+        (
+            [line] => 410
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $code in actionLoginGoogle().
+        )
+
+    [20] => Array
+        (
+            [line] => 491
+            [file] => controllers/UserController.php
+            [message] => Undefined parameter documented: $code in actionUpdate().
+        )
+
+)

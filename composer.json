@@ -6,7 +6,10 @@
         "codeception/module-phpbrowser": "^1.0.0",
         "codeception/module-asserts": "^1.0.0",
         "yii2tech/illuminate": "*",
-        "yiisoft/yii2-swiftmailer": "^2.1"
+        "yiisoft/yii2-swiftmailer": "^2.1",
+        "phpdocumentor/reflection-docblock": "^2.0.4",
+        "cebe/markdown": "~1.0.0",
+        "yiisoft/yii2-apidoc": "^2.1"
     },
     "repositories": [
         {

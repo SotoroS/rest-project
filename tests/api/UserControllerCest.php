@@ -123,7 +123,7 @@ class UserControllerCest
         $I->seeResponseIsJson();
         
         $I->seeResponseMatchesJsonType([
-            'redirect_uri' => 'string:url'
+            'url' => 'string:url'
         ]);
     }
 
@@ -141,7 +141,7 @@ class UserControllerCest
         $I->seeResponseIsJson();
         
         $I->seeResponseMatchesJsonType([
-            'redirect_uri' => 'string:url'
+            'url' => 'string:url'
         ]);
     }
 
@@ -203,7 +203,7 @@ class UserControllerCest
         $I->seeResponseIsJson();
 
         $I->seeResponseContainsJson(
-            array('result' => true)
+            array('status' => true)
         );
 
         $I->sendPOST('/user/update/' . $this->testUser->ID, [
@@ -216,7 +216,7 @@ class UserControllerCest
         $I->seeResponseIsJson();
         
         $I->seeResponseContainsJson(
-            array('result' => true)
+            array('status' => true)
         );
     }
 
@@ -238,7 +238,7 @@ class UserControllerCest
         $I->seeResponseIsJson();
         
         $I->seeResponseContainsJson(
-            array('result' => true)
+            array('status' => true)
         );
     }
 }

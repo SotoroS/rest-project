@@ -1,0 +1,10 @@
+Array
+(
+    [0] => Array
+        (
+            [line] => 36
+            [file] => controllers/UserController.php
+            [message] => No docblock for element 'behaviors'
+        )
+
+)

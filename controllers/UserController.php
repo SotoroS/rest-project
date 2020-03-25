@@ -6,21 +6,20 @@ namespace micro\controllers;
 
 use Yii;
 
-use yii\base\Exception;
-
-use yii\rest\Controller;
 use yii\web\Response;
-use yii\filters\auth\HttpBearerAuth;
-use yii\filters\AccessControl;
+use yii\base\Exception;
+use yii\rest\Controller;
+
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\filters\auth\HttpBearerAuth;
 
 use micro\models\User;
-use micro\models\UserMobile;
-use micro\models\UserWeb;
-
 use micro\models\City;
+use micro\models\UserWeb;
 use micro\models\CityArea;
 use micro\models\RentType;
+use micro\models\UserMobile;
 use micro\models\PropertyType;
 
 use Facebook;
@@ -33,6 +32,31 @@ use Google_Service_Oauth2;
  */
 class UserController extends Controller
 {
+    /**
+     * Returns a list of behaviors that this component should behave as.
+     *
+     * Child classes may override this method to specify the behaviors they want to behave as.
+     *
+     * The return value of this method should be an array of behavior objects or configurations
+     * indexed by behavior names. A behavior configuration can be either a string specifying
+     * the behavior class or an array of the following structure:
+     *
+     * ```php
+     * 'behaviorName' => [
+     *     'class' => 'BehaviorClass',
+     *     'property1' => 'value1',
+     *     'property2' => 'value2',
+     * ]
+     * ```
+     *
+     * Note that a behavior class must extend from [[Behavior]]. Behaviors can be attached using a name or anonymously.
+     * When a name is used as the array key, using this name, the behavior can later be retrieved using [[getBehavior()]]
+     * or be detached using [[detachBehavior()]]. Anonymous behaviors can not be retrieved or detached.
+     *
+     * Behaviors declared in this method will be attached to the component automatically (on demand).
+     *
+     * @return array the behavior configurations.
+     */
     public function behaviors()
     {
         // удаляем rateLimiter, требуется для аутентификации пользователя
@@ -82,16 +106,40 @@ class UserController extends Controller
     }
 
     /**
-     * Signup from mobile phone device
+     * Signup from mobile phone device (<b>POST</b>)
+     * <br> URL: https://rest.fokin-team.ru/user/signup-mob
      * 
-     * @param int $account_id
-     * @param string $deviceType
-     * @param string $fcmToken
+     * Example of successfull response:
      * 
+     * ```json
+     * {
+     *  'status' = true,
+     *  'cities': [...],
+     *  'city_areas': [...],
+     *  'rent_types': [...],
+     *  'property_types': [...]
+     * }
+     * ```
      * 
-     * @return array
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * ```
+     * 
+     * @param string $signature The hash signature for this request
+     * 
+     * @param int $account_id Account ID
+     * @param string $deviceType Device type
+     * @param string $fcmToken fcm token
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
      */
-    public function actionSignupMob(): array
+    public function actionSignupMob($signature = '', $account_id = 0, $deviceType = '', $fcmToken = ''): array
     {
         $request = Yii::$app->request;
 
@@ -110,9 +158,7 @@ class UserController extends Controller
             $user->fcmToken = $request->post('fcmToken');
 
             if (!$user->save()) {
-                return [
-                    'error' => $user->errors
-                ];
+                return ['error' => $user->errors];
             }
 
             $output['status'] = true;
@@ -125,21 +171,40 @@ class UserController extends Controller
         } catch (Exception $e) {
             Yii::error($e->getMessage(), __METHOD__);
 
-            return [
-                'error' => $e->getMessage()
-            ];
+            return ['error' => $e->getMessage()];
         }
     }
 
     /**
-     * Signup from web
+     * Signup from web (<b>POST</b>)
+     * <br> URL: https://rest.fokin-team.ru/user/signup-web
      * 
-     * @param string $email - email address
-     * @param string $password - password
+     * Example of successfull response:
      * 
-     * @return array
+     * ```json
+     * {
+     *  'status' = true,
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * ```
+     * 
+     * @param string $signature The hash signature for this request
+     * 
+     * @param string $email E-mail address
+     * @param string $password Password
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
      */
-    public function actionSignupWeb(): array
+    public function actionSignupWeb($signature = '', $email = '', $password = ''): array
     {
         $request = Yii::$app->request;
 
@@ -166,7 +231,7 @@ class UserController extends Controller
                 $model->signup_token = $signup_token;
 
                 if (!$model->validate() || !$model->save()) {
-                    throw new Exception('Cann\'t save user model');
+                    return ['error' => $model->errors];
                 }
 
                 $message = Yii::$app->mailer->compose();
@@ -178,9 +243,7 @@ class UserController extends Controller
                     ->setHtmlBody('Для подтверждения перейдите <a href="' . $_SERVER['HTTP_HOST'] . "/user/verify?token=" . $signup_token . '">по ссылке</a>');
 
                 if ($message->send()) {
-                    return [
-                        "status" => true
-                    ];
+                    return ['status' => true];
                 } else {
                     throw new Exception("Cann't send email");
                 }
@@ -190,16 +253,39 @@ class UserController extends Controller
         } catch (Exception $e) {
             Yii::error($e->getMessage(), __METHOD__);
 
-            return [
-                'error' => $e->getMessage()
-            ];
+            return ['error' => $e->getMessage()];
         }
     }
 
     /**
-     * Get all areas 
+     * Get all areas (<b>GET</b>)
+     * <br> URL: https://rest.fokin-team.ru/user/get-areas
      * 
-     * @return array
+     * Example of successfull response:
+     * 
+     * ```json
+     * {
+     *  [
+     *   {
+     *    'id': '...',
+     *    'name: '...'
+     *   },
+     *   ...
+     *  ]
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * ```
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
      */
     public function actionGetAreas(): array
     {
@@ -214,8 +300,8 @@ class UserController extends Controller
 
             foreach ($cities as $city) {
                 $citiesArray[] = [
-                    'name' => $city->name,
                     'id' => $city->id,
+                    'name' => $city->name,
                 ];
             }
 
@@ -230,13 +316,33 @@ class UserController extends Controller
     }
 
     /**
-     * Verify user function
+     * Verify user (<b>GET</b>)
+     * <br> URL: https://rest.fokin-team.ru/user/verify
      * 
-     * @param string $token - verify token
+     * Example of successfull response:
      * 
-     * @return array
+     *```json
+     * {
+     *  'status': true
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * 
+     * @param string $signature The hash signature for this request
+     * 
+     * @param string $token Verify token
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
      */
-    public function actionVerify(): array
+    public function actionVerify($signature = '', $token = ''): array
     {
         $request = Yii::$app->request;
 
@@ -253,11 +359,9 @@ class UserController extends Controller
                 $user->verified = 1;
 
                 if ($user->update()) {
-                    return [
-                        "result" => true,
-                    ];
+                    return ['status' => true];
                 } else {
-                    throw new Exception("Cann't update user model");
+                    return ['error' => $user->errors];
                 }
             } else {
                 throw new Exception("User by signup_token not found");
@@ -265,23 +369,40 @@ class UserController extends Controller
         } catch (Exception $e) {
             Yii::error($e->getMessage(), __METHOD__);
 
-            return [
-                'error' => $e->getMessage()
-            ];
+            return ['error' => $e->getMessage()];
         }
     }
 
     /**
-     * Login function
+     * Login (<b>POST</b>)
+     * <br> URL: https://rest.fokin-team.ru/user/login
      * 
-     * @param $email - email user
-     * @param $password - password user 
+     * Example of successfull response:
      * 
-     * @return string|bool
+     *```json
+     * {
+     *  'access_token': '...'
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * 
+     * @param string $signature The hash signature for this request
+     * 
+     * @param string $email E-mail user
+     * @param string $password Password user 
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
      */
-    public function actionLogin(): array
+    public function actionLogin($signature = '', $email = '', $password = ''): array
     {
-        // Checking for data availability
         $request = Yii::$app->request;
 
         $email = $request->post('email');
@@ -297,7 +418,7 @@ class UserController extends Controller
             if (is_null($user)) {
                 throw new Exception("User not found by email");
             }
-        
+
             if (!password_verify($password, $user->password)) {
                 throw new Exception("Wrong Password");
             }
@@ -306,11 +427,9 @@ class UserController extends Controller
                 $user->access_token = uniqid();
 
                 if ($user->update()) {
-                    return [
-                        "access_token" => $user->access_token
-                    ];
+                    return ['access_token' => $user->access_token];
                 } else {
-                    throw new Exception("Cann't generate new access token");
+                    return ['error' => $user->errors];
                 }
             } else {
                 throw new Exception("Confirm your account by clicking on the link in the mail");
@@ -325,14 +444,35 @@ class UserController extends Controller
     }
 
     /**
-     * Facebook authorization
+     * Login from Facebook (<b>GET</b>)
+     * <br> URL: https://rest.fokin-team.ru/user/login-facebook
      * 
-     * @param $code - code user
+     * Example of successfull response:
      * 
-     * @return string|bool
+     *```json
+     * {
+     *  'access_token': '...'
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * 
+     * @param string $signature The hash signature for this request
+     * 
+     * @param string $code Code user
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
      */
-    public function actionLoginFacebook(): array
+    public function actionLoginFacebook($signature = '', $code = null): array
     {
+        session_start(); 
         $fb = new Facebook\Facebook([
             'app_id' => Yii::$app->params['facebook_client_id'],
             'app_secret' => Yii::$app->params['facebook_client_secret'],
@@ -341,11 +481,9 @@ class UserController extends Controller
 
         $helper = $fb->getRedirectLoginHelper();
 
-        // Create the url
         $permissions = ['email'];
         $loginUrl = $helper->getLoginUrl(Yii::$app->params['facebook_client_uri'], $permissions);
 
-        // Getting the authorization  code
         $code = Yii::$app->request->get('code');
 
         if (!is_null($code)) {
@@ -358,7 +496,7 @@ class UserController extends Controller
                 // Getting user email
                 $userEmail = $response->getGraphUser();
                 $email = $userEmail['email'];
-                
+
                 // Getting string accessToken
                 $value = $accessToken->getValue();
 
@@ -373,42 +511,57 @@ class UserController extends Controller
                     $model->access_token = uniqid();
 
                     if ($model->save()) {
-                        return [
-                            "access_token" => $value
-                        ];
+                        return ['access_token' => $model->access_token];
                     } else {
-                        throw new Exception('Cann\'t save user model');
+                        return ['error' => $model->errors];
                     }
                 } else {
                     $user->access_token = uniqid();
+
                     if ($user->update()) {
-                        return [
-                            "access_token" => $user->access_token
-                        ];
+                        return ['access_token' => $user->access_token];
                     } else {
-                        throw new Exception('Cann\'t update user model');
+                        return ['error' => $user->errors];
                     }
                 }
             } catch (Exception $e) {
                 Yii::error($e->getMessage(), __METHOD__);
 
-                return [
-                    'error' => $e->getMessage()
-                ];
+                return ['error' => $e->getMessage()];
             }
         }
 
-        return ["redirect_uri" => $loginUrl];
+        return ['url' => $loginUrl];
     }
 
     /**
-     * Login function
+     * Login from Google (<b>GET</b>)
+     * <br> URL: https://rest.fokin-team.ru/user/login-google
      * 
-     * @param $code - authorization code returned by Google
+     * Example of successfull response:
      * 
-     * @return string|bool
+     *```json
+     * {
+     *  'access_token': '...'
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * 
+     * @param string $signature The hash signature for this request
+     * 
+     * @param string $code Authorization code returned by Google
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
      */
-    public function actionLoginGoogle(): array
+    public function actionLoginGoogle($signature = '', $code = null): array
     {
         $request = Yii::$app->request;
 
@@ -427,13 +580,10 @@ class UserController extends Controller
         $code = $request->get('code');
 
         if (isset($code)) {
-            // Try-catch error check 
             try {
-                // Getting the token
                 $token = $g_client->fetchAccessTokenWithAuthCode($code);
                 $g_client->setAccessToken($token);
 
-                // Getting user information
                 $oauth2 = new Google_Service_Oauth2($g_client);
 
                 $userInfo = $oauth2->userinfo->get();
@@ -441,7 +591,6 @@ class UserController extends Controller
 
                 $user = User::findOne(['email' => $email]);
 
-                // Check user with such email in database
                 if (is_null($user)) {
                     $model = new User();
 
@@ -451,48 +600,63 @@ class UserController extends Controller
                     $model->access_token = $token['access_token'];
 
                     if ($model->save()) {
-                        return [
-                            "access_token" => $token['access_token']
-                        ];
+                        return ['access_token' => $token['access_token']];
                     } else {
-                        throw new Exception('Cann\'t save user model');
+                        return ['error' => $model->errors];
                     }
                 } else {
                     $user->access_token = uniqid();
-                    
+
                     if ($user->update()) {
-                        return [
-                            "access_token" => $user->access_token
-                        ];
+                        return ['access_token' => $user->access_token];
                     } else {
-                        throw new Exception('Cann\'t update user model');
+                        return ['error' => $user->errors];
                     }
                 }
             } catch (Exception $e) {
                 Yii::error($e->getMessage(), __METHOD__);
 
-                return [
-                    'error' => $e->getMessage()
-                ];
+                return ['error' => $e->getMessage()];
             }
         } else {
-            return [
-                "redirect_uri" => $auth_url
-            ];
+            return ['url' => $auth_url];
         }
     }
 
     /**
-     * Update user info function
+     * Update user info (<b>POST</b>)
+     * <br> URL: https://rest.fokin-team.ru/user/update
      * 
-     * @param $code - authorization code returned by Google
+     * Example of successfull response:
      * 
-     * @return string|bool
+     *```json
+     * {
+     *  'status': true
+     * }
+     * ```
+     * 
+     * Example of error response:
+     * 
+     * ```json
+     * {
+     *  'error' = '...'
+     * }
+     * 
+     * @param string $signature The hash signature for this request
+     * 
+     * @param string $gender New value gender of user (Values: M or F)
+     * @param string $phone New value phone of user
+     * @param string $email New value E-mail of user
+     * @param string $age New value age of user
+     * 
+     * @throws Exception Exception
+     * 
+     * @return array Response
      */
-    public function actionUpdate(): array
+    public function actionUpdate($signature = '', $gender = '', $phone = '', $email = '', $age = ''): array
     {
         $request = Yii::$app->request;
-        
+
         $user = User::findOne(Yii::$app->user->identity->id);
 
         try {
@@ -513,27 +677,14 @@ class UserController extends Controller
             }
 
             if ($user->update()) {
-                return [
-                    "result" => true
-                ];
-            } else if (
-                is_null($request->post("age")) 
-                && is_null($request->post("email")) 
-                && is_null($request->post("phone")) 
-                && is_null($request->post("gender"))
-            ) {
-                throw new Exception('Nothing to change');
+                return ['status' => true];
             } else {
-                return [
-                    "error" => $user->errors
-                ];
+                return ['error' => $user->errors];
             }
         } catch (Exception $e) {
             Yii::error($e->getMessage(), __METHOD__);
 
-            return [
-                'error' => $e->getMessage()
-            ];
+            return ['error' => $e->getMessage()];
         }
     }
 }

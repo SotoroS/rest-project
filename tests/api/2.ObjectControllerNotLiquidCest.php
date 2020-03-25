@@ -206,7 +206,7 @@ class ObjectControllerNotLiquidCest
         $I->seeResponseIsJson();
 
         $I->seeResponseContainsJson(
-            array('result' => true)
+            array('status' => true)
         );
     }
 

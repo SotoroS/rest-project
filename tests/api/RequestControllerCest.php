@@ -139,7 +139,7 @@ class RequestControllerCest
         $I->seeResponseIsJson();
 
         $I->seeResponseContainsJson(
-            array('result' => true)
+            array('status' => true)
         );
     }
 
@@ -252,7 +252,7 @@ class RequestControllerCest
         $I->seeResponseIsJson();
 
         $I->seeResponseContainsJson(
-            array('result' => true)
+            array('status' => true)
         );
     }
 
